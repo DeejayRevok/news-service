@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  mongodb:
+    image: 'bitnami/mongodb:latest'
+    volumes:
+      - 'mongodb_data:/bitnami'
+    ports:
+      - "27017:27017"
+
+  event-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: event-service:latest
+    ports:
+      - "8080:8080"
+    links:
+      - mongodb:mongodb
+
+volumes:
+  mongodb_data:
