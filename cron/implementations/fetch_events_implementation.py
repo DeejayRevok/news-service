@@ -21,7 +21,7 @@ class FetchEventsImplementation(Implementation):
             app: application which runs the cron
             definition: fetch events cron definition parameters
         """
-        super().__init__(app, definition)
+        Implementation.__init__(self, app, definition)
 
     def _run(self):
         """
