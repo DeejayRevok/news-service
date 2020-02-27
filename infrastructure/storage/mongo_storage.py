@@ -125,7 +125,7 @@ class MongoStorage(Storage):
         Returns: first query matching item
 
         """
-        return self.collection.find_one(None)
+        return self.collection.find_one(query)
 
     @check_collection
     def delete(self, identifier: str):
