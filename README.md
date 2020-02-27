@@ -43,7 +43,7 @@ In your webbrowser navigate to http://localhost:8080/v1/api/docs/ui
 
 In order to test the Event list endpoint, take into account that the format of the date should be the same as the date format of the provided XML (%Y-%m-%dT%H:%M:%S)
 
-# Documentatio
+# Documentation
 
 Aiohttp has been choosed as main web framework for the application. It is an asynchronous HTTP server integrated inside the aio-libs framework. This framework has a great support community and a lot of different libraries for multiple tools. Aiohttp provides an improved asynchronous and concurrent processing. This framework is so flexible since it provides multiple ways of implement and extend its functionalities.
 
