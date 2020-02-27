@@ -6,15 +6,43 @@ from infrastructure.storage.filters.storage_filter_type import StorageFilterType
 from lib.fixed_dict import FixedDict
 from services.event_service import EventService
 
-mocked_event = {"base_event": {"base_event_id": "291", "sell_mode": "online", "title": "Concert",
-                               "event": {"event_date": 1561921200, "event_id": "291", "sell_from": 1404165600,
-                                         "sell_to": 1561917600, "sold_out": "false", "zone": [
-                                       {"capacity": "243", "max_price": "20.00", "name": "Platea", "numbered": "true",
-                                        "zone_id": "40"},
-                                       {"capacity": "100", "max_price": "0.00", "name": "test", "numbered": "false",
-                                        "zone_id": "38"},
-                                       {"capacity": "90", "max_price": "0.00", "name": "A28", "numbered": "true",
-                                        "zone_id": "30"}]}}}
+MOCKED_EVENT = {
+    "base_event": {
+        "base_event_id": "291",
+        "sell_mode": "online",
+        "title": "Concert",
+        "event": {
+            "event_date": 1561921200,
+            "event_id": "291",
+            "sell_from": 1404165600,
+            "sell_to": 1561917600,
+            "sold_out": "false",
+            "zone": [
+                {
+                    "capacity": "243",
+                    "max_price": "20.00",
+                    "name": "Platea",
+                    "numbered": "true",
+                    "zone_id": "40"
+                },
+                {
+                    "capacity": "100",
+                    "max_price": "0.00",
+                    "name": "test",
+                    "numbered": "false",
+                    "zone_id": "38"
+                },
+                {
+                    "capacity": "90",
+                    "max_price": "0.00",
+                    "name": "A28",
+                    "numbered": "true",
+                    "zone_id": "30"
+                }
+            ]
+        }
+    }
+}
 
 
 class TestEventService(unittest.TestCase):
@@ -22,8 +50,8 @@ class TestEventService(unittest.TestCase):
     @patch('infrastructure.storage.storage.Storage')
     def test_save_event(self, client):
         event_service = EventService(client)
-        event_service.save_event(mocked_event)
-        client.save.assert_called_with(mocked_event, exist_filter=StorageFilterType.UNIQUE,
+        event_service.save_event(MOCKED_EVENT)
+        client.save.assert_called_with(MOCKED_EVENT, exist_filter=StorageFilterType.UNIQUE,
                                        exist_params=FixedDict(dict(key='base_event.base_event_id', value='291')))
 
     @patch('infrastructure.storage.storage.Storage')
@@ -58,15 +86,15 @@ class TestEventService(unittest.TestCase):
                                        FixedDict(dict(key='base_event.sell_mode', value='online'))])
 
     def test_render_events(self):
-        mocked_event_date = mocked_event['base_event']['event']['event_date']
-        mocked_event_sell_from = mocked_event['base_event']['event']['sell_from']
-        mocked_event_sell_to = mocked_event['base_event']['event']['sell_to']
+        mocked_event_date = MOCKED_EVENT['base_event']['event']['event_date']
+        mocked_event_sell_from = MOCKED_EVENT['base_event']['event']['sell_from']
+        mocked_event_sell_to = MOCKED_EVENT['base_event']['event']['sell_to']
 
         rendered_event_date = datetime.fromtimestamp(mocked_event_date).strftime(EventService.DATE_FORMAT)
         rendered_event_sell_from = datetime.fromtimestamp(mocked_event_sell_from).strftime(EventService.DATE_FORMAT)
         rendered_event_sell_to = datetime.fromtimestamp(mocked_event_sell_to).strftime(EventService.DATE_FORMAT)
 
-        rendered_event = next(EventService.render_event_list([mocked_event]), None)
+        rendered_event = next(EventService.render_event_list([MOCKED_EVENT]), None)
 
         assert rendered_event is not None
         assert rendered_event['base_event']['event']['event_date'] == rendered_event_date

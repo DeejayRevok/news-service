@@ -37,4 +37,3 @@ class Implementation:
         """
         Specific cron functionality
         """
-        pass

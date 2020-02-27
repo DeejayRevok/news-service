@@ -49,7 +49,6 @@ class SourceAdapter:
         Returns: fetched items
 
         """
-        pass
 
     @abstractmethod
     def _adapt_single(self, item: Any) -> dict:
@@ -62,4 +61,3 @@ class SourceAdapter:
         Returns: dictionary representation of the item
 
         """
-        pass

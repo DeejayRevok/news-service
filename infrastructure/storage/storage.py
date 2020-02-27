@@ -23,7 +23,6 @@ class Storage(metaclass=ABCMeta):
             exist_params: existence filter parameters
 
         """
-        pass
 
     @abstractmethod
     def get(self, filter_types: List[StorageFilterType] = None, filters_params: List[FixedDict] = None) -> Iterator[dict]:
@@ -37,7 +36,6 @@ class Storage(metaclass=ABCMeta):
         Returns: iterator to dictionary representation of the items
 
         """
-        pass
 
     @abstractmethod
     def get_one(self, query: dict = None) -> dict:
@@ -50,7 +48,6 @@ class Storage(metaclass=ABCMeta):
         Returns: persisted item
 
         """
-        pass
 
     @abstractmethod
     def delete(self, identifier: str):
@@ -61,4 +58,3 @@ class Storage(metaclass=ABCMeta):
             identifier: identifier of the item to delete
 
         """
-        pass

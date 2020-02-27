@@ -24,3 +24,5 @@ def storage_factory(storage_type: str, storage_config: dict) -> Storage:
 
     if storage == StorageType.MONGO:
         return MongoStorage(**storage_config)
+    else:
+        raise NotImplementedError('Specified storage type not implemented')

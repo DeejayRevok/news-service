@@ -15,17 +15,17 @@ from log_config import get_logger
 LOGGER = get_logger()
 
 
-def check_collection(fn: Callable) -> Any:
+def check_collection(function: Callable) -> Any:
     """
     Check if collection is configured
 
     Args:
-        fn: check before this function execution
+        function: check before this function execution
 
     Returns: fn execution result
 
     """
-    @functools.wraps(fn)
+    @functools.wraps(function)
     def managed(*args, **kwargs) -> Any:
         """
         Decorate the decorated function with its input args and kwargs
@@ -39,7 +39,7 @@ def check_collection(fn: Callable) -> Any:
         """
         assert args[0].collection is not None, 'Collection not set'
 
-        return fn(*args, **kwargs)
+        return function(*args, **kwargs)
     return managed
 
 
@@ -125,10 +125,7 @@ class MongoStorage(Storage):
         Returns: first query matching item
 
         """
-        if query is not None:
-            return self.collection.find_one(query)
-        else:
-            return self.collection.find_one()
+        return self.collection.find_one(None)
 
     @check_collection
     def delete(self, identifier: str):

@@ -8,7 +8,7 @@ Cron definitions:
 from adapters.xml_event_endpoint_adapter import XmlEventEndpointAdapter
 from cron.implementations.fetch_events_implementation import FetchEventsImplementation
 
-definitions = {
+DEFINITIONS = {
     'fetch_events': {
         'class': FetchEventsImplementation,
         'expression': '*/5 * * * *',
