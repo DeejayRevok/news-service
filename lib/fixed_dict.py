@@ -36,46 +36,46 @@ class FixedDict(collections.MutableMapping):
         """
         return iter(self.__data)
 
-    def __setitem__(self, k: str, v: Any):
+    def __setitem__(self, key: str, value: Any):
         """
         Set the specified value to the specified key if the key exists
 
         Args:
-            k: key
-            v: value to set
+            key: key
+            value: value to set
 
         """
-        if k not in self.__data:
-            raise KeyError(k)
+        if key not in self.__data:
+            raise KeyError(key)
 
-        self.__data[k] = v
+        self.__data[key] = value
 
-    def __delitem__(self, k: str):
+    def __delitem__(self, key: str):
         """
         Avoid key deleting
         """
         raise NotImplementedError
 
-    def __getitem__(self, k: str) -> Any:
+    def __getitem__(self, key: str) -> Any:
         """
         Get the specified key value
 
         Args:
-            k: key to get value
+            key: key to get value
 
         Returns: value of the key
 
         """
-        return self.__data[k]
+        return self.__data[key]
 
-    def __contains__(self, k: str) -> bool:
+    def __contains__(self, key: str) -> bool:
         """
         Check if the dictionary contains the specified key
 
         Args:
-            k: key to check existence
+            key: key to check existence
 
         Returns: True if the key exists, False otherwise
 
         """
-        return k in self.__data
+        return key in self.__data

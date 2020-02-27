@@ -4,7 +4,7 @@ Run all the defined crons in the cron definitions module
 """
 from aiohttp.web_app import Application
 
-from cron.cron_definitions import definitions
+from cron.cron_definitions import DEFINITIONS
 
 
 def initialize_crons(app: Application):
@@ -14,5 +14,5 @@ def initialize_crons(app: Application):
     Args:
         app: application which runs the crons
     """
-    for definition_key in definitions.keys():
-        definitions[definition_key]['class'](app, definitions[definition_key])
+    for definition in DEFINITIONS.values():
+        definition['class'](app, definition)

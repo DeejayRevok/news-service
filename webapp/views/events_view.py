@@ -22,6 +22,7 @@ class EventViews:
     """
     Event REST endpoint views handler
     """
+
     def __init__(self, app: Application):
         """
         Initialize the event views handler
@@ -66,9 +67,9 @@ class EventViews:
 
         try:
             start_date = mktime(strptime(request.rel_url.query['start_date'],
-                                '%Y-%m-%dT%H:%M:%S')) if 'start_date' in request.rel_url.query else None
+                                         '%Y-%m-%dT%H:%M:%S')) if 'start_date' in request.rel_url.query else None
             end_date = mktime(strptime(request.rel_url.query['end_date'],
-                              '%Y-%m-%dT%H:%M:%S')) if 'end_date' in request.rel_url.query else None
+                                       '%Y-%m-%dT%H:%M:%S')) if 'end_date' in request.rel_url.query else None
         except Exception as ex:
             raise HTTPBadRequest(text=str(ex))
 

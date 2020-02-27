@@ -72,6 +72,6 @@ def init_app() -> Application:
 
 if __name__ == '__main__':
     LOGGER.info('Starting web app')
-    application = init_app()
-    run_app(application, host=application['host'], port=application['port'],
+    APPLICATION = init_app()
+    run_app(APPLICATION, host=APPLICATION['host'], port=APPLICATION['port'],
             access_log=get_logger())

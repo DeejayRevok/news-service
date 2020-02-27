@@ -45,9 +45,9 @@ async def middleware_factory(_: Application, handler: Callable):
             response = await handler(request)
             return response
         except HTTPException as ex:
-            LOGGER.error('Request {} has failed with exception: {}'.format(request, repr(ex)))
+            LOGGER.error('Request %s has failed with exception: %s', request, repr(ex))
             return json_error(ex.status, ex)
         except Exception as ex:
-            LOGGER.error('Request {} has failed with exception: {}'.format(request, repr(ex)))
+            LOGGER.error('Request %s has failed with exception: %s', request, repr(ex))
             return json_error(500, ex)
     return error_middleware
