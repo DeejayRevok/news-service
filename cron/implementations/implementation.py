@@ -21,6 +21,7 @@ class Implementation:
         """
         self.app = app
         self.definition = definition
+        self._run()
 
         @crontab(definition['expression'])
         async def scheduled():
