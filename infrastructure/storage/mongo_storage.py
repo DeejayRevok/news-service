@@ -115,7 +115,7 @@ class MongoStorage(Storage):
             yield MongoStorage.render_item(item)
 
     @check_collection
-    def get_one(self, query: str = None) -> dict:
+    def get_one(self, query: dict = None) -> dict:
         """
         Get first queried item
 
