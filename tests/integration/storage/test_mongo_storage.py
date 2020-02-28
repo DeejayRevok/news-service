@@ -18,12 +18,18 @@ class TestMongoStorage(unittest.TestCase):
 
     @mongomock.patch(servers=((MONGO_HOST, MONGO_PORT),))
     def test_collection_not_set(self):
+        """
+        Test if not setting the collection raises error
+        """
         mongo_client = MongoStorage(self.MONGO_HOST, self.MONGO_PORT, self.DATABASE)
         with self.assertRaises(AssertionError):
             mongo_client.save(MOCKED_ITEM)
 
     @mongomock.patch(servers=((MONGO_HOST, MONGO_PORT),))
     def test_save(self):
+        """
+        Test the persist functionality
+        """
         mongo_client = MongoStorage(self.MONGO_HOST, self.MONGO_PORT, self.DATABASE)
         mongo_client.set_collection(self.COLLECTION)
         mongo_client.save(MOCKED_ITEM)
@@ -32,6 +38,9 @@ class TestMongoStorage(unittest.TestCase):
 
     @mongomock.patch(servers=((MONGO_HOST, MONGO_PORT),))
     def test_save_duplicated_update(self):
+        """
+        Test if persisting an existing item updates it
+        """
         mongo_client = MongoStorage(self.MONGO_HOST, self.MONGO_PORT, self.DATABASE)
         mongo_client.set_collection(self.COLLECTION)
         mongo_client.save(MOCKED_ITEM)
@@ -44,6 +53,9 @@ class TestMongoStorage(unittest.TestCase):
 
     @mongomock.patch(servers=((MONGO_HOST, MONGO_PORT),))
     def test_get_one(self):
+        """
+        Test querying one item
+        """
         mongo_client = MongoStorage(self.MONGO_HOST, self.MONGO_PORT, self.DATABASE)
         mongo_client.set_collection(self.COLLECTION)
         mongo_client.save(MOCKED_ITEM)
@@ -57,6 +69,9 @@ class TestMongoStorage(unittest.TestCase):
 
     @mongomock.patch(servers=((MONGO_HOST, MONGO_PORT),))
     def test_get(self):
+        """
+        Test querying multiple items
+        """
         mongo_client = MongoStorage(self.MONGO_HOST, self.MONGO_PORT, self.DATABASE)
         mongo_client.set_collection(self.COLLECTION)
         mongo_client.save(MOCKED_ITEM)
@@ -72,6 +87,9 @@ class TestMongoStorage(unittest.TestCase):
 
     @mongomock.patch(servers=((MONGO_HOST, MONGO_PORT),))
     def test_delete(self):
+        """
+        Test the delete functionality
+        """
         mongo_client = MongoStorage(self.MONGO_HOST, self.MONGO_PORT, self.DATABASE)
         mongo_client.set_collection(self.COLLECTION)
         mongo_client.save(MOCKED_ITEM)

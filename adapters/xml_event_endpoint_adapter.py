@@ -6,7 +6,7 @@ from typing import Iterator
 from xml.etree.ElementTree import fromstring, tostring, Element
 
 import requests
-import xmltodict
+from xmltodict import parse
 
 from adapters.source_adapter import SourceAdapter
 from log_config import get_logger
@@ -47,7 +47,7 @@ class XmlEventEndpointAdapter(SourceAdapter):
         Returns: xml item dict representation
 
         """
-        event_dict = xmltodict.parse(tostring(item).decode(), attr_prefix='')
+        event_dict = parse(tostring(item).decode(), attr_prefix='')
         event_dict[self.ROOT_XML_TAG]['event']['event_date'] = mktime(strptime(
             event_dict[self.ROOT_XML_TAG]['event']['event_date'],
             self.DATE_INPUT_FORMAT))
