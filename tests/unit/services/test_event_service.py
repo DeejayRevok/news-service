@@ -49,6 +49,9 @@ class TestEventService(unittest.TestCase):
 
     @patch('infrastructure.storage.storage.Storage')
     def test_save_event(self, client):
+        """
+        Test persisting event
+        """
         event_service = EventService(client)
         event_service.save_event(MOCKED_EVENT)
         client.save.assert_called_with(MOCKED_EVENT, exist_filter=StorageFilterType.UNIQUE,
@@ -57,6 +60,9 @@ class TestEventService(unittest.TestCase):
     @patch('infrastructure.storage.storage.Storage')
     @patch.object(EventService, 'render_event_list')
     def test_get_events_empty(self, client, event_service_mocked):
+        """
+        Test find events without filter
+        """
         event_service = EventService(client)
         event_service.render_event_list = event_service_mocked.render_event_list
         event_service.get_events()
@@ -66,6 +72,9 @@ class TestEventService(unittest.TestCase):
     @patch('infrastructure.storage.storage.Storage')
     @patch.object(EventService, 'render_event_list')
     def test_get_events_range(self, client, event_service_mocked):
+        """
+        Test find events with range filter
+        """
         event_service = EventService(client)
         event_service.render_event_list = event_service_mocked.render_event_list
         start = 1
@@ -86,6 +95,9 @@ class TestEventService(unittest.TestCase):
                                        FixedDict(dict(key='base_event.sell_mode', value='online'))])
 
     def test_render_events(self):
+        """
+        Test events rendering parses date
+        """
         mocked_event_date = MOCKED_EVENT['base_event']['event']['event_date']
         mocked_event_sell_from = MOCKED_EVENT['base_event']['event']['sell_from']
         mocked_event_sell_to = MOCKED_EVENT['base_event']['event']['sell_to']

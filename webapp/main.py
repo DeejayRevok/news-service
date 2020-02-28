@@ -2,7 +2,6 @@
 Application main module
 """
 import configparser
-from os.path import dirname, join
 
 from aiohttp.web import run_app
 from aiohttp.web_app import Application
@@ -12,11 +11,10 @@ from cron.cron_factory import initialize_crons
 from infrastructure.storage.storage_factory import storage_factory
 from log_config import get_logger
 from services.event_service import EventService
+from webapp.definitions import CONFIG_PATH, API_VERSION
 from webapp.middlewares import middleware_factory
 from webapp.views import events_view
 
-API_VERSION = 'v1'
-CONFIG_PATH = join(dirname(dirname(__file__, )), 'config.ini')
 LOGGER = get_logger()
 
 

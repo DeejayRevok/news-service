@@ -11,7 +11,7 @@ from aiohttp_apispec import docs
 
 from lib.aio_class_route_table import ClassRouteTableDef
 from log_config import get_logger
-from webapp.main import API_VERSION
+from webapp.definitions import API_VERSION
 
 ROOT_PATH = '/api/events'
 LOGGER = get_logger()
