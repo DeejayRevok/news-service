@@ -19,6 +19,8 @@ jobs:
     - name: Lint and check score
       run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt *
     - name: Test with unittest
-      run: python -m unittest discover -v tests
+      run: coverage run --source . --branch --omit=*__init__** -m unittest discover -v tests
+    - name: Check test coverage
+      run: coverage report  --fail-under=80
     - name: Build the docker-compose stack
       run: docker-compose up -d
