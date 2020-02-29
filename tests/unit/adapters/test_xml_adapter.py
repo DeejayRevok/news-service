@@ -42,9 +42,9 @@ class TestXmlAdapter(unittest.TestCase):
         xml_event_adapter = XmlEventEndpointAdapter({'event_source_url': None})
         xml_event_adapter.adapt = adapt_pass
         fetch_return = xml_event_adapter.fetch()
-        assert len(fetch_return) == 3
+        self.assertEqual(len(fetch_return), 3)
         for elem in fetch_return:
-            assert isinstance(elem, Element)
+            self.assertTrue(isinstance(elem, Element))
 
     def test_adapt(self):
         """
@@ -52,12 +52,12 @@ class TestXmlAdapter(unittest.TestCase):
         """
         xml_event_adapter = XmlEventEndpointAdapter({'event_source_url': None})
         adapt_return = list(xml_event_adapter.adapt(self.mocked_elements))
-        assert len(adapt_return) == 3
+        self.assertEqual(len(adapt_return), 3)
         for adapted_elem in adapt_return:
-            assert isinstance(adapted_elem, dict)
-            assert isinstance(adapted_elem['base_event']['event']['event_date'], float)
-            assert isinstance(adapted_elem['base_event']['event']['sell_from'], float)
-            assert isinstance(adapted_elem['base_event']['event']['sell_to'], float)
+            self.assertTrue(isinstance(adapted_elem, dict))
+            self.assertTrue(isinstance(adapted_elem['base_event']['event']['event_date'], float))
+            self.assertTrue(isinstance(adapted_elem['base_event']['event']['sell_from'], float))
+            self.assertTrue(isinstance(adapted_elem['base_event']['event']['sell_to'], float))
 
 
 if __name__ == '__main__':

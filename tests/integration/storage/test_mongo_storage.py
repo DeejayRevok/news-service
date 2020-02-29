@@ -34,7 +34,8 @@ class TestMongoStorage(unittest.TestCase):
         mongo_client.set_collection(self.COLLECTION)
         mongo_client.save(MOCKED_ITEM)
         stored_item = mongo_client.get_one()
-        assert stored_item == MOCKED_ITEM
+
+        self.assertEqual(stored_item, MOCKED_ITEM)
 
     @mongomock.patch(servers=((MONGO_HOST, MONGO_PORT),))
     def test_save_duplicated_update(self):
@@ -48,8 +49,9 @@ class TestMongoStorage(unittest.TestCase):
                           exist_params=FixedDict(dict(key='id', value=1)))
         stored_items = list(mongo_client.get())
         del MOCKED_ITEM_UPDATE['_id']
-        assert len(stored_items) == 1
-        assert stored_items[0] == MOCKED_ITEM_UPDATE
+
+        self.assertEqual(len(stored_items), 1)
+        self.assertEqual(stored_items[0], MOCKED_ITEM_UPDATE)
 
     @mongomock.patch(servers=((MONGO_HOST, MONGO_PORT),))
     def test_get_one(self):
@@ -62,10 +64,10 @@ class TestMongoStorage(unittest.TestCase):
         mongo_client.save(MOCKED_ITEM_UPDATE)
 
         first_item = mongo_client.get_one()
-        assert first_item == MOCKED_ITEM
+        self.assertEqual(first_item, MOCKED_ITEM)
 
         query_item = mongo_client.get_one({'test': 'test2'})
-        assert query_item == MOCKED_ITEM_UPDATE
+        self.assertEqual(query_item, MOCKED_ITEM_UPDATE)
 
     @mongomock.patch(servers=((MONGO_HOST, MONGO_PORT),))
     def test_get(self):
@@ -78,12 +80,12 @@ class TestMongoStorage(unittest.TestCase):
         mongo_client.save(MOCKED_ITEM_UPDATE)
 
         items = mongo_client.get()
-        assert list(items) == [MongoStorage.render_item(MOCKED_ITEM), MongoStorage.render_item(MOCKED_ITEM_UPDATE)]
+        self.assertEqual(list(items), [MongoStorage.render_item(MOCKED_ITEM), MongoStorage.render_item(MOCKED_ITEM_UPDATE)])
 
         filtered_items = list(mongo_client.get(filter_types=[StorageFilterType.UNIQUE],
                                                filters_params=[FixedDict(dict(key='test', value='test2'))]))
-        assert len(filtered_items) == 1
-        assert filtered_items[0] == MOCKED_ITEM_UPDATE
+        self.assertEqual(len(filtered_items), 1)
+        self.assertEqual(filtered_items[0], MOCKED_ITEM_UPDATE)
 
     @mongomock.patch(servers=((MONGO_HOST, MONGO_PORT),))
     def test_delete(self):
@@ -95,11 +97,11 @@ class TestMongoStorage(unittest.TestCase):
         mongo_client.save(MOCKED_ITEM)
 
         items = list(mongo_client.get())
-        assert len(items) == 1
+        self.assertEqual(len(items), 1)
 
         mongo_client.delete(MOCKED_ITEM['_id'])
         items = list(mongo_client.get())
-        assert len(items) == 0
+        self.assertEqual(len(items), 0)
 
 
 if __name__ == '__main__':
