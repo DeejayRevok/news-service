@@ -19,8 +19,15 @@ jobs:
     - name: Lint and check score
       run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt *
     - name: Test with unittest
-      run: coverage run --source . --branch --omit=*__init__** -m unittest discover -v tests
+      run: coverage run --source . --branch --omit=*__init__**,**tests** -m unittest discover -v tests
     - name: Check test coverage
       run: coverage report  --fail-under=80
+    - name: Generate coverage report
+      run: coverage xml
+    - name: Codecov upload
+      uses: codecov/codecov-action@v1.0.5
+      with:
+        token: 35467d4d-b784-4e1a-98b5-2c37a5eda8e6
+        file: coverage.xml
     - name: Build the docker-compose stack
       run: docker-compose up -d
