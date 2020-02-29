@@ -1,4 +1,4 @@
-name: Python application
+name: Event Service
 
 on: [push]
 
