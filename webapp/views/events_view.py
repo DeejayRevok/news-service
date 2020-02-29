@@ -86,5 +86,6 @@ def setup_routes(app: Application):
         app: application to add routes
 
     """
+    ROUTES.clean_routes()
     ROUTES.add_class_routes(EventViews(app))
     app.router.add_routes(ROUTES)

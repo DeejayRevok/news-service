@@ -20,6 +20,12 @@ class ClassRouteTableDef(RouteTableDef):
         """
         return "<ClassRouteTableDef count={}>".format(len(self._items))
 
+    def clean_routes(self):
+        """
+        Clean all the routes from the table
+        """
+        self._items = list()
+
     def route(self,
               method: str,
               path: str,
