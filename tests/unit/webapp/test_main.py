@@ -12,9 +12,9 @@ class TestMain(unittest.TestCase):
         Test if the parsed configuration contains the minimum required parameters
         """
         config_parsed = parse_config()
-        assert config_parsed.get('server', 'host') is not None
-        assert config_parsed.get('server', 'port') is not None
-        assert config_parsed.get('server', 'storage') is not None
+        self.assertIsNotNone(config_parsed.get('server', 'host'))
+        self.assertIsNotNone(config_parsed.get('server', 'port'))
+        self.assertIsNotNone(config_parsed.get('server', 'storage'))
 
     @patch('webapp.main.initialize_crons')
     @patch('webapp.main.setup_aiohttp_apispec')
@@ -27,12 +27,12 @@ class TestMain(unittest.TestCase):
         test_storage_client = dict(test='test')
         storage_factory_mock.return_value = test_storage_client
         app = init_app()
-        assert init_crons_mock.call_args[0][0] == app
+        self.assertEqual(init_crons_mock.call_args[0][0], app)
         apispec_mock.assert_called_once()
         view_mock.setup_routes.assert_called_once()
-        assert app['event_service'] is not None
-        assert isinstance(app['event_service'], EventService)
-        assert app['event_service']._client == test_storage_client
+        self.assertIsNotNone(app['event_service'])
+        self.assertTrue(isinstance(app['event_service'], EventService))
+        self.assertEqual(app['event_service']._client, test_storage_client)
 
 
 if __name__ == '__main__':

@@ -108,10 +108,10 @@ class TestEventService(unittest.TestCase):
 
         rendered_event = next(EventService.render_event_list([MOCKED_EVENT]), None)
 
-        assert rendered_event is not None
-        assert rendered_event['base_event']['event']['event_date'] == rendered_event_date
-        assert rendered_event['base_event']['event']['sell_from'] == rendered_event_sell_from
-        assert rendered_event['base_event']['event']['sell_to'] == rendered_event_sell_to
+        self.assertIsNotNone(rendered_event)
+        self.assertEqual(rendered_event['base_event']['event']['event_date'], rendered_event_date)
+        self.assertEqual(rendered_event['base_event']['event']['sell_from'], rendered_event_sell_from)
+        self.assertEqual(rendered_event['base_event']['event']['sell_to'], rendered_event_sell_to)
 
 
 if __name__ == '__main__':
