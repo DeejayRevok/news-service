@@ -28,7 +28,9 @@ class Implementation:
             """
             Cron scheduled runner
             """
+            self.app['apm'].client.begin_transaction('cron_execution')
             self._run()
+            self.app['apm'].client.end_transaction(f'{self.definition["class"].__name__}', 'OK')
 
         scheduled.start()
 

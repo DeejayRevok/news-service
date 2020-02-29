@@ -28,7 +28,8 @@ def raise_exception(**_):
 class TestEventsView(AioHTTPTestCase):
 
     @patch.object(EventService, 'get_events')
-    async def get_application(self, mocked_event_service):
+    @patch('elasticapm.middleware.ElasticAPM')
+    async def get_application(self, mocked_event_service, mock_apm_client):
         """
         Override the get_app method to return your application.
         """
@@ -36,6 +37,7 @@ class TestEventsView(AioHTTPTestCase):
         self.mocked_event_service = mocked_event_service
         app = Application()
         app['event_service'] = mocked_event_service
+        app['apm'] = mock_apm_client
         app.middlewares.append(middleware_factory)
         setup_routes(app)
         return app
