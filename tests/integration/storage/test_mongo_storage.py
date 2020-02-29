@@ -22,7 +22,7 @@ class TestMongoStorage(unittest.TestCase):
         Test if not setting the collection raises error
         """
         mongo_client = MongoStorage(self.MONGO_HOST, self.MONGO_PORT, self.DATABASE)
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(AttributeError):
             mongo_client.save(MOCKED_ITEM)
 
     @mongomock.patch(servers=((MONGO_HOST, MONGO_PORT),))

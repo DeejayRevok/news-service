@@ -6,6 +6,8 @@ import configparser
 from aiohttp.web import run_app
 from aiohttp.web_app import Application
 from aiohttp_apispec import setup_aiohttp_apispec
+from elasticapm import Client
+from elasticapm.middleware import ElasticAPM
 
 from cron.cron_factory import initialize_crons
 from infrastructure.storage.storage_factory import storage_factory
@@ -64,6 +66,14 @@ def init_app() -> Application:
     )
 
     initialize_crons(app)
+
+    apm_client = Client(config={
+        'SERVICE_NAME': parsed_config.get('ELASTIC_APM', 'service-name'),
+        'SECRET_TOKEN': parsed_config.get('ELASTIC_APM', 'secret-token'),
+        'SERVER_URL': f'http://{parsed_config.get("ELASTIC_APM", "host")}:{parsed_config.get("ELASTIC_APM", "port")}'
+    })
+
+    app['apm'] = ElasticAPM(app, apm_client)
 
     return app
 

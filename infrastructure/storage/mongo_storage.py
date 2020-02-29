@@ -37,9 +37,10 @@ def check_collection(function: Callable) -> Any:
         Returns: decorated function execution result
 
         """
-        assert args[0].collection is not None, 'Collection not set'
-
-        return function(*args, **kwargs)
+        if args[0].collection is not None:
+            return function(*args, **kwargs)
+        else:
+            raise AttributeError('Collection not set')
     return managed
 
 
