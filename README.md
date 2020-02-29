@@ -1,6 +1,8 @@
 # Event Service
 Social events service
 
+![CI status](https://github.com/DeejayRevok/event-service/workflows/Event%20Service/badge.svg)
+
 ## Installation
 ### Docker
 - Requirements:
