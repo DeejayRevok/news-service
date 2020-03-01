@@ -10,17 +10,18 @@ services:
 
   event-service:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
     image: event-service:latest
     ports:
       - "8080:8080"
     depends_on:
       - mongodb
       - apm-server
+      - elasticsearch
     links:
       - mongodb:mongodb
       - apm-server:apm-server
+      - logstash:logstash
 
   elasticsearch:
     image: elasticsearch:7.6.0
@@ -33,12 +34,24 @@ services:
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
       discovery.type: "single-node"
 
+  logstash:
+    build:
+      context: logstash
+    image: logstash-event-service:latest
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch:elasticsearch
+    ports:
+      - "5000:5000"
+
   kibana:
     image: kibana:7.6.0
     ports:
       - 5601:5601
     depends_on:
       - elasticsearch
+      - logstash
 
   apm-server:
     image: store/elastic/apm-server:7.6.0
