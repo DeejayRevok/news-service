@@ -30,4 +30,4 @@ jobs:
         token: 35467d4d-b784-4e1a-98b5-2c37a5eda8e6
         file: coverage.xml
     - name: Build the docker-compose stack
-      run: docker-compose up -d
+      run: docker-compose -f docker/docker-compose.yml up -d
