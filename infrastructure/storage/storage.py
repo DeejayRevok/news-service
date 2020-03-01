@@ -12,6 +12,16 @@ class Storage(metaclass=ABCMeta):
     """
     Storage interface
     """
+
+    @abstractmethod
+    def health_check(self) -> bool:
+        """
+        Check if the storage is available
+
+        Returns: True if the storage is available, False otherwise
+
+        """
+
     @abstractmethod
     def save(self, item: dict, exist_filter: StorageFilterType = None, exist_params: FixedDict = None):
         """

@@ -1,0 +1,11 @@
+heartbeat.monitors:
+- type: http
+  schedule: '@every 5s'
+  urls:
+    - http://event-service:8080/healthcheck
+
+output.elasticsearch:
+  hosts: ['elasticsearch:9200']
+
+setup.kibana:
+  host: 'kibana:5601'

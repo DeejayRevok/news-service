@@ -16,12 +16,16 @@ services:
       - "8080:8080"
     depends_on:
       - mongodb
+      - logstash
       - apm-server
       - elasticsearch
+      - kibana
     links:
       - mongodb:mongodb
       - apm-server:apm-server
+      - elasticsearch:elasticsearch
       - logstash:logstash
+      - kibana:kibana
 
   elasticsearch:
     image: elasticsearch:7.6.0
@@ -67,6 +71,19 @@ services:
     depends_on:
       - elasticsearch
       - kibana
+
+  heartbeat:
+    build:
+      context: heartbeat
+    image: heartbeat-event-service:latest
+    depends_on:
+      - elasticsearch
+      - kibana
+      - event-service
+    links:
+      - elasticsearch:elasticsearch
+      - kibana:kibana
+      - event-service:event-service
 
 volumes:
   mongodb_data:
