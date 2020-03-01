@@ -1,7 +1,8 @@
 """
 Logging configuration
 """
-from logging import config as logging_config, getLogger, DEBUG
+import configparser
+from logging import config as logging_config, getLogger, DEBUG, INFO
 from logging import Logger
 from os import makedirs
 from os.path import join, dirname, exists
@@ -20,6 +21,10 @@ def check_dir(directory: str) -> str:
     if not exists(directory):
         makedirs(directory)
     return directory
+
+
+CONFIG_PARSER = configparser.RawConfigParser()
+CONFIG_PARSER.read(join(dirname(__file__), 'config.ini'))
 
 
 LOG_FILE = join(check_dir(join(dirname(__file__), 'var', 'logs')), "tests.log")
@@ -44,11 +49,18 @@ LOG_CONFIG = {
             'filename': LOG_FILE,
             'formatter': 'error',
             'level': DEBUG
+        },
+        'logstash': {
+            'class': 'logstash.TCPLogstashHandler',
+            'level': INFO,
+            'host': CONFIG_PARSER.get('LOGSTASH', 'host'),
+            'port': int(CONFIG_PARSER.get('LOGSTASH', 'port')),
+            'version': 1
         }
     },
     'loggers': {
         'main_logger': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console', 'file', 'logstash'],
             'level': DEBUG}
     }
 }
