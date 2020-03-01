@@ -12,3 +12,4 @@ coverage==5.0.3
 elastic-apm==5.4.3
 psutil==5.7.0
 python-logstash==0.4.6
+aio-tiny-healthcheck==1.1.2

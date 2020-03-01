@@ -5,6 +5,7 @@ import functools
 from typing import Callable, Any, Iterator, List
 
 import pymongo
+from pymongo.errors import ServerSelectionTimeoutError
 
 from infrastructure.storage.filters.mongo_filter import MongoFilter
 from infrastructure.storage.filters.storage_filter_type import StorageFilterType
@@ -48,6 +49,7 @@ class MongoStorage(Storage):
     """
     MongoDB storage implementation
     """
+
     def __init__(self, host: str, port: int, database: str):
         """
         Initialize a mongo storage client
@@ -57,9 +59,23 @@ class MongoStorage(Storage):
             port: mongodb port
             database: mongodb database name
         """
-        mongo_client = pymongo.MongoClient(host, int(port), connect=True)
-        self._database = mongo_client[database]
+        self._mongo_client = pymongo.MongoClient(host, int(port), connect=True)
+        self._database = self._mongo_client[database]
         self.collection = None
+
+    def health_check(self) -> bool:
+        """
+        Check if the mongodb storage is available
+
+        Returns: True if mongodb is available, False otherwise
+
+        """
+        try:
+            self._mongo_client.server_info()
+            return True
+        except ServerSelectionTimeoutError:
+            LOGGER.error('MongoDB is not available at %s', self._mongo_client.HOST + self._mongo_client.PORT)
+            return False
 
     def set_collection(self, collection: str):
         """

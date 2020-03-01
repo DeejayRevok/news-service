@@ -1,8 +1,7 @@
 """
 Application main module
 """
-import configparser
-
+from aio_tiny_healthcheck import Checker
 from aiohttp.web import run_app
 from aiohttp.web_app import Application
 from aiohttp_apispec import setup_aiohttp_apispec
@@ -11,26 +10,14 @@ from elasticapm.middleware import ElasticAPM
 
 from cron.cron_factory import initialize_crons
 from infrastructure.storage.storage_factory import storage_factory
+from lib.config_tools import parse_config
 from log_config import get_logger
 from services.event_service import EventService
-from webapp.definitions import CONFIG_PATH, API_VERSION
+from webapp.definitions import CONFIG_PATH, API_VERSION, health_check
 from webapp.middlewares import middleware_factory
 from webapp.views import events_view
 
 LOGGER = get_logger()
-
-
-def parse_config() -> configparser.RawConfigParser:
-    """
-    Parse the application configuration
-
-    Returns: application configuration
-
-    """
-    LOGGER.info('Loading configuration')
-    config_parser = configparser.RawConfigParser()
-    config_parser.read(CONFIG_PATH)
-    return config_parser
 
 
 def init_app() -> Application:
@@ -43,7 +30,7 @@ def init_app() -> Application:
     LOGGER.info('Initializing app')
     app = Application()
 
-    parsed_config = parse_config()
+    parsed_config = parse_config(CONFIG_PATH)
 
     app['host'] = parsed_config.get('server', 'host')
     app['port'] = int(parsed_config.get('server', 'port'))
@@ -52,6 +39,10 @@ def init_app() -> Application:
 
     event_store_client = storage_factory(parsed_config.get('server', 'storage'), storage_config)
     app['event_service'] = EventService(event_store_client)
+
+    healthcheck_provider = Checker(success_code=200, fail_code=500)
+    healthcheck_provider.add_check('health_check', health_check)
+    app.router.add_get('/healthcheck', healthcheck_provider.aiohttp_handler)
 
     events_view.setup_routes(app)
 
