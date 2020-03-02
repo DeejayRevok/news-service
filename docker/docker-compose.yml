@@ -2,11 +2,19 @@ version: '3'
 
 services:
   mongodb:
-    image: 'bitnami/mongodb:latest'
+    build:
+      context: mongo
+    image: mongo-event-service:latest
     volumes:
-      - 'mongodb_data:/bitnami'
+      - 'mongodb_data:/data/db'
     ports:
       - "27017:27017"
+    depends_on:
+      - elasticsearch
+      - kibana
+    links:
+      - elasticsearch:elasticsearch
+      - kibana:kibana
 
   event-service:
     build:
