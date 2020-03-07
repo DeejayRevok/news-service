@@ -24,6 +24,13 @@ def raise_exception(**_):
     raise Exception(EXCEPTION_MESSAGE)
 
 
+async def mock_auth_middleware(app, handler):
+    async def middleware(request):
+        request.user = {'test': 'test'}
+        return await handler(request)
+    return middleware
+
+
 class TestEventsView(AioHTTPTestCase):
 
     @patch.object(EventService, 'get_events')
@@ -32,12 +39,17 @@ class TestEventsView(AioHTTPTestCase):
         """
         Override the get_app method to return your application.
         """
-        mocked_event_service.get_events.return_value = iter(MOCKED_RESPONSE)
+
+        async def mock_event_response():
+            return iter(MOCKED_RESPONSE)
+
+        mocked_event_service.get_events.return_value = mock_event_response()
         self.mocked_event_service = mocked_event_service
         app = Application()
         app['event_service'] = mocked_event_service
         app['apm'] = mock_apm_client
         app.middlewares.append(error_middleware)
+        app.middlewares.append(mock_auth_middleware)
         setup_routes(app)
         return app
 
