@@ -55,7 +55,7 @@ class TestEventService(unittest.TestCase):
         """
         event_service = EventService(client)
 
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
         loop.run_until_complete(event_service.save_event(MOCKED_EVENT))
 
         client.save.assert_called_with(MOCKED_EVENT, exist_filter=StorageFilterType.UNIQUE,
@@ -70,7 +70,7 @@ class TestEventService(unittest.TestCase):
         event_service = EventService(client)
         event_service.render_event_list = event_service_mocked.render_event_list
 
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
         loop.run_until_complete(event_service.get_events())
 
         client.get.assert_called_with([StorageFilterType.UNIQUE],
@@ -87,21 +87,21 @@ class TestEventService(unittest.TestCase):
         start = 1
         end = 2
 
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
         loop.run_until_complete(event_service.get_events(start=start, end=end))
 
         client.get.assert_called_with([StorageFilterType.RANGE, StorageFilterType.UNIQUE],
                                       [FixedDict(dict(key='base_event.event.event_date', upper=end, lower=start)),
                                        FixedDict(dict(key='base_event.sell_mode', value='online'))])
 
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
         loop.run_until_complete(event_service.get_events(start=start))
 
         client.get.assert_called_with([StorageFilterType.RANGE, StorageFilterType.UNIQUE],
                                       [FixedDict(dict(key='base_event.event.event_date', upper=None, lower=start)),
                                        FixedDict(dict(key='base_event.sell_mode', value='online'))])
 
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
         loop.run_until_complete(event_service.get_events(end=end))
 
         client.get.assert_called_with([StorageFilterType.RANGE, StorageFilterType.UNIQUE],
