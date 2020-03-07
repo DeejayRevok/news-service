@@ -61,9 +61,18 @@ async def error_middleware(app: Application, handler: Callable):
     return middleware
 
 
-async def auth_middleware(app, handler):
+async def auth_middleware(app: Application, handler: Callable):
+    """
+    This middlewares check if the requests are authenticated
 
-    async def middleware(request):
+    Args:
+        app: web application
+        handler: request handler
+
+    Returns: authentication middleware
+
+    """
+    async def middleware(request: Request) -> Response:
         request.user = None
         jwt_token = request.headers.get('X-API-Key', None)
         if jwt_token:
