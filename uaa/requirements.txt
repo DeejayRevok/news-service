@@ -1,0 +1,13 @@
+multidict==4.6.1
+yarl==1.3.0
+aiohttp==3.6.2
+aiohttp-apispec==2.2.1
+aio-tiny-healthcheck==1.1.2
+pylint-fail-under==0.3.0
+pyjwt==1.7.1
+sqlalchemy==1.3.13
+mysqlclient==1.4.6
+coverage==5.0.3
+elastic-apm==5.4.3
+psutil==5.7.0
+python-logstash==0.4.6

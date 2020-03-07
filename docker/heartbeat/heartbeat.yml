@@ -2,7 +2,8 @@ heartbeat.monitors:
 - type: http
   schedule: '@every 5s'
   urls:
-    - http://event-service:8080/healthcheck
+    - http://event-manager:8080/healthcheck
+    - http://uaa:8081/healthcheck
 
 output.elasticsearch:
   hosts: ['elasticsearch:9200']
