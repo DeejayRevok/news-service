@@ -15,11 +15,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r ./event-manager/requirements.txt
+        pip install -r event_manager/requirements.txt
     - name: Lint and check score
-      run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt ./event-manager/*
+      run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt event_manager/*
     - name: Test with unittest
-      run: coverage run --source ./event-manager --branch --omit=*__init__**,**tests** -m unittest discover -v tests
+      run: coverage run --source ./event_manager --branch --omit=*__init__**,**tests** -m unittest discover -v tests
     - name: Check test coverage
       run: coverage report  --fail-under=80
     - name: Generate coverage report
