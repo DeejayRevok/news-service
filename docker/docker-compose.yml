@@ -12,14 +12,37 @@ services:
     depends_on:
       - elasticsearch
       - kibana
-    links:
-      - elasticsearch:elasticsearch
-      - kibana:kibana
 
-  event-service:
+  mysql:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+    - 'mysql_data:/var/lib/mysql'
+    environment:
+      MYSQL_ROOT_PASSWORD: ev3nts3rv1ce
+      MYSQL_DATABASE: eventservice
+      MYSQL_USER: app-us3r
+      MYSQL_PASSWORD: ev3ntp4ssw0r0
+    ports:
+      - "3306:3306"
+
+  uaa:
     build:
-      context: ..
-    image: event-service:latest
+      context: ../uaa
+    image: uaa:latest
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql
+      - logstash
+      - apm-server
+      - elasticsearch
+      - kibana
+
+  event-manager:
+    build:
+      context: ../event_manager
+    image: event-manager:latest
     ports:
       - "8080:8080"
     depends_on:
@@ -28,12 +51,7 @@ services:
       - apm-server
       - elasticsearch
       - kibana
-    links:
-      - mongodb:mongodb
-      - apm-server:apm-server
-      - elasticsearch:elasticsearch
-      - logstash:logstash
-      - kibana:kibana
+      - uaa
 
   elasticsearch:
     image: elasticsearch:7.6.0
@@ -52,8 +70,6 @@ services:
     image: logstash-event-service:latest
     depends_on:
       - elasticsearch
-    links:
-      - elasticsearch:elasticsearch
     ports:
       - "5000:5000"
 
@@ -87,12 +103,10 @@ services:
     depends_on:
       - elasticsearch
       - kibana
-      - event-service
-    links:
-      - elasticsearch:elasticsearch
-      - kibana:kibana
-      - event-service:event-service
+      - event-manager
+      - uaa
 
 volumes:
   mongodb_data:
+  mysql_data:
   elastic_data:
