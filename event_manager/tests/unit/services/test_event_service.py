@@ -1,3 +1,4 @@
+import asyncio
 import unittest
 from datetime import datetime
 from unittest.mock import patch
@@ -53,7 +54,10 @@ class TestEventService(unittest.TestCase):
         Test persisting event
         """
         event_service = EventService(client)
-        event_service.save_event(MOCKED_EVENT)
+
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(event_service.save_event(MOCKED_EVENT))
+
         client.save.assert_called_with(MOCKED_EVENT, exist_filter=StorageFilterType.UNIQUE,
                                        exist_params=FixedDict(dict(key='base_event.base_event_id', value='291')))
 
@@ -65,7 +69,10 @@ class TestEventService(unittest.TestCase):
         """
         event_service = EventService(client)
         event_service.render_event_list = event_service_mocked.render_event_list
-        event_service.get_events()
+
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(event_service.get_events())
+
         client.get.assert_called_with([StorageFilterType.UNIQUE],
                                       [FixedDict(dict(key='base_event.sell_mode', value='online'))])
 
@@ -79,17 +86,24 @@ class TestEventService(unittest.TestCase):
         event_service.render_event_list = event_service_mocked.render_event_list
         start = 1
         end = 2
-        event_service.get_events(start=start, end=end)
+
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(event_service.get_events(start=start, end=end))
+
         client.get.assert_called_with([StorageFilterType.RANGE, StorageFilterType.UNIQUE],
                                       [FixedDict(dict(key='base_event.event.event_date', upper=end, lower=start)),
                                        FixedDict(dict(key='base_event.sell_mode', value='online'))])
 
-        event_service.get_events(start=start)
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(event_service.get_events(start=start))
+
         client.get.assert_called_with([StorageFilterType.RANGE, StorageFilterType.UNIQUE],
                                       [FixedDict(dict(key='base_event.event.event_date', upper=None, lower=start)),
                                        FixedDict(dict(key='base_event.sell_mode', value='online'))])
 
-        event_service.get_events(end=end)
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(event_service.get_events(end=end))
+
         client.get.assert_called_with([StorageFilterType.RANGE, StorageFilterType.UNIQUE],
                                       [FixedDict(dict(key='base_event.event.event_date', upper=end, lower=None)),
                                        FixedDict(dict(key='base_event.sell_mode', value='online'))])
