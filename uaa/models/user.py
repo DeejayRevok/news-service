@@ -5,10 +5,10 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.engine import Engine
 from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+BASE = declarative_base()
 
 
-class User(Base):
+class User(BASE):
     """
     User model
     """
@@ -37,4 +37,4 @@ def create_schema(db_engine: Engine):
         db_engine: database engine
 
     """
-    Base.metadata.tables['users'].create(db_engine, checkfirst=True)
+    BASE.metadata.tables['users'].create(db_engine, checkfirst=True)

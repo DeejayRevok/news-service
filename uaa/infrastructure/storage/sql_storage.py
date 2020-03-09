@@ -32,7 +32,7 @@ class SqlStorage:
         session = sessionmaker(bind=self.engine)
         self._session = session()
 
-    def save(self, model_instance: DeclarativeMeta) -> DeclarativeMeta:
+    def save(self, model_instance):
         """
         Save the specified model to the database
 
@@ -47,7 +47,7 @@ class SqlStorage:
         self._session.flush()
         return model_instance
 
-    def get_one(self, model: DeclarativeMeta, **filters: dict) -> DeclarativeMeta:
+    def get_one(self, model, **filters):
         """
         Get one persistence instance matching the given filters
 

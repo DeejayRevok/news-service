@@ -16,5 +16,5 @@ def initialize_db(db_engine: Engine):
         db_engine: database engine instance
 
     """
-    for module_name, module in inspect.getmembers(models, inspect.ismodule):
+    for _, module in inspect.getmembers(models, inspect.ismodule):
         module.create_schema(db_engine)

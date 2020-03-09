@@ -9,7 +9,7 @@ JWT_SECRET = 'secret'
 JWT_ALGORITHM = 'HS256'
 
 
-def generate_token(payload: dict) -> str:
+def generate_token(payload: dict) -> bytes:
     """
     Generate one JWT token containing the payload data
 
@@ -34,8 +34,8 @@ def decode_token(token: str) -> dict:
     """
     if not re.fullmatch(r'(Bearer)\s(.*)', token):
         raise ValueError('Token is invalid')
-    else:
-        inner_token = re.match(r'(Bearer)\s(.*)', token)[2]
+
+    inner_token = re.match(r'(Bearer)\s(.*)', token)[2]
     try:
         return decode(inner_token, JWT_SECRET,
                       algorithms=[JWT_ALGORITHM])
