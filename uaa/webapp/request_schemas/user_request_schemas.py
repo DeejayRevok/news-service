@@ -1,3 +1,6 @@
+"""
+User request schemas module
+"""
 from marshmallow import Schema, fields
 
 

@@ -50,8 +50,8 @@ LOG_CONFIG = {
         'logstash': {
             'class': 'logstash.TCPLogstashHandler',
             'level': INFO,
-            'host': CONFIG_PARSER.get('LOGSTASH', 'host'),
-            'port': int(CONFIG_PARSER.get('LOGSTASH', 'port')),
+            'host': CONFIG_PARSER.get_one('LOGSTASH', 'host'),
+            'port': int(CONFIG_PARSER.get_one('LOGSTASH', 'port')),
             'version': 1
         }
     },
