@@ -1,9 +1,12 @@
+"""
+Authentication request schemas module
+"""
 from marshmallow import Schema, fields
 
 
 class PostAuthSchema(Schema):
     """
-    Class that describes the schema of the post create user request
+    Class that describes the schema of the post authenticate request
     """
     username = fields.Str(description="User name")
     password = fields.Str(description="User password")

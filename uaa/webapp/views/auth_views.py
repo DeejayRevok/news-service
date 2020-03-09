@@ -1,3 +1,6 @@
+"""
+Authentication views module
+"""
 from aiohttp.web_app import Application
 from aiohttp.web_exceptions import HTTPBadRequest
 from aiohttp.web_request import Request
@@ -16,12 +19,12 @@ ROUTES = ClassRouteTableDef()
 
 class AuthViews:
     """
-    Event REST endpoint views handler
+    Authentication REST endpoint views handler
     """
 
     def __init__(self, app: Application):
         """
-        Initialize the event views handler
+        Initialize the authentication views handler
 
         Args:
             app: application associated
@@ -37,12 +40,12 @@ class AuthViews:
     @ROUTES.post(f'/{API_VERSION}{ROOT_PATH}')
     async def authenticate(self, request: Request) -> Response:
         """
-        Request to get an user identified by its username
+        Request to authenticate an user
 
         Args:
             request: input REST request
 
-        Returns: json REST response with the queried user
+        Returns: json REST response with the authentication token
 
         """
         LOGGER.info('REST request to get one user')
@@ -71,7 +74,7 @@ class AuthViews:
         Args:
             request: input REST request
 
-        Returns: json REST response with the queried user
+        Returns: json REST response with the authenticated user data
 
         """
         LOGGER.info('REST request to validate JWT token')

@@ -1,3 +1,6 @@
+"""
+User views module
+"""
 from aiohttp.web_app import Application
 from aiohttp.web_exceptions import HTTPBadRequest
 from aiohttp.web_request import Request
@@ -16,12 +19,12 @@ ROUTES = ClassRouteTableDef()
 
 class UserViews:
     """
-    Event REST endpoint views handler
+    User REST endpoint views handler
     """
 
     def __init__(self, app: Application):
         """
-        Initialize the event views handler
+        Initialize the user views handler
 
         Args:
             app: application associated
@@ -68,7 +71,7 @@ class UserViews:
         Args:
             request: input REST request
 
-        Returns: json REST response with the queried events
+        Returns: json REST response with the created user
 
         """
         LOGGER.info('REST request to create user')

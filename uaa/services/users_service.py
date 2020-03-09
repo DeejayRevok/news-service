@@ -13,7 +13,7 @@ class UserService:
         return self._client.save(User(username=username, password=password_hash))
 
     async def get_user_by_id(self, identifier):
-        return self._client.get(User, id=identifier)
+        return self._client.get_one(User, id=identifier)
 
     async def get_user_by_name(self, username):
-        return self._client.get(User, username=username)
+        return self._client.get_one(User, username=username)

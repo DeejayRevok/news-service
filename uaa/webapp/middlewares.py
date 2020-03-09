@@ -1,3 +1,6 @@
+"""
+UAA webapp middlewares module
+"""
 from typing import Callable
 
 from aiohttp.web_app import Application
@@ -56,11 +59,20 @@ async def error_middleware(app: Application, handler: Callable):
     return middleware
 
 
-async def auth_middleware(app, handler):
+async def auth_middleware(app: Application, handler: Callable) -> Callable:
+    """
+    Middleware used to verify the authentication JWT token
 
-    async def middleware(request):
+    Args:
+        app: application associated
+        handler: request handler
+
+    Returns: authentication middleware
+
+    """
+    async def middleware(request: Request):
         request.user = None
-        jwt_token = request.headers.get('X-API-Key', None)
+        jwt_token = request.headers.getone('X-API-Key', None)
         if jwt_token:
             payload = decode_token(jwt_token)
             try:
