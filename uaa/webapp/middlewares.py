@@ -76,7 +76,7 @@ async def auth_middleware(app: Application, handler: Callable) -> Callable:
         if jwt_token:
             payload = decode_token(jwt_token)
             try:
-                request.user = await app['user_service'].get_user_by_id(payload['user_id'])
+                request.user = await app['user_service'].get_user_data(payload['user_id'])
             except KeyError:
                 raise HTTPUnauthorized(reason='Wrong authorization token')
         return await handler(request)

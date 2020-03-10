@@ -2,7 +2,6 @@
 SQL database client module
 """
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import sessionmaker
 
 from uaa.log_config import get_logger
@@ -46,6 +45,19 @@ class SqlStorage:
         self._session.commit()
         self._session.flush()
         return model_instance
+
+    def get_all(self, model) -> list:
+        """
+        Get all the stored instances of the given model
+
+        Args:
+            model: base model
+
+        Returns: list of persisted instances
+
+        """
+        query = self._session.query(model)
+        return query.all()
 
     def get_one(self, model, **filters):
         """

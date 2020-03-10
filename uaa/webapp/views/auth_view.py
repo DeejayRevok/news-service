@@ -48,7 +48,7 @@ class AuthViews:
         Returns: json REST response with the authentication token
 
         """
-        LOGGER.info('REST request to get one user')
+        LOGGER.info('REST request to authenticate an user')
 
         try:
             username = request['data']['username']
