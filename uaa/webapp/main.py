@@ -16,7 +16,7 @@ from uaa.services.authentication_service import AuthService
 from uaa.services.users_service import UserService
 from uaa.webapp.definitions import CONFIG_PATH, health_check, API_VERSION
 from uaa.webapp.middlewares import error_middleware, auth_middleware
-from uaa.webapp.views import users_view, auth_views
+from uaa.webapp.views import users_view, auth_view
 
 LOGGER = get_logger()
 
@@ -48,7 +48,7 @@ def init_app() -> Application:
     app.router.add_get('/healthcheck', healthcheck_provider.aiohttp_handler)
 
     users_view.setup_routes(app)
-    auth_views.setup_routes(app)
+    auth_view.setup_routes(app)
 
     app.middlewares.append(error_middleware)
     app.middlewares.append(auth_middleware)

@@ -25,8 +25,8 @@ class User(BASE):
         Returns: iterator to the model properties
 
         """
-        yield 'id', repr(self.id)
-        yield 'username', repr(self.username)
+        yield 'id', self.id
+        yield 'username', self.username
 
 
 def create_schema(db_engine: Engine):
