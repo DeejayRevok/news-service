@@ -6,7 +6,7 @@ from logging import Logger
 from os import makedirs
 from os.path import join, dirname, exists
 
-from event_manager.log_config import CONFIG_PARSER
+import configparser
 
 
 def check_dir(directory: str) -> str:
@@ -23,6 +23,8 @@ def check_dir(directory: str) -> str:
         makedirs(directory)
     return directory
 
+CONFIG_PARSER = configparser.RawConfigParser()
+CONFIG_PARSER.read(join(dirname(__file__), 'config.ini'))
 
 LOG_FILE = join(check_dir(join(dirname(__file__), 'var', 'logs')), "uaa.log")
 
