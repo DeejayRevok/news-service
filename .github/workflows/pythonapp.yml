@@ -32,32 +32,32 @@ jobs:
     - name: Build the docker stack
       run: docker-compose -f docker/docker-compose.yml build event-manager
 
-    uaa-CI:
-      runs-on: ubuntu-latest
+  uaa-CI:
+    runs-on: ubuntu-latest
 
-      steps:
-        - uses: actions/checkout@v2
-        - name: Set up Python 3.7
-          uses: actions/setup-python@v1
-          with:
-            python-version: 3.7
-        - name: Install dependencies
-          run: |
-            python -m pip install --upgrade pip
-            pip install -r uaa/requirements.txt
-        - name: Lint and check score
-          run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt uaa/*
-        - name: Test with unittest
-          run: coverage run --source ./uaa --branch --omit=*__init__**,**tests** -m unittest discover -v uaa/tests
-        - name: Check test coverage
-          run: coverage report  --fail-under=80
-        - name: Generate coverage report
-          run: coverage xml -o coverage_uaa.xml
-        - name: Codecov upload
-          uses: codecov/codecov-action@v1.0.5
-          with:
-            token: 35467d4d-b784-4e1a-98b5-2c37a5eda8e6
-            file: coverage_uaa.xml
-        - name: Build the docker stack
-          run: docker-compose -f docker/docker-compose.yml build event-manager
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r uaa/requirements.txt
+      - name: Lint and check score
+        run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt uaa/*
+      - name: Test with unittest
+        run: coverage run --source ./uaa --branch --omit=*__init__**,**tests** -m unittest discover -v uaa/tests
+      - name: Check test coverage
+        run: coverage report  --fail-under=80
+      - name: Generate coverage report
+        run: coverage xml -o coverage_uaa.xml
+      - name: Codecov upload
+        uses: codecov/codecov-action@v1.0.5
+        with:
+          token: 35467d4d-b784-4e1a-98b5-2c37a5eda8e6
+          file: coverage_uaa.xml
+      - name: Build the docker stack
+        run: docker-compose -f docker/docker-compose.yml build event-manager
 
