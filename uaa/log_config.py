@@ -59,7 +59,7 @@ LOG_CONFIG = {
     },
     'loggers': {
         'main_logger': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console', 'file', 'logstash'],
             'level': DEBUG}
     }
 }
