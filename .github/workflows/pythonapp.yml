@@ -30,15 +30,18 @@ jobs:
         token: 35467d4d-b784-4e1a-98b5-2c37a5eda8e6
         file: coverage_event_manager.xml
     - name: Build the docker image
-      run: docker-compose -f docker/docker-compose.yml build event-manager
+      run: docker-compose -f docker/docker-compose.yml build event-manager && docker tag event-manager:latest djrevok/event-manager:latest
+    - name: Login to docker hub
+      if: github.ref == 'refs/heads/develop'
+      uses: actions-hub/docker/login@master
+      env:
+        DOCKER_USERNAME: djrevok
+        DOCKER_PASSWORD: Sds93@Dckr20
     - name: Publish docker image
       if: github.ref == 'refs/heads/develop'
-      uses: manusa/actions-publish-docker@v1.0.1
+      uses: actions-hub/docker@master
       with:
-        name: event-manager
-        tag: latest
-        username: djrevok
-        password: Sds93@Dckr20
+        args: push djrevok/event-manager:latest
 
   uaa-CI:
     runs-on: ubuntu-latest
@@ -66,13 +69,16 @@ jobs:
         with:
           token: 35467d4d-b784-4e1a-98b5-2c37a5eda8e6
           file: coverage_uaa.xml
-      - name: Build the docker stack
-        run: docker-compose -f docker/docker-compose.yml build uaa
+      - name: Build the docker image
+        run: docker-compose -f docker/docker-compose.yml build uaa && docker tag uaa:latest djrevok/uaa:latest
+      - name: Login to docker hub
+        if: github.ref == 'refs/heads/develop'
+        uses: actions-hub/docker/login@master
+        env:
+          DOCKER_USERNAME: djrevok
+          DOCKER_PASSWORD: Sds93@Dckr20
       - name: Publish docker image
         if: github.ref == 'refs/heads/develop'
-        uses: manusa/actions-publish-docker@v1.0.1
+        uses: actions-hub/docker@master
         with:
-          name: uaa
-          tag: latest
-          username: djrevok
-          password: Sds93@Dckr20
+          args: push djrevok/uaa:latest
