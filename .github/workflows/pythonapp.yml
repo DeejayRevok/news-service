@@ -27,7 +27,7 @@ jobs:
     - name: Codecov upload
       uses: codecov/codecov-action@v1.0.5
       with:
-        token: 35467d4d-b784-4e1a-98b5-2c37a5eda8e6
+        token: ${{ secrets.CODECOV_TOKEN }}
         file: coverage_event_manager.xml
     - name: Build the docker image
       run: docker-compose -f docker/docker-compose.yml build event-manager && docker tag event-manager:latest djrevok/event-manager:latest
@@ -35,8 +35,8 @@ jobs:
       if: github.ref == 'refs/heads/develop'
       uses: actions-hub/docker/login@master
       env:
-        DOCKER_USERNAME: djrevok
-        DOCKER_PASSWORD: Sds93@Dckr20
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     - name: Publish docker image
       if: github.ref == 'refs/heads/develop'
       uses: actions-hub/docker@master
@@ -67,7 +67,7 @@ jobs:
       - name: Codecov upload
         uses: codecov/codecov-action@v1.0.5
         with:
-          token: 35467d4d-b784-4e1a-98b5-2c37a5eda8e6
+          token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage_uaa.xml
       - name: Build the docker image
         run: docker-compose -f docker/docker-compose.yml build uaa && docker tag uaa:latest djrevok/uaa:latest
@@ -75,8 +75,8 @@ jobs:
         if: github.ref == 'refs/heads/develop'
         uses: actions-hub/docker/login@master
         env:
-          DOCKER_USERNAME: djrevok
-          DOCKER_PASSWORD: Sds93@Dckr20
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - name: Publish docker image
         if: github.ref == 'refs/heads/develop'
         uses: actions-hub/docker@master
