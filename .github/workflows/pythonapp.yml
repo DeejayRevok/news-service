@@ -29,8 +29,20 @@ jobs:
       with:
         token: 35467d4d-b784-4e1a-98b5-2c37a5eda8e6
         file: coverage_event_manager.xml
-    - name: Build the docker stack
+    - name: Build the docker image
       run: docker-compose -f docker/docker-compose.yml build event-manager
+    - name: Publish docker image
+      if: github.ref == 'refs/heads/develop'
+      uses: tinact/docker.image@1.0.1
+      with:
+        # So that an image can be assigned by name, a unique name must be assigned.
+        image_name: event-manager
+        # Each image should have a tag for unique identification.
+        image_tag: latest
+        # Registry Username
+        registry_username: djrevok
+        # Registry Password. This should be stored in a Secret on Github.
+        registry_password: Sds93@Dckr20
 
   uaa-CI:
     runs-on: ubuntu-latest
@@ -60,4 +72,16 @@ jobs:
           file: coverage_uaa.xml
       - name: Build the docker stack
         run: docker-compose -f docker/docker-compose.yml build uaa
+      - name: Publish docker image
+        if: github.ref == 'refs/heads/develop'
+        uses: tinact/docker.image@1.0.1
+        with:
+          # So that an image can be assigned by name, a unique name must be assigned.
+          image_name: uaa
+          # Each image should have a tag for unique identification.
+          image_tag: latest
+          # Registry Username
+          registry_username: djrevok
+          # Registry Password. This should be stored in a Secret on Github.
+          registry_password: Sds93@Dckr20
 
