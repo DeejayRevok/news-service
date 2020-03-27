@@ -33,16 +33,12 @@ jobs:
       run: docker-compose -f docker/docker-compose.yml build event-manager
     - name: Publish docker image
       if: github.ref == 'refs/heads/develop'
-      uses: tinact/docker.image@1.0.1
+      uses: manusa/actions-publish-docker@v1.0.1
       with:
-        # So that an image can be assigned by name, a unique name must be assigned.
-        image_name: event-manager
-        # Each image should have a tag for unique identification.
-        image_tag: latest
-        # Registry Username
-        registry_username: djrevok
-        # Registry Password. This should be stored in a Secret on Github.
-        registry_password: Sds93@Dckr20
+        name: event-manager
+        tag: latest
+        username: djrevok
+        password: Sds93@Dckr20
 
   uaa-CI:
     runs-on: ubuntu-latest
@@ -74,14 +70,9 @@ jobs:
         run: docker-compose -f docker/docker-compose.yml build uaa
       - name: Publish docker image
         if: github.ref == 'refs/heads/develop'
-        uses: tinact/docker.image@1.0.1
+        uses: manusa/actions-publish-docker@v1.0.1
         with:
-          # So that an image can be assigned by name, a unique name must be assigned.
-          image_name: uaa
-          # Each image should have a tag for unique identification.
-          image_tag: latest
-          # Registry Username
-          registry_username: djrevok
-          # Registry Password. This should be stored in a Secret on Github.
-          registry_password: Sds93@Dckr20
-
+          name: uaa
+          tag: latest
+          username: djrevok
+          password: Sds93@Dckr20
