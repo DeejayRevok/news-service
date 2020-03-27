@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: event-service-fanout
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: event-service.com
+    http:
+      paths:
+      - path: /manager
+        backend:
+          serviceName: event-manager
+          servicePort: 8080
+      - path: /uaa
+        backend:
+          serviceName: uaa
+          servicePort: 8081
+      - path: /kibana
+        backend:
+          serviceName: kibana
+          servicePort: 5601
