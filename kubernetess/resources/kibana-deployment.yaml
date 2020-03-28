@@ -24,7 +24,10 @@ spec:
         io.kompose.service: kibana
     spec:
       containers:
-      - image: kibana:7.6.0
+      - env:
+          - name: SERVER_BASEPATH
+            value: "/kibana"
+        image: kibana:7.6.0
         imagePullPolicy: ""
         name: kibana
         ports:

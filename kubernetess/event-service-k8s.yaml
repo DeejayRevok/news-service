@@ -285,7 +285,7 @@ spec:
         io.kompose.service: event-manager
     spec:
       containers:
-      - image: event-manager:latest
+      - image: djrevok/event-manager:latest
         imagePullPolicy: IfNotPresent
         name: event-manager
         ports:
@@ -322,7 +322,7 @@ spec:
         io.kompose.service: heartbeat
     spec:
       containers:
-      - image: heartbeat-event-service:latest
+      - image: djrevok/heartbeat-event-service:latest
         imagePullPolicy: IfNotPresent
         name: heartbeat
         resources: {}
@@ -357,7 +357,10 @@ spec:
         io.kompose.service: kibana
     spec:
       containers:
-      - image: kibana:7.6.0
+      - env:
+        - name: SERVER_BASEPATH
+          value: /kibana
+        image: kibana:7.6.0
         imagePullPolicy: ""
         name: kibana
         ports:
@@ -394,7 +397,7 @@ spec:
         io.kompose.service: logstash
     spec:
       containers:
-      - image: logstash-event-service:latest
+      - image: djrevok/logstash-event-service:latest
         imagePullPolicy: IfNotPresent
         name: logstash
         ports:
@@ -432,7 +435,7 @@ spec:
         io.kompose.service: mongodb
     spec:
       containers:
-      - image: mongo-event-service:latest
+      - image: djrevok/mongo-event-service:latest
         imagePullPolicy: IfNotPresent
         name: mongodb
         ports:
@@ -530,7 +533,7 @@ spec:
         io.kompose.service: uaa
     spec:
       containers:
-      - image: uaa:latest
+      - image: djrevok/uaa:latest
         imagePullPolicy: IfNotPresent
         name: uaa
         ports:
@@ -540,6 +543,29 @@ spec:
       serviceAccountName: ""
       volumes: null
 status: {}
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: event-service-fanout
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: event-manager
+          servicePort: 8080
+        path: /manager
+      - backend:
+          serviceName: uaa
+          servicePort: 8081
+        path: /uaa
+      - backend:
+          serviceName: kibana
+          servicePort: 5601
+        path: /kibana
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

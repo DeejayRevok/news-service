@@ -24,7 +24,7 @@ spec:
         io.kompose.service: event-manager
     spec:
       containers:
-      - image: event-manager:latest
+      - image: djrevok/event-manager:latest
         imagePullPolicy: IfNotPresent
         name: event-manager
         ports:
