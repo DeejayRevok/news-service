@@ -285,7 +285,10 @@ spec:
         io.kompose.service: event-manager
     spec:
       containers:
-      - image: djrevok/event-manager:latest
+      - env:
+        - name: SERVER_BASEPATH
+          value: /manager
+        image: djrevok/event-manager:latest
         imagePullPolicy: IfNotPresent
         name: event-manager
         ports:
@@ -533,7 +536,10 @@ spec:
         io.kompose.service: uaa
     spec:
       containers:
-      - image: djrevok/uaa:latest
+      - env:
+        - name: SERVER_BASEPATH
+          value: /uaa
+        image: djrevok/uaa:latest
         imagePullPolicy: IfNotPresent
         name: uaa
         ports:

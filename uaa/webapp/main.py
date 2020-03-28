@@ -1,15 +1,18 @@
 """
 Application main module
 """
+import os
+
 from aio_tiny_healthcheck import Checker
 from aiohttp.web import run_app
 from aiohttp.web_app import Application
-from aiohttp_apispec import setup_aiohttp_apispec, validation_middleware
+from aiohttp_apispec import setup_aiohttp_apispec, validation_middleware, AiohttpApiSpec
 from elasticapm import Client
 from elasticapm.middleware import ElasticAPM
 
 from uaa.infrastructure.storage.db_initializer import initialize_db
 from uaa.infrastructure.storage.sql_storage import SqlStorage
+from uaa.lib.apispec_utils import setup_aiohttp_apispec_mod
 from uaa.lib.config_tools import parse_config
 from uaa.log_config import get_logger
 from uaa.services.authentication_service import AuthService
@@ -54,16 +57,31 @@ def init_app() -> Application:
     app.middlewares.append(auth_middleware)
     app.middlewares.append(validation_middleware)
 
-    setup_aiohttp_apispec(
-        app=app,
-        title='API',
-        version=API_VERSION,
-        url=f'/{API_VERSION}/api/docs/swagger.json',
-        swagger_path=f'/{API_VERSION}/api/docs/ui',
-        securityDefinitions={
-            'ApiKeyAuth': {'type': 'apiKey', 'name': 'X-API-Key', 'in': 'header'}
-        },
-    )
+    if 'SERVER_BASEPATH' in os.environ:
+        server_base_path = os.environ.get('SERVER_BASEPATH')
+        setup_aiohttp_apispec_mod(
+            app=app,
+            title='API',
+            version=API_VERSION,
+            prefix=server_base_path,
+            url=f'/{API_VERSION}/api/docs/swagger.json',
+            swagger_path=f'/{API_VERSION}/api/docs/ui',
+            static_base_url=server_base_path,
+            securityDefinitions={
+                'ApiKeyAuth': {'type': 'apiKey', 'name': 'X-API-Key', 'in': 'header'}
+            },
+        )
+    else:
+        setup_aiohttp_apispec(
+            app=app,
+            title='API',
+            version=API_VERSION,
+            url=f'/{API_VERSION}/api/docs/swagger.json',
+            swagger_path=f'/{API_VERSION}/api/docs/ui',
+            securityDefinitions={
+                'ApiKeyAuth': {'type': 'apiKey', 'name': 'X-API-Key', 'in': 'header'}
+            },
+        )
 
     apm_client = Client(config={
         'SERVICE_NAME': parsed_config.get('ELASTIC_APM', 'service-name'),
