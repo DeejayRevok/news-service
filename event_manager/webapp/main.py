@@ -1,6 +1,8 @@
 """
 Application main module
 """
+import os
+
 from aio_tiny_healthcheck import Checker
 from aiohttp.web import run_app
 from aiohttp.web_app import Application
@@ -10,6 +12,7 @@ from elasticapm.middleware import ElasticAPM
 
 from event_manager.cron.cron_factory import initialize_crons
 from event_manager.infrastructure.storage.storage_factory import storage_factory
+from event_manager.lib.apispec_utils import setup_aiohttp_apispec_mod
 from event_manager.lib.config_tools import parse_config
 from event_manager.log_config import get_logger
 from event_manager.services.event_service import EventService
@@ -53,16 +56,31 @@ def init_app() -> Application:
     app.middlewares.append(error_middleware)
     app.middlewares.append(auth_middleware)
 
-    setup_aiohttp_apispec(
-        app=app,
-        title='API',
-        version=API_VERSION,
-        url=f'/{API_VERSION}/api/docs/swagger.json',
-        swagger_path=f'/{API_VERSION}/api/docs/ui',
-        securityDefinitions={
-            'ApiKeyAuth': {'type': 'apiKey', 'name': 'X-API-Key', 'in': 'header'}
-        },
-    )
+    if 'SERVER_BASEPATH' in os.environ:
+        server_base_path = os.environ.get('SERVER_BASEPATH')
+        setup_aiohttp_apispec_mod(
+            app=app,
+            title='API',
+            version=API_VERSION,
+            prefix=server_base_path,
+            url=f'/{API_VERSION}/api/docs/swagger.json',
+            swagger_path=f'/{API_VERSION}/api/docs/ui',
+            static_base_url=server_base_path,
+            securityDefinitions={
+                'ApiKeyAuth': {'type': 'apiKey', 'name': 'X-API-Key', 'in': 'header'}
+            },
+        )
+    else:
+        setup_aiohttp_apispec(
+            app=app,
+            title='API',
+            version=API_VERSION,
+            url=f'/{API_VERSION}/api/docs/swagger.json',
+            swagger_path=f'/{API_VERSION}/api/docs/ui',
+            securityDefinitions={
+                'ApiKeyAuth': {'type': 'apiKey', 'name': 'X-API-Key', 'in': 'header'}
+            },
+        )
 
     initialize_crons(app)
 

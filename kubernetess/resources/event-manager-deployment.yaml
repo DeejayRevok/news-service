@@ -24,7 +24,10 @@ spec:
         io.kompose.service: event-manager
     spec:
       containers:
-      - image: djrevok/event-manager:latest
+      - env:
+          - name: SERVER_BASEPATH
+            value: "/manager"
+        image: djrevok/event-manager:latest
         imagePullPolicy: IfNotPresent
         name: event-manager
         ports:
