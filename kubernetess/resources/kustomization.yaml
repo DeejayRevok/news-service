@@ -19,3 +19,4 @@ resources:
   - apm-server-service.yaml
   - apm-server-deployment.yaml
   - heartbeat-deployment.yaml
+  - ingress.yaml

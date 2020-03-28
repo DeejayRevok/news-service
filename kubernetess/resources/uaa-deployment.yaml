@@ -24,7 +24,7 @@ spec:
         io.kompose.service: uaa
     spec:
       containers:
-      - image: uaa:latest
+      - image: djrevok/uaa:latest
         imagePullPolicy: IfNotPresent
         name: uaa
         ports:
