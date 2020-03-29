@@ -1,9 +1,10 @@
 """
 Test for the definitions module functions
 """
+import unittest
 from unittest.mock import patch
 
-import aiounittest
+from aiounittest import async_test
 
 from uaa.webapp.definitions import health_check
 
@@ -16,12 +17,13 @@ class MockConfig:
         self._sections = dict(storage=dict(test='test_storage'))
 
 
-class TestDefinitions(aiounittest.AsyncTestCase):
+class TestDefinitions(unittest.TestCase):
     """
     Test case for definitions module
     """
     @patch('uaa.webapp.definitions.SqlStorage')
     @patch('uaa.webapp.definitions.parse_config')
+    @async_test
     async def test_healthcheck(self, config_parse_mock, sql_storage_mock):
         """
         Test the app healthcheck method
