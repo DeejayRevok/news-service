@@ -25,12 +25,12 @@ def setup_aiohttp_apispec_mod(
 ) -> None:
     """
     Overrides the default setup_aiohhtp_apispec function to run the modified api spec class
+    Refer to the aiohttp_apispec.setup_aiohttp_apispec documentation in order to check the full documentation
 
     Args:
         static_base_url: base path for the static files url
 
     """
-    __doc__ += aiohttp_apispec.setup_aiohttp_apispec.__doc__
     AiohttpApiSpecMod(
         url,
         app,
