@@ -1,0 +1,22 @@
+resources:
+  - mongodb-service.yaml
+  - mongodb-deployment.yaml
+  - mongodb-data-persistentvolumeclaim.yaml
+  - mysql-service.yaml
+  - mysql-deployment.yaml
+  - mysql-data-persistentvolumeclaim.yaml
+  - uaa-service.yaml
+  - uaa-deployment.yaml
+  - event-manager-service.yaml
+  - event-manager-deployment.yaml
+  - elasticsearch-service.yaml
+  - elasticsearch-deployment.yaml
+  - elastic-data-persistentvolumeclaim.yaml
+  - logstash-service.yaml
+  - logstash-deployment.yaml
+  - kibana-service.yaml
+  - kibana-deployment.yaml
+  - apm-server-service.yaml
+  - apm-server-deployment.yaml
+  - heartbeat-deployment.yaml
+  - ingress.yaml
