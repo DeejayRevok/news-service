@@ -1,3 +1,6 @@
+"""
+Apispec utilities module
+"""
 from aiohttp import web
 from pathlib import Path
 
@@ -20,6 +23,14 @@ def setup_aiohttp_apispec_mod(
     static_base_url: str = None,
     **kwargs
 ) -> None:
+    """
+    Overrides the default setup_aiohhtp_apispec function to run the modified api spec class
+
+    Args:
+        static_base_url: base path for the static files url
+
+    """
+    __doc__ += aiohttp_apispec.setup_aiohttp_apispec.__doc__
     AiohttpApiSpecMod(
         url,
         app,
@@ -37,7 +48,9 @@ def setup_aiohttp_apispec_mod(
 
 
 class AiohttpApiSpecMod(aiohttp_apispec.AiohttpApiSpec):
-
+    """
+    Class which overrides the default aiphttp apispec class in order to allow specifying the static files base url
+    """
     def __init__(self, url="/api/docs/swagger.json", app=None, request_data_name="data", swagger_path=None,
                  static_path='/static/swagger', error_callback=None, in_place=False, prefix='', static_base_url=None,
                  **kwargs):
