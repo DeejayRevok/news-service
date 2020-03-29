@@ -64,7 +64,8 @@ class AiohttpApiSpecMod(aiohttp_apispec.AiohttpApiSpec):
 
         with open(str(static_files / "index.html")) as swg_tmp:
             if self.static_base_url is not None:
-                tmp = Template(swg_tmp.read()).render(path=self.url, static=self.static_base_url+static_path)
+                tmp = Template(swg_tmp.read()).render(path=self.static_base_url + self.url,
+                                                      static=self.static_base_url + static_path)
             else:
                 tmp = Template(swg_tmp.read()).render(path=self.url, static=static_path)
 
