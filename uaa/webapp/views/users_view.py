@@ -7,7 +7,7 @@ from aiohttp.web_request import Request
 from aiohttp.web_response import Response, json_response
 from aiohttp_apispec import docs, request_schema
 
-from uaa.lib.aio_class_route_table import ClassRouteTableDef
+from lib.sources.aio_class_route_table import ClassRouteTableDef
 from uaa.log_config import get_logger
 from uaa.webapp.definitions import API_VERSION, login_required
 from uaa.webapp.request_schemas.user_request_schemas import PostCreateUserSchema

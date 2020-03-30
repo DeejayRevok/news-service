@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 
 from aiohttp.web_app import Application
 
-from event_manager.lib.config_tools import parse_config
+from lib.sources.config_tools import parse_config
 from event_manager.services.event_service import EventService
 from event_manager.webapp.definitions import CONFIG_PATH
 from event_manager.webapp.main import init_app
