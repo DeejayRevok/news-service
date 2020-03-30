@@ -9,7 +9,7 @@ from aiohttp.web_request import Request
 from aiohttp.web_response import json_response, Response
 from aiohttp_apispec import docs
 
-from event_manager.lib.aio_class_route_table import ClassRouteTableDef
+from lib.sources.aio_class_route_table import ClassRouteTableDef
 from event_manager.log_config import get_logger
 from event_manager.webapp.definitions import API_VERSION, login_required
 

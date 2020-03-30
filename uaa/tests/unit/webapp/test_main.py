@@ -10,7 +10,7 @@ from uaa.lib.config_tools import parse_config
 from uaa.services.users_service import UserService
 from uaa.services.authentication_service import AuthService
 from uaa.webapp.definitions import CONFIG_PATH
-from uaa.webapp.main import init_app
+from uaa.webapp.main import init_server
 
 
 class DummySession:
@@ -46,7 +46,7 @@ class TestMain(unittest.TestCase):
         mock_engine = dict(Engine='engine')
         engine_mock.return_value = mock_engine
         session_maker_mock.return_value = DummySession
-        app = init_app()
+        app = init_server()
         apispec_mock.assert_called_once()
         auth_view_mock.setup_routes.assert_called_once()
         users_view_mock.setup_routes.assert_called_once()
