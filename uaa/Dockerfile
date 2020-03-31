@@ -1,5 +1,13 @@
 FROM python:3.8-buster
-COPY . /app/uaa
+COPY ./uaa /app/uaa
+COPY ./event-service-lib /app/event-service-lib
+WORKDIR /app/event-service-lib
+
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+RUN python setup.py bdist_wheel
+RUN pip install dist/event_service_lib-0.0.1-py3-none-any.whl
+
 WORKDIR /app
 
 RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
@@ -10,7 +18,7 @@ RUN apt-get update && apt-get install metricbeat && apt-get install default-libm
 RUN pip install --upgrade pip
 RUN pip install -r uaa/requirements.txt
 
-COPY tools_config/metricbeat.yml /etc/metricbeat/metricbeat.yml
+COPY ./uaa/tools_config/metricbeat.yml /etc/metricbeat/metricbeat.yml
 
-EXPOSE 8080
-CMD service metricbeat start && export PYTHONPATH=${PYTHONPATH}:/app && python ./uaa/webapp/main.py
+EXPOSE 8081
+CMD service metricbeat start && export PYTHONPATH=${PYTHONPATH}:/app && python ./uaa/webapp/main.py -p DOCKER

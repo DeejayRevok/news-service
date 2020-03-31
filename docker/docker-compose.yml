@@ -28,7 +28,8 @@ services:
 
   uaa:
     build:
-      context: ../uaa
+      context: ../
+      dockerfile: uaa/Dockerfile
     image: uaa:latest
     ports:
       - "8081:8081"
@@ -41,7 +42,8 @@ services:
 
   event-manager:
     build:
-      context: ../event_manager
+      context: ../
+      dockerfile: event_manager/Dockerfile
     image: event-manager:latest
     ports:
       - "8080:8080"
