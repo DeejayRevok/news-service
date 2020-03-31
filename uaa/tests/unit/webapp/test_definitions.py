@@ -4,32 +4,30 @@ Test for the definitions module functions
 import unittest
 from unittest.mock import patch
 
+from aiohttp.web_app import Application
 from aiounittest import async_test
 
+from lib.sources.config import Configuration
 from uaa.webapp.definitions import health_check
-
-
-class MockConfig:
-    """
-    Mocked configuration for the healthcheck test
-    """
-    def __init__(self):
-        self._sections = dict(storage=dict(test='test_storage'))
 
 
 class TestDefinitions(unittest.TestCase):
     """
     Test case for definitions module
     """
+    TEST_STORAGE_CONFIG = dict(host='test', port=0, user='test', password='test', schema='test')
+
+    @patch.object(Configuration, 'get_section')
     @patch('uaa.webapp.definitions.SqlStorage')
-    @patch('uaa.webapp.definitions.parse_config')
     @async_test
-    async def test_healthcheck(self, config_parse_mock, sql_storage_mock):
+    async def test_healthcheck(self, sql_storage_mock, config_mock):
         """
         Test the app healthcheck method
         """
-        config_parse_mock.return_value = MockConfig()
+        config_mock.get_section.return_value = self.TEST_STORAGE_CONFIG
+        app = Application()
+        app['config'] = config_mock
         sql_storage_mock.health_check.return_value = True
-        health = await health_check()
+        health = await health_check(app)
         self.assertTrue(health)
-        sql_storage_mock.assert_called_with(test='test_storage')
+        sql_storage_mock.assert_called_with(**self.TEST_STORAGE_CONFIG)
