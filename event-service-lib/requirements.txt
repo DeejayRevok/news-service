@@ -1,0 +1,6 @@
+wheel==0.34.2
+python-logstash==0.4.6
+elastic-apm==5.4.3
+aiohttp==3.6.2
+aiohttp-apispec==2.2.1
+aio-tiny-healthcheck==1.1.2

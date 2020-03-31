@@ -2,16 +2,16 @@ import unittest
 from unittest.mock import patch
 
 from aiohttp.web_app import Application
+from event_service_lib.config import Configuration
 
 from event_manager.services.event_service import EventService
 from event_manager.services.uaa_service import UaaService
 from event_manager.webapp.main import init_event_manager
-from lib.sources.config import Configuration
 
 
 class TestMain(unittest.TestCase):
 
-    TEST_CONFIG = dict(protocol='test',  host='test', port=0)
+    TEST_CONFIG = dict(protocol='test', host='test', port=0)
 
     # noinspection PyTypeHints
     @patch.object(Configuration, 'get')

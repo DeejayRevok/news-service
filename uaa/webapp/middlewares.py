@@ -6,27 +6,13 @@ from typing import Callable
 from aiohttp.web_app import Application
 from aiohttp.web_exceptions import HTTPException, HTTPUnauthorized
 from aiohttp.web_request import Request
-from aiohttp.web_response import Response, json_response
+from aiohttp.web_response import Response
+from event_service_lib.error_utils import json_error
 
 from uaa.lib.jwt_tools import decode_token
 from uaa.log_config import get_logger
 
 LOGGER = get_logger()
-
-
-def json_error(status_code: int, exception: Exception) -> Response:
-    """
-    Returns a Json Response from an exception.
-
-    Args:
-        status_code: response code
-        exception: exception thrown
-
-    Returns: web error json response
-
-    """
-    return json_response(data=dict(error=exception.__class__.__name__, detail=str(exception)),
-                         status=status_code)
 
 
 async def error_middleware(app: Application, handler: Callable):
@@ -52,7 +38,7 @@ async def error_middleware(app: Application, handler: Callable):
             app['apm'].client.capture_exception()
             return json_error(ex.status, ex)
         except Exception as ex:
-            LOGGER.error('Request %s has failed with exception: %s', request, repr(ex))
+            LOGGER.error('Request %s has failed with exception: %s', request, repr(ex), exc_info=True)
             app['apm'].client.end_transaction(f'{request.method}{request.rel_url}', 500)
             app['apm'].client.capture_exception()
             return json_error(500, ex)

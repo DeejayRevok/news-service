@@ -5,7 +5,7 @@ from logging import config as logging_config, getLogger
 from logging import Logger
 from os.path import join, dirname
 
-from lib.sources.log_utils import get_base_log_config, check_log_dir
+from event_service_lib.log_utils import check_log_dir, get_base_log_config
 
 LOG_FILE = join(check_log_dir(join(dirname(__file__), 'var', 'logs')), "uaa.log")
 LOG_CONFIG = get_base_log_config(LOG_FILE)

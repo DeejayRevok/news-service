@@ -3,9 +3,9 @@ Application main module
 """
 from aiohttp.web_app import Application
 from aiohttp_apispec import validation_middleware
+from event_service_lib.healthcheck import HealthCheck
+from event_service_lib.server_utils import server_runner
 
-from lib.sources.healthcheck import HealthCheck
-from lib.sources.server_utils import server_runner
 from uaa.infrastructure.storage.db_initializer import initialize_db
 from uaa.infrastructure.storage.sql_storage import SqlStorage
 from uaa.log_config import LOG_CONFIG, get_logger
