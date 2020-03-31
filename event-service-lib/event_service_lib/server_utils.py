@@ -10,10 +10,9 @@ from aiohttp.web_app import Application
 from aiohttp_apispec import setup_aiohttp_apispec
 from elasticapm import Client
 from elasticapm.middleware import ElasticAPM
-
-from lib.sources.apispec_utils import setup_aiohttp_apispec_mod
-from lib.sources.config import ConfigProfile, Configuration
-from lib.sources.log_utils import add_logstash_handler
+from event_service_lib.apispec_utils import setup_aiohttp_apispec_mod
+from event_service_lib.config import ConfigProfile, Configuration
+from event_service_lib.log_utils import add_logstash_handler
 
 
 def initialize_server(config_profile: ConfigProfile, config_path: str, log_config: dict) -> Application:
