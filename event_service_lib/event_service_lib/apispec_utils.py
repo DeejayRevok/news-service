@@ -1,28 +1,18 @@
 """
 Apispec utilities module
 """
-from aiohttp import web
 from pathlib import Path
+
+from aiohttp import web
 
 import aiohttp_apispec
 from jinja2 import Template
 
 
-def setup_aiohttp_apispec_mod(
-    app: web.Application,
-    *,
-    title: str = "API documentation",
-    version: str = "0.0.1",
-    url: str = "/api/docs/swagger.json",
-    request_data_name: str = "data",
-    swagger_path: str = None,
-    static_path: str = '/static/swagger',
-    error_callback=None,
-    in_place: bool = False,
-    prefix: str = '',
-    static_base_url: str = None,
-    **kwargs
-) -> None:
+def setup_aiohttp_apispec_mod(app: web.Application, *, title: str = "API documentation", version: str = "0.0.1",
+                              url: str = "/api/docs/swagger.json", request_data_name: str = "data",
+                              swagger_path: str = None, static_path: str = '/static/swagger', error_callback=None,
+                              in_place: bool = False, prefix: str = '', static_base_url: str = None, **kwargs) -> None:
     """
     Overrides the default setup_aiohhtp_apispec function to run the modified api spec class
     Refer to the aiohttp_apispec.setup_aiohttp_apispec documentation in order to check the full documentation
@@ -51,6 +41,7 @@ class AiohttpApiSpecMod(aiohttp_apispec.AiohttpApiSpec):
     """
     Class which overrides the default aiphttp apispec class in order to allow specifying the static files base url
     """
+
     def __init__(self, url="/api/docs/swagger.json", app=None, request_data_name="data", swagger_path=None,
                  static_path='/static/swagger', error_callback=None, in_place=False, prefix='', static_base_url=None,
                  **kwargs):

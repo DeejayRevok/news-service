@@ -1,3 +1,6 @@
+"""
+Healthcheck tests module
+"""
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
 
@@ -12,6 +15,9 @@ class TestHealthCheck(TestCase):
     @patch('event_service_lib.healthcheck.Checker')
     @async_test
     async def test_healthcheck(self, checker_mock):
+        """
+        Test the healthcheck calls the specified healthchecker for the input app
+        """
         checker_function_mock = MagicMock()
 
         async def checker_function_async(_):

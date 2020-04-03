@@ -1,3 +1,6 @@
+"""
+Error utils module tests
+"""
 import json
 from unittest import TestCase
 
@@ -7,6 +10,9 @@ from ..error_utils import json_error
 class TestErrorUtils(TestCase):
 
     def test_json_error(self):
+        """
+        Test the json error method returns a json containing the error status and the exception details
+        """
         test_exception_msg = 'Test exception'
         test_error_status = 12345
         error_response = json_error(test_error_status, Exception(test_exception_msg))

@@ -1,3 +1,6 @@
+"""
+Config module tests
+"""
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
 
@@ -8,6 +11,9 @@ class TestConfig(TestCase):
 
     @patch('event_service_lib.config.configparser')
     def test_get(self, configparser_mock):
+        """
+        Test the get method returns the value read from the config ini
+        """
         test_return_value = 'test'
         raw_mock = MagicMock()
         configparser_mock.RawConfigParser.return_value = raw_mock
@@ -17,6 +23,9 @@ class TestConfig(TestCase):
 
     @patch('event_service_lib.config.configparser')
     def test_get_section(self, configparser_mock):
+        """
+        Test the get section method returns the section read from the config ini
+        """
         test_section = {'test': 'test'}
         raw_mock = MagicMock()
         configparser_mock.RawConfigParser.return_value = raw_mock
