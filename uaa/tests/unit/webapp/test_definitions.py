@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 from aiohttp.web_app import Application
 from aiounittest import async_test
-from event_service_lib.config import Configuration
+from event_service_lib import Configuration
 
 from uaa.webapp.definitions import health_check
 
