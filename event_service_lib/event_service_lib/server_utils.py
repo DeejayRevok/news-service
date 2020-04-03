@@ -4,15 +4,17 @@ Server utilities functions
 import os
 from argparse import ArgumentParser
 from collections import Callable
+from typing import Any, Dict
 
 from aiohttp.web import run_app
 from aiohttp.web_app import Application
 from aiohttp_apispec import setup_aiohttp_apispec
 from elasticapm import Client
 from elasticapm.middleware import ElasticAPM
-from event_service_lib.apispec_utils import setup_aiohttp_apispec_mod
-from event_service_lib.config import ConfigProfile, Configuration
-from event_service_lib.log_utils import add_logstash_handler
+
+from .apispec_utils import setup_aiohttp_apispec_mod
+from .config import ConfigProfile, Configuration
+from .log_utils import add_logstash_handler
 
 
 def initialize_server(config_profile: ConfigProfile, config_path: str, log_config: dict) -> Application:
@@ -87,6 +89,22 @@ def finish_server_startup(app: Application, api_version: str) -> Application:
     return app
 
 
+def _parse_args(server_name: str) -> Dict[str, Any]:
+    """
+    Parse the required arguments to run the specified server
+
+    Args:
+        server_name: name of the server to parse args
+
+    Returns: args parsed
+
+    """
+    arg_solver = ArgumentParser(description=f'{server_name} server')
+    arg_solver.add_argument('-p', '--profile', required=False, help='Configuration profile', default='LOCAL')
+
+    return vars(arg_solver.parse_args())
+
+
 def server_runner(server_name: str, server_initializer: Callable, server_api_version: str, server_config_path: str,
                   server_log_config: dict, server_logger_provider: Callable):
     """
@@ -102,10 +120,7 @@ def server_runner(server_name: str, server_initializer: Callable, server_api_ver
         server_logger_provider: server logger provider function
 
     """
-    arg_solver = ArgumentParser(description=f'{server_name} server')
-    arg_solver.add_argument('-p', '--profile', required=False, help='Configuration profile', default='LOCAL')
-
-    args = vars(arg_solver.parse_args())
+    args = _parse_args(server_name)
 
     app = finish_server_startup(
         server_initializer(initialize_server(ConfigProfile[args['profile']], server_config_path, server_log_config)),

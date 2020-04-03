@@ -1,7 +1,7 @@
 FROM python:3.8-buster
 COPY ./uaa /app/uaa
-COPY ./event-service-lib /app/event-service-lib
-WORKDIR /app/event-service-lib
+COPY ./event_service_lib /app/event_service_lib
+WORKDIR /app/event_service_lib
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt

@@ -2,8 +2,7 @@
 Application main module
 """
 from aiohttp.web_app import Application
-from event_service_lib.healthcheck import HealthCheck
-from event_service_lib.server_utils import server_runner
+from event_service_lib import HealthCheck, server_runner
 
 from event_manager.cron.cron_factory import initialize_crons
 from event_manager.infrastructure.storage.storage_factory import storage_factory

@@ -20,14 +20,13 @@ def get_requirements() -> List[str]:
 
 
 setuptools.setup(
-    use_pyscaffold=True,
-    name='event-service-lib',
+    name='event_service_lib',
     version="0.0.1",
     author="DeejayRevok",
     author_email="seryi_one@hotmail.com",
     description="Event service microservices library",
-    url="https://github.com/DeejayRevok/event-service/tree/develop/event-service-lib",
-    packages=setuptools.find_packages(),
+    url="https://github.com/DeejayRevok/event-service/tree/develop/event_service_lib",
+    packages=['event_service_lib', 'event_service_lib.tests'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
