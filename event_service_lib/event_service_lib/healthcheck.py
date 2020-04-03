@@ -1,7 +1,7 @@
 """
 Aiohttp application generic healthcheck module
 """
-from collections import Callable
+from typing import Callable
 
 from aio_tiny_healthcheck import Checker
 from aiohttp.web_app import Application

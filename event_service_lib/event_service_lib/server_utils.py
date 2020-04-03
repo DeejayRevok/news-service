@@ -3,8 +3,7 @@ Server utilities functions
 """
 import os
 from argparse import ArgumentParser
-from collections import Callable
-from typing import Any, Dict
+from typing import Any, Dict, Callable
 
 from aiohttp.web import run_app
 from aiohttp.web_app import Application

@@ -1,3 +1,6 @@
+"""
+Event service library declarations module
+"""
 from .config import ConfigProfile, Configuration
 from .server_utils import initialize_server, finish_server_startup, server_runner
 from .aio_class_route_table import ClassRouteTableDef

@@ -3,7 +3,37 @@ name: Event Service
 on: [push]
 
 jobs:
+  lib-CI:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r event_service_lib/requirements.txt
+      - name: Lint and check score
+        run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt event_service_lib/*
+      - name: Test with unittest
+        run: coverage run --source ./event_service_lib/event_service_lib --branch --omit=*__init__**,**tests** -m unittest discover -v event_service_lib/event_service_lib/tests -t event_service_lib
+      - name: Check test coverage
+        run: coverage report  --fail-under=80
+      - name: Generate coverage report
+        run: coverage xml -o coverage_lib.xml
+      - name: Codecov upload
+        uses: codecov/codecov-action@v1.0.5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: coverage_lib.xml
+      - name: Build the library
+        run: python setup.py bdist_wheel
+
   event-manager-CI:
+    needs: lib-CI
     runs-on: ubuntu-latest
 
     steps:
@@ -51,6 +81,7 @@ jobs:
         args: push djrevok/event-manager:latest
 
   uaa-CI:
+    needs: lib-CI
     runs-on: ubuntu-latest
 
     steps:
