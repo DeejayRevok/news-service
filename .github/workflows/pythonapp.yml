@@ -30,6 +30,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage_lib.xml
       - name: Build the library
+        working-directory: event_service_lib
         run: python setup.py bdist_wheel
 
   event-manager-CI:
