@@ -24,7 +24,7 @@ spec:
         io.kompose.service: heartbeat
     spec:
       containers:
-      - image: djrevok/heartbeat-event-service:latest
+      - image: djrevok/heartbeat-news-service:latest
         imagePullPolicy: IfNotPresent
         name: heartbeat
         resources: {}

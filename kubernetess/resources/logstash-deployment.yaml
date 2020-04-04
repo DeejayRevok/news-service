@@ -24,7 +24,7 @@ spec:
         io.kompose.service: logstash
     spec:
       containers:
-      - image: djrevok/logstash-event-service:latest
+      - image: djrevok/logstash-news-service:latest
         imagePullPolicy: IfNotPresent
         name: logstash
         ports:

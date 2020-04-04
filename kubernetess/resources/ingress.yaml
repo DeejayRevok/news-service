@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: event-service-fanout
+  name: news-service-fanout
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -10,7 +10,7 @@ spec:
         paths:
         - path: /manager
           backend:
-            serviceName: event-manager
+            serviceName: news-manager
             servicePort: 8080
         - path: /uaa
           backend:

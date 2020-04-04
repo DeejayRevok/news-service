@@ -1,4 +1,4 @@
-name: Event Service
+name: News Service
 
 on: [push]
 
@@ -15,11 +15,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r event_service_lib/requirements.txt
+          pip install -r news_service_lib/requirements.txt
       - name: Lint and check score
-        run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt event_service_lib/*
+        run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt news_service_lib/*
       - name: Test with unittest
-        run: coverage run --source ./event_service_lib/event_service_lib --branch --omit=*__init__**,**tests** -m unittest discover -v event_service_lib/event_service_lib/tests -t event_service_lib
+        run: coverage run --source ./news_service_lib/news_service_lib --branch --omit=*__init__**,**tests** -m unittest discover -v news_service_lib/news_service_lib/tests -t news_service_lib
       - name: Check test coverage
         run: coverage report  --fail-under=80
       - name: Generate coverage report
@@ -30,10 +30,10 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage_lib.xml
       - name: Build the library
-        working-directory: event_service_lib
+        working-directory: news_service_lib
         run: python setup.py bdist_wheel
 
-  event-manager-CI:
+  news-manager-CI:
     needs: lib-CI
     runs-on: ubuntu-latest
 
@@ -43,32 +43,32 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.7
-    - name: Install event service lib
-      working-directory: event_service_lib
+    - name: Install news service lib
+      working-directory: news_service_lib
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         python setup.py bdist_wheel
-        pip install dist/event_service_lib-0.0.1-py3-none-any.whl
+        pip install dist/news_service_lib-0.0.1-py3-none-any.whl
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r event_manager/requirements.txt
+        pip install -r news_manager/requirements.txt
     - name: Lint and check score
-      run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt event_manager/*
+      run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt news_manager/*
     - name: Test with unittest
-      run: coverage run --source ./event_manager --branch --omit=*__init__**,**tests** -m unittest discover -v event_manager/tests
+      run: coverage run --source ./news_manager --branch --omit=*__init__**,**tests** -m unittest discover -v news_manager/tests
     - name: Check test coverage
       run: coverage report  --fail-under=80
     - name: Generate coverage report
-      run: coverage xml -o coverage_event_manager.xml
+      run: coverage xml -o coverage_news_manager.xml
     - name: Codecov upload
       uses: codecov/codecov-action@v1.0.5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: coverage_event_manager.xml
+        file: coverage_news_manager.xml
     - name: Build the docker image
-      run: docker-compose -f docker/docker-compose.yml build event-manager && docker tag event-manager:latest djrevok/event-manager:latest
+      run: docker-compose -f docker/docker-compose.yml build news-manager && docker tag news-manager:latest djrevok/news-manager:latest
     - name: Login to docker hub
       if: github.ref == 'refs/heads/develop'
       uses: actions-hub/docker/login@master
@@ -79,7 +79,7 @@ jobs:
       if: github.ref == 'refs/heads/develop'
       uses: actions-hub/docker@master
       with:
-        args: push djrevok/event-manager:latest
+        args: push djrevok/news-manager:latest
 
   uaa-CI:
     needs: lib-CI
@@ -91,13 +91,13 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
-      - name: Install event service lib
-        working-directory: event_service_lib
+      - name: Install news service lib
+        working-directory: news_service_lib
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           python setup.py bdist_wheel
-          pip install dist/event_service_lib-0.0.1-py3-none-any.whl
+          pip install dist/news_service_lib-0.0.1-py3-none-any.whl
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip

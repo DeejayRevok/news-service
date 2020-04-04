@@ -1,5 +1,5 @@
-# Event Service
-Social events service
+# News Service
+News service
 
 ![CI status](https://github.com/DeejayRevok/event-service/workflows/Event%20Service/badge.svg)
 [![codecov](https://codecov.io/gh/DeejayRevok/event-service/branch/master/graph/badge.svg?token=1EEM8TD8JC)](https://codecov.io/gh/DeejayRevok/event-service)
@@ -44,4 +44,4 @@ python -m unittest discover -v tests
 ## Usage
 In your webbrowser navigate to http://localhost:8080/v1/api/docs/ui
 
-In order to test the Event list endpoint, take into account that the format of the date should be the same as the date format of the provided XML (%Y-%m-%dT%H:%M:%S)
+In order to test the news list endpoint, take into account that the format of the date should be the same as the date format of the provided XML (%Y-%m-%dT%H:%M:%S)

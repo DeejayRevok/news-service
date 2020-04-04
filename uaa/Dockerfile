@@ -1,12 +1,12 @@
 FROM python:3.8-buster
 COPY ./uaa /app/uaa
-COPY ./event_service_lib /app/event_service_lib
-WORKDIR /app/event_service_lib
+COPY ./news_service_lib /app/news_service_lib
+WORKDIR /app/news_service_lib
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 RUN python setup.py bdist_wheel
-RUN pip install dist/event_service_lib-0.0.1-py3-none-any.whl
+RUN pip install dist/news_service_lib-0.0.1-py3-none-any.whl
 
 WORKDIR /app
 
