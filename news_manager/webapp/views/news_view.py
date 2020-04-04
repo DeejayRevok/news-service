@@ -22,6 +22,7 @@ class NewsViews:
     """
     News REST endpoint views handler
     """
+    DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
     def __init__(self, app: Application):
         """
@@ -71,13 +72,14 @@ class NewsViews:
 
             try:
                 start_date = mktime(strptime(inner_request.rel_url.query['start_date'],
-                                             '%Y-%m-%dT%H:%M:%S')) if 'start_date' in inner_request.rel_url.query else None
+                                             self.DATE_FORMAT)) if 'start_date' in inner_request.rel_url.query else None
                 end_date = mktime(strptime(inner_request.rel_url.query['end_date'],
-                                           '%Y-%m-%dT%H:%M:%S')) if 'end_date' in inner_request.rel_url.query else None
+                                           self.DATE_FORMAT)) if 'end_date' in inner_request.rel_url.query else None
             except Exception as ex:
                 raise HTTPBadRequest(text=str(ex))
 
-            news = list(await self.news_service.get_news(start=start_date, end=end_date))
+            news = list(map(lambda new: new.dto(self.DATE_FORMAT),
+                            await self.news_service.get_news(start=start_date, end=end_date)))
 
             return json_response(news, status=200)
 
