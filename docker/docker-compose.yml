@@ -43,7 +43,7 @@ services:
   news-manager:
     build:
       context: ../
-      dockerfile: ../news_manager/Dockerfile
+      dockerfile: news_manager/Dockerfile
     image: news-manager:latest
     ports:
       - "8080:8080"
