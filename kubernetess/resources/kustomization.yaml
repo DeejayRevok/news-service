@@ -7,8 +7,8 @@ resources:
   - mysql-data-persistentvolumeclaim.yaml
   - uaa-service.yaml
   - uaa-deployment.yaml
-  - event-manager-service.yaml
-  - event-manager-deployment.yaml
+  - news-manager-service.yaml
+  - news-manager-deployment.yaml
   - elasticsearch-service.yaml
   - elasticsearch-deployment.yaml
   - elastic-data-persistentvolumeclaim.yaml

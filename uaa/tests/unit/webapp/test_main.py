@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import patch
 
 from aiohttp.web_app import Application
-from event_service_lib import Configuration
+from news_service_lib import Configuration
 
 from uaa.services.users_service import UserService
 from uaa.services.authentication_service import AuthService

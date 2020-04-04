@@ -4,7 +4,7 @@ services:
   mongodb:
     build:
       context: mongo
-    image: mongo-event-service:latest
+    image: mongo-news-service:latest
     volumes:
       - 'mongodb_data:/data/db'
     ports:
@@ -19,10 +19,10 @@ services:
     volumes:
     - 'mysql_data:/var/lib/mysql'
     environment:
-      MYSQL_ROOT_PASSWORD: ev3nts3rv1ce
-      MYSQL_DATABASE: eventservice
+      MYSQL_ROOT_PASSWORD: n3wss3rv1c3
+      MYSQL_DATABASE: newsservice
       MYSQL_USER: app-us3r
-      MYSQL_PASSWORD: ev3ntp4ssw0r0
+      MYSQL_PASSWORD: n3wsp4ssw0rd
     ports:
       - "3306:3306"
 
@@ -40,11 +40,11 @@ services:
       - elasticsearch
       - kibana
 
-  event-manager:
+  news-manager:
     build:
       context: ../
-      dockerfile: event_manager/Dockerfile
-    image: event-manager:latest
+      dockerfile: ../news_manager/Dockerfile
+    image: news-manager:latest
     ports:
       - "8080:8080"
     depends_on:
@@ -69,7 +69,7 @@ services:
   logstash:
     build:
       context: logstash
-    image: logstash-event-service:latest
+    image: logstash-news-service:latest
     depends_on:
       - elasticsearch
     ports:
@@ -101,11 +101,11 @@ services:
   heartbeat:
     build:
       context: heartbeat
-    image: heartbeat-event-service:latest
+    image: heartbeat-news-service:latest
     depends_on:
       - elasticsearch
       - kibana
-      - event-manager
+      - news-manager
       - uaa
 
 volumes:
