@@ -6,16 +6,14 @@ from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
 
 from aiohttp.web_app import Application
 
+from news_manager.infrastructure.storage.models.new import New
 from news_manager.services.news_service import NewsService
 from news_manager.webapp.middlewares import error_middleware
 from news_manager.webapp.views.news_view import setup_routes, ROOT_PATH
 from news_manager.webapp.definitions import API_VERSION
 
-MOCKED_RESPONSE = [{
-    'test': 'test'
-}, {
-    'test2': 'test2'
-}]
+MOCKED_RESPONSE = [New(title='Test1', content='Test1', categories=['Test1'], date=101001.10),
+                   New(title='Test2', content='Test2', categories=['Test2'], date=101001.10)]
 
 EXCEPTION_MESSAGE = 'test'
 
@@ -28,6 +26,7 @@ async def mock_auth_middleware(app, handler):
     async def middleware(request):
         request.user = {'test': 'test'}
         return await handler(request)
+
     return middleware
 
 
@@ -61,7 +60,8 @@ class TestNewsView(AioHTTPTestCase):
         resp = await self.client.get(f'/{API_VERSION}{ROOT_PATH}')
         self.assertEqual(resp.status, 200)
         response_content = await resp.json()
-        self.assertEqual(response_content, list(MOCKED_RESPONSE))
+        self.assertEqual(response_content[0]['title'], list(MOCKED_RESPONSE)[0].title)
+        self.assertEqual(response_content[1]['title'], list(MOCKED_RESPONSE)[1].title)
         self.mocked_news_service.get_news.assert_called_with(start=None, end=None)
 
     @unittest_run_loop
