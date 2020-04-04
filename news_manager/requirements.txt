@@ -12,3 +12,4 @@ psutil==5.7.0
 python-logstash==0.4.6
 news-service-lib==0.0.1
 bs4==0.0.1
+lxml==4.5.0
