@@ -5,7 +5,7 @@ from aiohttp.web_app import Application
 from news_service_lib.config import Configuration
 
 from news_manager.services.news_service import NewsService
-from news_manager.services.uaa_service import UaaService
+from news_service_lib.news_service_lib.uaa_service import UaaService
 from news_manager.webapp.main import init_news_manager
 
 

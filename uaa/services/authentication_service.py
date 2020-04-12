@@ -1,8 +1,9 @@
 """
 Authentication module
 """
-from uaa.lib.jwt_tools import decode_token, generate_token
+from news_service_lib import generate_token, decode_token
 from uaa.lib.pass_tools import hash_password
+from uaa.models.user import User
 from uaa.services.users_service import UserService
 
 
@@ -64,8 +65,11 @@ class AuthService:
         except KeyError:
             raise ValueError('Token is invalid')
 
-        user = await self._user_service.get_user_by_id(user_identifier)
-        if user is not None:
-            return user
+        if user_identifier == -1000:
+            return User(id=-1000, username='SYSTEM')
         else:
-            raise ValueError('Invalid user')
+            user = await self._user_service.get_user_by_id(user_identifier)
+            if user is not None:
+                return user
+            else:
+                raise ValueError('Invalid user')

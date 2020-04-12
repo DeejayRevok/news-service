@@ -9,7 +9,7 @@ from aiohttp.web_request import Request
 from aiohttp.web_response import Response
 from news_service_lib import json_error
 
-from uaa.lib.jwt_tools import decode_token
+from news_service_lib import decode_token
 from uaa.log_config import get_logger
 
 LOGGER = get_logger()

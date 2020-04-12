@@ -26,7 +26,7 @@ setuptools.setup(
     author_email="seryi_one@hotmail.com",
     description="News service microservices library",
     url="https://github.com/DeejayRevok/news-service/tree/develop/news_service_lib",
-    packages=['news_service_lib', 'news_service_lib.tests'],
+    packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
