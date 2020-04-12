@@ -1,9 +1,24 @@
 heartbeat.monitors:
 - type: http
+  name: 'News manager'
   schedule: '@every 5s'
-  urls:
-    - http://news-manager:8080/healthcheck
-    - http://uaa:8081/healthcheck
+  hosts: ["http://news-manager:8080/healthcheck"]
+  check.response.status: 200
+- type: http
+  name: 'UAA'
+  schedule: '@every 5s'
+  hosts: ["http://uaa:8081/healthcheck"]
+  check.response.status: 200
+- type: http
+  name: 'NLP service'
+  schedule: '@every 5s'
+  hosts: ["http://nlp-service:8082/healthcheck"]
+  check.response.status: 200
+- type: http
+  name: 'Flower celery monitor service'
+  schedule: '@every 5s'
+  hosts: ["http://nlp-service-flower:5555/api/workers"]
+  check.response.status: 200
 
 output.elasticsearch:
   hosts: ['elasticsearch:9200']

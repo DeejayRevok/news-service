@@ -1,6 +1,8 @@
 """
 Application main module
 """
+import sys
+
 from aiohttp.web_app import Application
 from aiohttp_apispec import validation_middleware
 from news_service_lib import HealthCheck, server_runner
@@ -27,6 +29,10 @@ def init_uaa(app: Application) -> Application:
     storage_config = app['config'].get_section('storage')
 
     store_client = SqlStorage(**storage_config)
+
+    if not store_client.health_check():
+        sys.exit(1)
+
     initialize_db(store_client.engine)
     app['user_service'] = UserService(store_client)
     app['auth_service'] = AuthService(app['user_service'])

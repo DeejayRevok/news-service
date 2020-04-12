@@ -16,6 +16,24 @@ from .config import ConfigProfile, Configuration
 from .log_utils import add_logstash_handler
 
 
+def initialize_apm(app: Application):
+    """
+    Initialize the apm middleware and client and add it to the input application
+
+    Args:
+        app: application to configure apm client
+
+    """
+    if 'apm' not in app:
+        apm_client = Client(config={
+            'SERVICE_NAME': app['config'].get('ELASTIC_APM', 'service-name'),
+            'SECRET_TOKEN': app['config'].get('ELASTIC_APM', 'secret-token'),
+            'SERVER_URL': f'http://{app["config"].get("ELASTIC_APM", "host")}:{app["config"].get("ELASTIC_APM", "port")}'
+        })
+
+        app['apm'] = ElasticAPM(app, apm_client)
+
+
 def initialize_server(config_profile: ConfigProfile, config_path: str, log_config: dict) -> Application:
     """
     Initialize the server creating the server application with the specified configuration profile and logging config
@@ -78,17 +96,12 @@ def finish_server_startup(app: Application, api_version: str) -> Application:
             },
         )
 
-    apm_client = Client(config={
-        'SERVICE_NAME': app['config'].get('ELASTIC_APM', 'service-name'),
-        'SECRET_TOKEN': app['config'].get('ELASTIC_APM', 'secret-token'),
-        'SERVER_URL': f'http://{app["config"].get("ELASTIC_APM", "host")}:{app["config"].get("ELASTIC_APM", "port")}'
-    })
+    initialize_apm(app)
 
-    app['apm'] = ElasticAPM(app, apm_client)
     return app
 
 
-def _parse_args(server_name: str) -> Dict[str, Any]:
+def profile_args_parser(server_name: str) -> Dict[str, Any]:
     """
     Parse the required arguments to run the specified server
 
@@ -119,7 +132,7 @@ def server_runner(server_name: str, server_initializer: Callable, server_api_ver
         server_logger_provider: server logger provider function
 
     """
-    args = _parse_args(server_name)
+    args = profile_args_parser(server_name)
 
     app = finish_server_startup(
         server_initializer(initialize_server(ConfigProfile[args['profile']], server_config_path, server_log_config)),

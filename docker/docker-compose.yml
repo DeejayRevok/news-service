@@ -6,7 +6,7 @@ services:
       context: mongo
     image: mongo-news-service:latest
     volumes:
-      - 'mongodb_data:/data/db'
+      - 'mongodb_news_data:/data/db'
     ports:
       - "27017:27017"
     depends_on:
@@ -17,7 +17,7 @@ services:
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
     volumes:
-    - 'mysql_data:/var/lib/mysql'
+    - 'mysql_uaa_data:/var/lib/mysql'
     environment:
       MYSQL_ROOT_PASSWORD: n3wss3rv1c3
       MYSQL_DATABASE: newsservice
@@ -33,6 +33,9 @@ services:
     image: uaa:latest
     ports:
       - "8081:8081"
+    environment:
+      JWT_SECRET: t0k3ns3cr3t
+    restart: on-failure
     depends_on:
       - mysql
       - logstash
@@ -47,6 +50,9 @@ services:
     image: news-manager:latest
     ports:
       - "8080:8080"
+    environment:
+      JWT_SECRET: t0k3ns3cr3t
+    restart: on-failure
     depends_on:
       - mongodb
       - logstash
@@ -54,13 +60,57 @@ services:
       - elasticsearch
       - kibana
       - uaa
+      - rabbitmq
+
+  nlp-service:
+    build:
+      context: ../
+      dockerfile: nlp_service/Dockerfile
+    image: nlp-service:latest
+    ports:
+      - "8082:8082"
+    environment:
+      JWT_SECRET: t0k3ns3cr3t
+    depends_on:
+      - logstash
+      - apm-server
+      - elasticsearch
+      - kibana
+      - uaa
+
+  nlp-celery-worker:
+    build:
+      context: ../
+      dockerfile: nlp_service/Dockerfile_celery
+    image: nlp-celery-worker:latest
+    environment:
+      JWT_SECRET: t0k3ns3cr3t
+      CELERY_FORCE_ROOT: "True"
+    depends_on:
+      - logstash
+      - elasticsearch
+      - kibana
+      - rabbitmq
+    links:
+      - "nlp-service:nlp-service"
+
+  nlp-service-flower:
+    build:
+      context: ../
+      dockerfile: nlp_service/Dockerfile_flower
+    image: nlp-service-flower:latest
+    ports:
+      - "5555:5555"
+    depends_on:
+      - elasticsearch
+      - kibana
 
   elasticsearch:
     image: elasticsearch:7.6.0
     ports:
       - "9200:9200"
     volumes:
-      - elastic_data:/usr/share/elasticsearch/data
+      - elastic_news_service_data:/usr/share/elasticsearch/data
     environment:
       JAVA_TOOL_OPTIONS: "-Xms512m -Xmx512m"
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
@@ -107,8 +157,25 @@ services:
       - kibana
       - news-manager
       - uaa
+      - nlp-service
+      - nlp-service-flower
+
+  rabbitmq:
+    image: rabbitmq:management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      - 4369:4369
+      - 5671:5671
+      - 5672:5672
+      - 15671:15671
+      - 15672:15672
+      - 15674:15674
+      - 25672:25672
 
 volumes:
-  mongodb_data:
-  mysql_data:
-  elastic_data:
+  mongodb_news_data:
+  mysql_uaa_data:
+  elastic_news_service_data:

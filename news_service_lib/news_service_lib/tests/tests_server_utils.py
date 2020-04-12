@@ -68,7 +68,7 @@ class TestServerUtils(TestCase):
     @patch('news_service_lib.server_utils.run_app')
     @patch('news_service_lib.server_utils.initialize_server')
     @patch('news_service_lib.server_utils.finish_server_startup')
-    @patch('news_service_lib.server_utils._parse_args')
+    @patch('news_service_lib.server_utils.profile_args_parser')
     def test_server_runner(self, argparser_mock, finish_server_mock, init_server_mock, run_app_mock):
         """
         Test the server runner initializes the server, calls to server initializer function,

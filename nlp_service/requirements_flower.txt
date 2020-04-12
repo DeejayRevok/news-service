@@ -1,0 +1,6 @@
+multidict==4.6.1
+yarl==1.3.0
+aiohttp==3.6.2
+psutil==5.7.0
+news-service-lib==0.0.1
+flower==0.9.4

@@ -4,7 +4,7 @@ from unittest.mock import patch
 from xml.etree.ElementTree import Element, fromstring
 
 from news_manager.adapters.abc_rss_news_adapter import ABCRssNewsAdapter
-from news_manager.infrastructure.storage.models.new import New
+from news_service_lib.news_service_lib.models.new import New
 
 
 def adapt_pass(value):

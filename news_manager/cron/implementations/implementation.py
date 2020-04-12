@@ -2,7 +2,6 @@
 Generic cron runner and interface module
 """
 from abc import abstractmethod
-from asyncio import get_event_loop
 
 from aiocron import crontab
 from aiohttp.web_app import Application
@@ -22,9 +21,6 @@ class Implementation:
         """
         self.app = app
         self.definition = definition
-
-        loop = get_event_loop()
-        loop.run_until_complete(self._run())
 
         @crontab(definition['expression'])
         async def scheduled():
