@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
-    io.kompose.service: kibana
-  name: kibana
+    io.kompose.service: nlp-service
+  name: nlp-service
 spec:
   ports:
-  - name: "5601"
-    port: 5601
-    targetPort: 5601
+  - name: "8082"
+    port: 8082
+    targetPort: 8082
   selector:
-    io.kompose.service: kibana
+    io.kompose.service: nlp-service
 status:
   loadBalancer: {}

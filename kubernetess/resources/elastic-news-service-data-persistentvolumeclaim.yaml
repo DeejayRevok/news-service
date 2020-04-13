@@ -3,8 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: elastic-data
-  name: elastic-data
+    io.kompose.service: elastic-news-service-data
+  name: elastic-news-service-data
 spec:
   accessModes:
   - ReadWriteOnce
