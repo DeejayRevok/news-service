@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import patch
 
 from news_manager.infrastructure.storage.filters.storage_filter_type import StorageFilterType
-from news_service_lib.news_service_lib.models.new import New
+from news_service_lib.models.new import New
 from news_manager.lib.fixed_dict import FixedDict
 from news_manager.services.news_service import NewsService
 

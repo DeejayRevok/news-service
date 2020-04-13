@@ -4,7 +4,7 @@ UAA service module tests
 from unittest import TestCase
 from unittest.mock import patch
 
-from aiohttp.web_exceptions import HTTPUnauthorized
+from aiohttp.web_exceptions import HTTPUnauthorized, HTTPInternalServerError
 from aiounittest import async_test
 from asynctest import CoroutineMock, patch as async_patch
 from news_service_lib.uaa_service import UaaService, get_system_auth_token, get_uaa_service
@@ -75,7 +75,7 @@ class TestUaaService(TestCase):
         """
         mock_post.return_value.__aenter__.return_value.status = 400
         uaa_service = UaaService(self.TEST_PROTOCOL, self.TEST_HOST, self.TEST_PORT)
-        with self.assertRaises(ConnectionError):
+        with self.assertRaises(HTTPInternalServerError):
             await uaa_service.validate_token(self.TEST_TOKEN)
 
     @patch('news_service_lib.uaa_service.generate_token')
