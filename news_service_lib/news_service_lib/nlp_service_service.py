@@ -51,7 +51,10 @@ class NlpServiceService:
                         raise HTTPInternalServerError(reason=response_json['detail'])
 
             except Exception as ex:
-                raise ConnectionError(f'Error calling nlp service {str(ex)}')
+                if not isinstance(ex, HTTPUnauthorized) and not isinstance(ex, HTTPInternalServerError):
+                    raise ConnectionError(f'Error calling NLP service {str(ex)}')
+                else:
+                    raise ex
 
     async def get_entities(self, text: str) -> Iterator[NamedEntity]:
         """
@@ -73,9 +76,12 @@ class NlpServiceService:
                     if response.status == 401:
                         response_json = await response.json()
                         raise HTTPUnauthorized(reason=response_json['detail'])
-                    elif response.status == 500:
+                    else:
                         response_json = await response.json()
                         raise HTTPInternalServerError(reason=response_json['detail'])
 
             except Exception as ex:
-                raise ConnectionError(f'Error calling nlp service {str(ex)}')
+                if not isinstance(ex, HTTPUnauthorized) and not isinstance(ex, HTTPInternalServerError):
+                    raise ConnectionError(f'Error calling NLP service {str(ex)}')
+                else:
+                    raise ex

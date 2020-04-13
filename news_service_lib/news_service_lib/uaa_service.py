@@ -2,7 +2,7 @@
 Module which implements the service used to interact with the UAA service
 """
 from aiohttp import ClientSession
-from aiohttp.web_exceptions import HTTPUnauthorized
+from aiohttp.web_exceptions import HTTPUnauthorized, HTTPInternalServerError
 from .jwt_tools import generate_token
 
 
@@ -46,9 +46,9 @@ class UaaService:
                     elif response.status == 500:
                         raise HTTPUnauthorized(reason='Wrong authorization token')
                     else:
-                        raise ConnectionError(f'Error calling uaa service')
+                        raise HTTPInternalServerError(reason='Error calling uaa service')
             except Exception as ex:
-                if not isinstance(ex, HTTPUnauthorized) or isinstance(ex, ConnectionError):
+                if not isinstance(ex, HTTPUnauthorized) and not isinstance(ex, HTTPInternalServerError):
                     raise ConnectionError(f'Error calling uaa service {str(ex)}')
                 else:
                     raise ex

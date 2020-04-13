@@ -153,7 +153,7 @@ jobs:
       - name: Lint and check score
         run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt nlp_service/*
       - name: Test with unittest
-        run: coverage run --source ./nlp_service --branch --omit=*__init__**,**tests** -m unittest discover -v nlp_service/tests/nlp_service
+        run: coverage run --source ./nlp_service --branch --omit=*__init__**,**tests**,**nlp_celery_worker** -m unittest discover -v nlp_service/tests/nlp_service
       - name: Check test coverage
         run: coverage report  --fail-under=80
       - name: Generate coverage report
@@ -201,7 +201,7 @@ jobs:
       - name: Lint and check score
         run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt nlp_service/nlp_celery_worker/*
       - name: Test with unittest
-        run: coverage run --source ./nlp_service/nlp_celery_worker --branch --omit=*__init__**,**tests** -m unittest discover -v nlp_service/tests/nlp_celery_worker
+        run: coverage run --source ./nlp_service/nlp_celery_worker --branch --omit=*__init__**,**tests**,**flower** -m unittest discover -v nlp_service/tests/nlp_celery_worker
       - name: Check test coverage
         run: coverage report  --fail-under=80
       - name: Generate coverage report
