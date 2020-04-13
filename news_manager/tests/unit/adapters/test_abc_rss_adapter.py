@@ -1,3 +1,6 @@
+"""
+ABC rss adapter tests module
+"""
 import unittest
 from os.path import join, dirname
 from unittest.mock import patch
@@ -8,11 +11,16 @@ from news_service_lib.models.new import New
 
 
 def adapt_pass(value):
+    """
+    Mocked helper function on adapt
+    """
     return list(value)
 
 
 class MockedResponse:
-
+    """
+    Mocked response helper function
+    """
     def __init__(self, content):
         self.content = content
 

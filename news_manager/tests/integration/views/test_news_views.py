@@ -1,3 +1,6 @@
+"""
+News views tests module
+"""
 import unittest
 from time import mktime, strptime
 from unittest.mock import patch
@@ -19,10 +22,16 @@ EXCEPTION_MESSAGE = 'test'
 
 
 def raise_exception(**_):
+    """
+    Raise exception helper function
+    """
     raise Exception(EXCEPTION_MESSAGE)
 
 
-async def mock_auth_middleware(app, handler):
+async def mock_auth_middleware(_, handler):
+    """
+    Mocked authentication middleware
+    """
     async def middleware(request):
         request.user = {'test': 'test'}
         return await handler(request)

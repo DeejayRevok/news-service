@@ -51,8 +51,8 @@ class CeleryApp:
 CELERY_APP = CeleryApp()
 
 if __name__ == '__main__':
-    args = profile_args_parser('NLP Celery worker')
-    configuration = Configuration(ConfigProfile[args['profile']], CONFIG_PATH)
-    add_logstash_handler(LOG_CONFIG, configuration.get('LOGSTASH', 'host'), int(configuration.get('LOGSTASH', 'port')))
-    CELERY_APP.configure(configuration.get_section('RABBIT'), int(configuration.get('CELERY', 'concurrency')))
+    ARGS = profile_args_parser('NLP Celery worker')
+    CONFIGURATION = Configuration(ConfigProfile[ARGS['profile']], CONFIG_PATH)
+    add_logstash_handler(LOG_CONFIG, CONFIGURATION.get('LOGSTASH', 'host'), int(CONFIGURATION.get('LOGSTASH', 'port')))
+    CELERY_APP.configure(CONFIGURATION.get_section('RABBIT'), int(CONFIGURATION.get('CELERY', 'concurrency')))
     CELERY_APP.run()

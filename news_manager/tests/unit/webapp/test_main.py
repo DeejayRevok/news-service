@@ -1,3 +1,6 @@
+"""
+News manager main tests module
+"""
 import unittest
 from unittest.mock import patch
 
