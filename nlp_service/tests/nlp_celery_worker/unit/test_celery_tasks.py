@@ -28,11 +28,11 @@ class TestCeleryTasks(TestCase):
         """
         initialize_worker(self.TEST_NLP_SERVICE_CONFIG, self.TEST_QUEUE_CONFIG)
 
-        from nlp_service.nlp_celery_worker.celery_nlp_tasks import nlp_service_service
-        self.assertIsNotNone(nlp_service_service)
+        from nlp_service.nlp_celery_worker.celery_nlp_tasks import NLP_REMOTE_SERVICE
+        self.assertIsNotNone(NLP_REMOTE_SERVICE)
 
-        from nlp_service.nlp_celery_worker.celery_nlp_tasks import queue_provider_config
-        self.assertEqual(queue_provider_config, self.TEST_QUEUE_CONFIG)
+        from nlp_service.nlp_celery_worker.celery_nlp_tasks import QUEUE_PROVIDER_CONFIG
+        self.assertEqual(QUEUE_PROVIDER_CONFIG, self.TEST_QUEUE_CONFIG)
 
     @patch.object(NlpServiceService, 'get_entities')
     @patch('nlp_service.nlp_celery_worker.celery_nlp_tasks.CELERY_APP')

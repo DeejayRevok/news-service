@@ -3,8 +3,9 @@ News service module
 """
 from typing import Iterator
 
-from news_manager.infrastructure.storage.filters.storage_filter_type import StorageFilterType
 from news_service_lib.models import New
+
+from news_manager.infrastructure.storage.filters.storage_filter_type import StorageFilterType
 from news_manager.infrastructure.storage.mongo_storage import MongoStorage
 from news_manager.infrastructure.storage.storage import Storage
 
@@ -39,6 +40,15 @@ class NewsService:
         self._client.save(dict(new), exist_filter=StorageFilterType.UNIQUE, exist_params=exist_filter_params)
 
     async def get_new_by_title(self, title: str) -> New:
+        """
+        Get an stored new looking for it by title
+
+        Args:
+            title: title of the new to search for
+
+        Returns: found new with the specified title
+
+        """
         unique_filter_params = StorageFilterType.UNIQUE.params
         unique_filter_params['key'] = 'title'
         unique_filter_params['value'] = title

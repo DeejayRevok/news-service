@@ -151,7 +151,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r nlp_service/requirements.txt
       - name: Lint and check score
-        run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt nlp_service/*
+        run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,Dockerfile_celery,Dockerfile_flower,README.md,requirements.txt,requirements_celery.txt,requirements_flower.txt,nlp_celery_worker nlp_service/*
       - name: Test with unittest
         run: coverage run --source ./nlp_service --branch --omit=*__init__**,**tests**,**nlp_celery_worker** -m unittest discover -v nlp_service/tests/nlp_service
       - name: Check test coverage
@@ -197,9 +197,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r nlp_service/requirements.txt
+          pip install -r nlp_service/requirements_celery.txt
       - name: Lint and check score
-        run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,README.md,config.ini,docker-compose.yml,requirements.txt nlp_service/nlp_celery_worker/*
+        run: pylint-fail-under --fail_under 9  --ignore=Dockerfile,Dockerfile_celery,Dockerfile_flower,README.md,requirements.txt,requirements_celery.txt,requirements_flower.txt,flower_app.py nlp_service/nlp_celery_worker/*
       - name: Test with unittest
         run: coverage run --source ./nlp_service/nlp_celery_worker --branch --omit=*__init__**,**tests**,**flower** -m unittest discover -v nlp_service/tests/nlp_celery_worker
       - name: Check test coverage

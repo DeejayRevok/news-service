@@ -22,7 +22,6 @@ class StorageFilter(metaclass=ABCMeta):
         Returns: parsed parameters
 
         """
-        pass
 
     @staticmethod
     @abstractmethod
@@ -36,4 +35,3 @@ class StorageFilter(metaclass=ABCMeta):
         Returns: parsed parameters
 
         """
-        pass

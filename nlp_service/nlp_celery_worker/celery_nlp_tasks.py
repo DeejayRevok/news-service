@@ -12,8 +12,8 @@ from nlp_service.log_config import get_logger
 from nlp_service.nlp_celery_worker.celery_app import CELERY_APP
 
 LOGGER = get_logger()
-nlp_service_service = None
-queue_provider_config = None
+NLP_REMOTE_SERVICE = None
+QUEUE_PROVIDER_CONFIG = None
 
 
 @CELERY_APP.app.task(name='initialize_worker')
@@ -26,14 +26,14 @@ def initialize_worker(nlp_service_config: dict, queue_config: dict):
         queue_config: queue provider configuration
 
     """
-    global nlp_service_service, queue_provider_config
+    global NLP_REMOTE_SERVICE, QUEUE_PROVIDER_CONFIG
     LOGGER.info('Initializing worker')
-    if nlp_service_service is None:
-        nlp_service_service = NlpServiceService(**nlp_service_config)
+    if NLP_REMOTE_SERVICE is None:
+        NLP_REMOTE_SERVICE = NlpServiceService(**nlp_service_config)
     else:
         LOGGER.info('Nlp service remote interface already initialized')
-    if queue_provider_config is None:
-        queue_provider_config = queue_config
+    if QUEUE_PROVIDER_CONFIG is None:
+        QUEUE_PROVIDER_CONFIG = queue_config
     else:
         LOGGER.info('Queue config already initialized')
 
@@ -49,12 +49,12 @@ def hydrate_new_with_entities(new: dict):
     Returns: new hydrated with named entities
 
     """
-    global nlp_service_service
+    global NLP_REMOTE_SERVICE
     LOGGER.info('Hydrating new %s with entities', new['title'])
-    if nlp_service_service is not None:
+    if NLP_REMOTE_SERVICE is not None:
         LOGGER.info('NLP service ready. Requesting new named entities...')
         new = New(**new)
-        new.entities = list(asyncio.run(nlp_service_service.get_entities(new.content)))
+        new.entities = list(asyncio.run(NLP_REMOTE_SERVICE.get_entities(new.content)))
         return dict(new)
     else:
         LOGGER.warning('Nlp service remote interface, not initialized, skipping named entities hydrating...')
@@ -70,18 +70,18 @@ def publish_hydrated_new(new: dict):
         new: new to publish
 
     """
-    global queue_provider_config
+    global QUEUE_PROVIDER_CONFIG
     if new is not None:
         LOGGER.info('Publishing hydrated new %s', new['title'])
-        if queue_provider_config is not None:
+        if QUEUE_PROVIDER_CONFIG is not None:
             LOGGER.info('Queue connection initialized, publishing...')
 
             new['hydrated'] = True
             connection = BlockingConnection(
-                ConnectionParameters(host=queue_provider_config['host'],
-                                     port=int(queue_provider_config['port']),
-                                     credentials=PlainCredentials(queue_provider_config['user'],
-                                                                  queue_provider_config['password'])))
+                ConnectionParameters(host=QUEUE_PROVIDER_CONFIG['host'],
+                                     port=int(QUEUE_PROVIDER_CONFIG['port']),
+                                     credentials=PlainCredentials(QUEUE_PROVIDER_CONFIG['user'],
+                                                                  QUEUE_PROVIDER_CONFIG['password'])))
             channel = connection.channel()
             channel.exchange_declare(exchange='news', exchange_type='fanout', durable=True)
             channel.basic_publish(exchange='news', routing_key='', body=json.dumps(dict(new)))
