@@ -22,6 +22,8 @@ RUN echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee -
 RUN apt-get update && apt-get install metricbeat
 
 RUN rm -rf /tmp
+RUN rm -rf nlp_service/stanza_resources
+
 RUN pip install --upgrade pip
 RUN pip install -r nlp_service/requirements.txt
 
