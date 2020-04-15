@@ -163,10 +163,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage_nlp_service.xml
-      - name: Free disk space
-        run: |
-          docker rmi -f $(docker images -a -q)
-          df -h
       - name: Build the docker image
         run: docker-compose -f docker/docker-compose.yml build nlp-service && docker tag nlp-service:latest djrevok/nlp-service:latest
       - name: Login to docker hub
