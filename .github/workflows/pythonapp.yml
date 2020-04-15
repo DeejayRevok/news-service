@@ -163,6 +163,11 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage_nlp_service.xml
+      - name: Free space
+        run: |
+          sudo swapoff -a
+          sudo rm -f /swapfile
+          sudo apt clean
       - name: Build the docker image
         run: docker-compose -f docker/docker-compose.yml build nlp-service && docker tag nlp-service:latest djrevok/nlp-service:latest
       - name: Login to docker hub
