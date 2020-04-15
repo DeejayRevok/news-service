@@ -19,6 +19,7 @@ class NewsConsumeService:
     """
     News consumer service implementation
     """
+
     def __init__(self, app: Application):
         """
         Initialize the news consume service for the specified app
@@ -52,8 +53,12 @@ class NewsConsumeService:
         self._app['apm'].client.begin_transaction('consume')
         try:
             body = json.loads(body)
-            updated_new = New(title=body['title'], content=body['content'], categories=body['categories'],
-                              date=body['date'], entities=[NamedEntity(**entity) for entity in body['entities']])
+            updated_new = New(title=body['title'],
+                              content=body['content'],
+                              categories=body['categories'],
+                              date=body['date'],
+                              hydrated=body['hydrated'],
+                              entities=[NamedEntity(**entity) for entity in body['entities']])
             asyncio.run(self._news_service.save_new(updated_new))
             self._app['apm'].client.end_transaction('New update', 'OK')
         except Exception as ex:

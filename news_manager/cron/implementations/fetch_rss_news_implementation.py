@@ -36,7 +36,7 @@ class FetchRssNewsImplementation(Implementation):
             for new in adapter.fetch():
 
                 try:
-                    existing_new = news_service.get_new_by_title(new.title)
+                    existing_new = await news_service.get_new_by_title(new.title)
                 except KeyError:
                     existing_new = None
 

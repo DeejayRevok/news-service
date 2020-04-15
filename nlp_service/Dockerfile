@@ -21,7 +21,6 @@ RUN apt-get install apt-transport-https -y
 RUN echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-7.x.list
 RUN apt-get update && apt-get install metricbeat
 
-RUN rm -rf /tmp
 RUN rm -rf nlp_service/stanza_resources
 
 RUN pip install --upgrade pip
