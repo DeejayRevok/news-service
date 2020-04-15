@@ -1,3 +1,6 @@
+"""
+News manager main tests module
+"""
 import unittest
 from unittest.mock import patch
 
@@ -5,7 +8,6 @@ from aiohttp.web_app import Application
 from news_service_lib.config import Configuration
 
 from news_manager.services.news_service import NewsService
-from news_manager.services.uaa_service import UaaService
 from news_manager.webapp.main import init_news_manager
 
 
@@ -14,12 +16,13 @@ class TestMain(unittest.TestCase):
     TEST_CONFIG = dict(protocol='test', host='test', port=0)
 
     # noinspection PyTypeHints
+    @patch('news_manager.webapp.main.NewsConsumeService')
     @patch.object(Configuration, 'get')
     @patch('news_manager.webapp.main.health_check')
     @patch('news_manager.webapp.main.initialize_crons')
     @patch('news_manager.webapp.main.news_view')
     @patch('news_manager.webapp.main.storage_factory')
-    def test_init_app(self, storage_factory_mock, view_mock, init_crons_mock, _, config_mock):
+    def test_init_app(self, storage_factory_mock, view_mock, init_crons_mock, _, config_mock, __):
         """
         Test if the initialization of the app initializes all the required modules
         """
@@ -35,7 +38,7 @@ class TestMain(unittest.TestCase):
         self.assertIsNotNone(app['news_service'])
         self.assertIsNotNone(app['uaa_service'])
         self.assertTrue(isinstance(app['news_service'], NewsService))
-        self.assertTrue(isinstance(app['uaa_service'], UaaService))
+        self.assertIsNotNone(app['uaa_service'])
         self.assertEqual(app['news_service']._client, test_storage_client)
 
 

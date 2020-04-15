@@ -1,3 +1,6 @@
+"""
+Factories tests module
+"""
 import unittest
 from unittest.mock import patch, Mock
 
@@ -7,7 +10,9 @@ from news_manager.infrastructure.storage.storage_factory import storage_factory
 
 
 class DummyImplementation:
-
+    """
+    Cron dummy implementation helper
+    """
     def __init__(self, dummy_app, definition):
         self.app = dummy_app
         self.definition = definition
@@ -15,7 +20,9 @@ class DummyImplementation:
 
 
 class TestFactories(unittest.TestCase):
-
+    """
+    Factories test cases
+    """
     def test_storage_factory_unknown(self):
         """
         Test storage factory raises error for unknown type

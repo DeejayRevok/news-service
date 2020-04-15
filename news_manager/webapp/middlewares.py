@@ -6,8 +6,8 @@ from typing import Callable
 from aiohttp.web_app import Application
 from aiohttp.web_exceptions import HTTPException
 from aiohttp.web_request import Request
+from aiohttp.web_response import Response
 from news_service_lib.error_utils import json_error
-from requests import Response
 
 from news_manager.log_config import get_logger
 
@@ -41,24 +41,4 @@ async def error_middleware(app: Application, handler: Callable):
             app['apm'].client.end_transaction(f'{request.method}{request.rel_url}', 500)
             app['apm'].client.capture_exception()
             return json_error(500, ex)
-    return middleware
-
-
-async def auth_middleware(app: Application, handler: Callable):
-    """
-    This middlewares check if the requests are authenticated
-
-    Args:
-        app: web application
-        handler: request handler
-
-    Returns: authentication middleware
-
-    """
-    async def middleware(request: Request) -> Response:
-        request.user = None
-        jwt_token = request.headers.get('X-API-Key', None)
-        if jwt_token:
-            request.user = await app['uaa_service'].validate_token(jwt_token)
-        return await handler(request)
     return middleware

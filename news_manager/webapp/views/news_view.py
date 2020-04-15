@@ -8,10 +8,10 @@ from aiohttp.web_exceptions import HTTPBadRequest
 from aiohttp.web_request import Request
 from aiohttp.web_response import json_response, Response
 from aiohttp_apispec import docs
-from news_service_lib.aio_class_route_table import ClassRouteTableDef
+from news_service_lib import ClassRouteTableDef, login_required
 
 from news_manager.log_config import get_logger
-from news_manager.webapp.definitions import API_VERSION, login_required
+from news_manager.webapp.definitions import API_VERSION
 
 ROOT_PATH = '/api/news'
 LOGGER = get_logger()

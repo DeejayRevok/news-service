@@ -4,7 +4,7 @@ Generic source adapter module
 from abc import abstractmethod
 from typing import Iterator, Any
 
-from news_manager.infrastructure.storage.models.new import New
+from news_service_lib.models import New
 
 
 class SourceAdapter:

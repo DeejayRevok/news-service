@@ -9,10 +9,11 @@ import requests
 from bs4 import BeautifulSoup
 from lxml import html
 from xmltodict import parse
+from news_service_lib.models import New
 
 from news_manager.adapters.source_adapter import SourceAdapter
-from news_manager.infrastructure.storage.models.new import New
 from news_manager.log_config import get_logger
+
 
 LOGGER = get_logger()
 

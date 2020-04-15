@@ -16,7 +16,19 @@ spec:
           backend:
             serviceName: uaa
             servicePort: 8081
+        - path: /nlp
+          backend:
+            serviceName: nlp-service
+            servicePort: 8081
         - path: /kibana
           backend:
             serviceName: kibana
             servicePort: 5601
+        - path: /rabbit
+          backend:
+            serviceName: rabbitmq
+            servicePort: 15672
+        - path: /flower
+          backend:
+            serviceName: nlp-service-flower
+            servicePort: 5555

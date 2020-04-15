@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+    kompose.version: 1.21.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nlp-celery-worker
+  name: nlp-celery-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nlp-celery-worker
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+        kompose.version: 1.21.0 ()
+      creationTimestamp: null
+      labels:
+        io.kompose.service: nlp-celery-worker
+    spec:
+      containers:
+      - env:
+        - name: CELERY_FORCE_ROOT
+          value: "True"
+        - name: JWT_SECRET
+          value: t0k3ns3cr3t
+        image: djrevok/nlp-celery-worker:latest
+        imagePullPolicy: ""
+        name: nlp-celery-worker
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
