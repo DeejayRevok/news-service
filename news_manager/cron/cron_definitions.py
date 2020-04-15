@@ -11,7 +11,7 @@ from news_manager.cron.implementations.fetch_rss_news_implementation import Fetc
 DEFINITIONS = {
     'fetch_rss_news': {
         'class': FetchRssNewsImplementation,
-        'expression': '*/5 * * * *',
+        'expression': '*/10 * * * *',
         'source_adapters': [ABCRssNewsAdapter],
         'abc_rss': 'https://www.abc.es/rss/feeds/abc_EspanaEspana.xml'
     }

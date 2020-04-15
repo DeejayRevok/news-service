@@ -29,8 +29,24 @@ class FetchRssNewsImplementation(Implementation):
         """
 
         news_service = self.app['news_service']
+        nlp_service_service = self.app['nlp_service_service']
 
         for adapter_class in self.definition['source_adapters']:
             adapter = adapter_class(self.definition)
             for new in adapter.fetch():
-                await news_service.save_new(new)
+
+                try:
+                    existing_new = await news_service.get_new_by_title(new.title)
+                except KeyError:
+                    existing_new = None
+
+                if existing_new is None:
+                    await news_service.save_new(new)
+
+                if existing_new is None or not existing_new.hydrated:
+                    try:
+                        await nlp_service_service.hydrate_new(new)
+                    except ConnectionError:
+                        LOGGER.warning('NLP service is not ready, skipping nlp hydrate')
+                    except ValueError:
+                        LOGGER.warning('JWT not configured, skipping nlp hydrate')

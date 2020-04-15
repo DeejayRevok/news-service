@@ -1,3 +1,6 @@
+"""
+News views tests module
+"""
 import unittest
 from time import mktime, strptime
 from unittest.mock import patch
@@ -6,7 +9,7 @@ from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
 
 from aiohttp.web_app import Application
 
-from news_manager.infrastructure.storage.models.new import New
+from news_service_lib.models.new import New
 from news_manager.services.news_service import NewsService
 from news_manager.webapp.middlewares import error_middleware
 from news_manager.webapp.views.news_view import setup_routes, ROOT_PATH
@@ -19,10 +22,16 @@ EXCEPTION_MESSAGE = 'test'
 
 
 def raise_exception(**_):
+    """
+    Raise exception helper function
+    """
     raise Exception(EXCEPTION_MESSAGE)
 
 
-async def mock_auth_middleware(app, handler):
+async def mock_auth_middleware(_, handler):
+    """
+    Mocked authentication middleware
+    """
     async def middleware(request):
         request.user = {'test': 'test'}
         return await handler(request)

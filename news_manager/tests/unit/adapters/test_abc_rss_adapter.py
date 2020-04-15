@@ -1,18 +1,26 @@
+"""
+ABC rss adapter tests module
+"""
 import unittest
 from os.path import join, dirname
 from unittest.mock import patch
 from xml.etree.ElementTree import Element, fromstring
 
 from news_manager.adapters.abc_rss_news_adapter import ABCRssNewsAdapter
-from news_manager.infrastructure.storage.models.new import New
+from news_service_lib.models.new import New
 
 
 def adapt_pass(value):
+    """
+    Mocked helper function on adapt
+    """
     return list(value)
 
 
 class MockedResponse:
-
+    """
+    Mocked response helper function
+    """
     def __init__(self, content):
         self.content = content
 

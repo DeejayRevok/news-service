@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -22,7 +22,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -42,27 +42,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
-    kompose.version: 1.21.0 ()
-  creationTimestamp: null
-  labels:
-    io.kompose.service: news-manager
-  name: news-manager
-spec:
-  ports:
-  - name: "8080"
-    port: 8080
-    targetPort: 8080
-  selector:
-    io.kompose.service: news-manager
-status:
-  loadBalancer: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -82,7 +62,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -102,7 +82,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -122,7 +102,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -142,7 +122,105 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+    kompose.version: 1.21.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: news-manager
+  name: news-manager
+spec:
+  ports:
+  - name: "8080"
+    port: 8080
+    targetPort: 8080
+  selector:
+    io.kompose.service: news-manager
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+    kompose.version: 1.21.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nlp-service
+  name: nlp-service
+spec:
+  ports:
+  - name: "8082"
+    port: 8082
+    targetPort: 8082
+  selector:
+    io.kompose.service: nlp-service
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+    kompose.version: 1.21.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nlp-service-flower
+  name: nlp-service-flower
+spec:
+  ports:
+  - name: "5555"
+    port: 5555
+    targetPort: 5555
+  selector:
+    io.kompose.service: nlp-service-flower
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+    kompose.version: 1.21.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: rabbitmq
+  name: rabbitmq
+spec:
+  ports:
+  - name: "4369"
+    port: 4369
+    targetPort: 4369
+  - name: "5671"
+    port: 5671
+    targetPort: 5671
+  - name: "5672"
+    port: 5672
+    targetPort: 5672
+  - name: "15671"
+    port: 15671
+    targetPort: 15671
+  - name: "15672"
+    port: 15672
+    targetPort: 15672
+  - name: "15674"
+    port: 15674
+    targetPort: 15674
+  - name: "25672"
+    port: 25672
+    targetPort: 25672
+  selector:
+    io.kompose.service: rabbitmq
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -162,7 +240,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -177,7 +255,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
         kompose.version: 1.21.0 ()
       creationTimestamp: null
       labels:
@@ -212,7 +290,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -228,7 +306,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
         kompose.version: 1.21.0 ()
       creationTimestamp: null
       labels:
@@ -250,60 +328,20 @@ spec:
         resources: {}
         volumeMounts:
         - mountPath: /usr/share/elasticsearch/data
-          name: elastic-data
+          name: elastic-news-service-data
       restartPolicy: Always
       serviceAccountName: ""
       volumes:
-      - name: elastic-data
+      - name: elastic-news-service-data
         persistentVolumeClaim:
-          claimName: elastic-data
+          claimName: elastic-news-service-data
 status: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
-    kompose.version: 1.21.0 ()
-  creationTimestamp: null
-  labels:
-    io.kompose.service: news-manager
-  name: news-manager
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      io.kompose.service: news-manager
-  strategy: {}
-  template:
-    metadata:
-      annotations:
-        kompose.cmd: kompose convert -f ../docker/docker-compose.yml
-        kompose.version: 1.21.0 ()
-      creationTimestamp: null
-      labels:
-        io.kompose.service: news-manager
-    spec:
-      containers:
-      - env:
-        - name: SERVER_BASEPATH
-          value: /manager
-        image: djrevok/news-manager:latest
-        imagePullPolicy: IfNotPresent
-        name: news-manager
-        ports:
-        - containerPort: 8080
-        resources: {}
-      restartPolicy: Always
-      serviceAccountName: ""
-      volumes: null
-status: {}
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -318,7 +356,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
         kompose.version: 1.21.0 ()
       creationTimestamp: null
       labels:
@@ -326,7 +364,7 @@ spec:
     spec:
       containers:
       - image: djrevok/heartbeat-news-service:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: ""
         name: heartbeat
         resources: {}
       restartPolicy: Always
@@ -338,7 +376,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -353,7 +391,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
         kompose.version: 1.21.0 ()
       creationTimestamp: null
       labels:
@@ -378,7 +416,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -393,7 +431,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
         kompose.version: 1.21.0 ()
       creationTimestamp: null
       labels:
@@ -401,7 +439,7 @@ spec:
     spec:
       containers:
       - image: djrevok/logstash-news-service:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: ""
         name: logstash
         ports:
         - containerPort: 5000
@@ -415,7 +453,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -431,7 +469,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
         kompose.version: 1.21.0 ()
       creationTimestamp: null
       labels:
@@ -439,27 +477,27 @@ spec:
     spec:
       containers:
       - image: djrevok/mongo-news-service:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: ""
         name: mongodb
         ports:
         - containerPort: 27017
         resources: {}
         volumeMounts:
         - mountPath: /data/db
-          name: mongodb-data
+          name: mongodb-news-data
       restartPolicy: Always
       serviceAccountName: ""
       volumes:
-      - name: mongodb-data
+      - name: mongodb-news-data
         persistentVolumeClaim:
-          claimName: mongodb-data
+          claimName: mongodb-news-data
 status: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -475,7 +513,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
         kompose.version: 1.21.0 ()
       creationTimestamp: null
       labels:
@@ -501,20 +539,238 @@ spec:
         resources: {}
         volumeMounts:
         - mountPath: /var/lib/mysql
-          name: mysql-data
+          name: mysql-uaa-data
       restartPolicy: Always
       serviceAccountName: ""
       volumes:
-      - name: mysql-data
+      - name: mysql-uaa-data
         persistentVolumeClaim:
-          claimName: mysql-data
+          claimName: mysql-uaa-data
 status: {}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+    kompose.version: 1.21.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: news-manager
+  name: news-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: news-manager
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+        kompose.version: 1.21.0 ()
+      creationTimestamp: null
+      labels:
+        io.kompose.service: news-manager
+    spec:
+      containers:
+      - env:
+        - name: JWT_SECRET
+          value: t0k3ns3cr3t
+        - name: SERVER_BASEPATH
+          value: /manager
+        image: djrevok/news-manager:latest
+        imagePullPolicy: ""
+        name: news-manager
+        ports:
+        - containerPort: 8080
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+    kompose.version: 1.21.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nlp-celery-worker
+  name: nlp-celery-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nlp-celery-worker
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+        kompose.version: 1.21.0 ()
+      creationTimestamp: null
+      labels:
+        io.kompose.service: nlp-celery-worker
+    spec:
+      containers:
+      - env:
+        - name: CELERY_FORCE_ROOT
+          value: "True"
+        - name: JWT_SECRET
+          value: t0k3ns3cr3t
+        image: djrevok/nlp-celery-worker:latest
+        imagePullPolicy: ""
+        name: nlp-celery-worker
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+    kompose.version: 1.21.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nlp-service
+  name: nlp-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nlp-service
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+        kompose.version: 1.21.0 ()
+      creationTimestamp: null
+      labels:
+        io.kompose.service: nlp-service
+    spec:
+      containers:
+      - env:
+        - name: JWT_SECRET
+          value: t0k3ns3cr3t
+        - name: SERVER_BASEPATH
+          value: /nlp
+        image: djrevok/nlp-service:latest
+        imagePullPolicy: ""
+        name: nlp-service
+        ports:
+        - containerPort: 8082
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+    kompose.version: 1.21.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nlp-service-flower
+  name: nlp-service-flower
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nlp-service-flower
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+        kompose.version: 1.21.0 ()
+      creationTimestamp: null
+      labels:
+        io.kompose.service: nlp-service-flower
+    spec:
+      containers:
+      - env:
+        - name: RABBIT_URL_PREFIX
+          value: rabbit
+        - name: URL_PREFIX
+          value: flower
+        image: djrevok/nlp-service-flower:latest
+        imagePullPolicy: ""
+        name: nlp-service-flower
+        ports:
+        - containerPort: 5555
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+    kompose.version: 1.21.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: rabbitmq
+  name: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: rabbitmq
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
+        kompose.version: 1.21.0 ()
+      creationTimestamp: null
+      labels:
+        io.kompose.service: rabbitmq
+    spec:
+      containers:
+      - env:
+        - name: RABBITMQ_DEFAULT_PASS
+          value: guest
+        - name: RABBITMQ_DEFAULT_USER
+          value: guest
+        - name: RABBITMQ_DEFAULT_VHOST
+          value: /
+        - name: RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS
+          value: -rabbitmq_management path_prefix "/rabbit"
+        image: rabbitmq:management
+        imagePullPolicy: ""
+        name: rabbitmq
+        ports:
+        - containerPort: 4369
+        - containerPort: 5671
+        - containerPort: 5672
+        - containerPort: 15671
+        - containerPort: 15672
+        - containerPort: 15674
+        - containerPort: 25672
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
     kompose.version: 1.21.0 ()
   creationTimestamp: null
   labels:
@@ -529,7 +785,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert -f ../docker/docker-compose.yml
+        kompose.cmd: kompose convert -f ./docker/docker-compose.yml -o kubernetess/resources
         kompose.version: 1.21.0 ()
       creationTimestamp: null
       labels:
@@ -537,10 +793,12 @@ spec:
     spec:
       containers:
       - env:
+        - name: JWT_SECRET
+          value: t0k3ns3cr3t
         - name: SERVER_BASEPATH
           value: /uaa
         image: djrevok/uaa:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: ""
         name: uaa
         ports:
         - containerPort: 8081
@@ -569,17 +827,29 @@ spec:
           servicePort: 8081
         path: /uaa
       - backend:
+          serviceName: nlp-service
+          servicePort: 8081
+        path: /nlp
+      - backend:
           serviceName: kibana
           servicePort: 5601
         path: /kibana
+      - backend:
+          serviceName: rabbitmq
+          servicePort: 15672
+        path: /rabbit
+      - backend:
+          serviceName: nlp-service-flower
+          servicePort: 5555
+        path: /flower
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: elastic-data
-  name: elastic-data
+    io.kompose.service: elastic-news-service-data
+  name: elastic-news-service-data
 spec:
   accessModes:
   - ReadWriteOnce
@@ -593,8 +863,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: mongodb-data
-  name: mongodb-data
+    io.kompose.service: mongodb-news-data
+  name: mongodb-news-data
 spec:
   accessModes:
   - ReadWriteOnce
@@ -608,8 +878,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: mysql-data
-  name: mysql-data
+    io.kompose.service: mysql-uaa-data
+  name: mysql-uaa-data
 spec:
   accessModes:
   - ReadWriteOnce
