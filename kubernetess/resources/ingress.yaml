@@ -3,32 +3,32 @@ kind: Ingress
 metadata:
   name: news-service-fanout
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
     - http:
         paths:
-        - path: /manager
+        - path: /manager/?(.*)
           backend:
             serviceName: news-manager
             servicePort: 8080
-        - path: /uaa
+        - path: /uaa/?(.*)
           backend:
             serviceName: uaa
             servicePort: 8081
-        - path: /nlp
+        - path: /nlp/?(.*)
           backend:
             serviceName: nlp-service
-            servicePort: 8081
-        - path: /kibana
+            servicePort: 8082
+        - path: /kibana/?(.*)
           backend:
             serviceName: kibana
             servicePort: 5601
-        - path: /rabbit
+        - path: /rabbit/?(.*)
           backend:
             serviceName: rabbitmq
             servicePort: 15672
-        - path: /flower
+        - path: /flower/?(.*)
           backend:
             serviceName: nlp-service-flower
             servicePort: 5555
