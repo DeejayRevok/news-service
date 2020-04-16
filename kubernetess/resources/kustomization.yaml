@@ -27,3 +27,4 @@ resources:
   - rabbitmq-deployment.yaml
   - rabbitmq-service.yaml
   - ingress.yaml
+  - ingress-rabbit.yaml

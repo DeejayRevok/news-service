@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: news-service-rabbit
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /rabbit/$1
+spec:
+  rules:
+    - http:
+        paths:
+        - path: /rabbit/?(.*)
+          backend:
+            serviceName: rabbitmq
+            servicePort: 15672
