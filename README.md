@@ -3,6 +3,7 @@ News service
 
 ![News Service](https://github.com/DeejayRevok/news-service/workflows/News%20Service/badge.svg)
 [![codecov](https://codecov.io/gh/DeejayRevok/news-service/branch/develop/graph/badge.svg?token=1EEM8TD8JC)](https://codecov.io/gh/DeejayRevok/news-service)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DeejayRevok_news-service&metric=alert_status)](https://sonarcloud.io/dashboard?id=DeejayRevok_news-service)
 
 ## Installation and running
   
