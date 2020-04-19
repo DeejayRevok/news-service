@@ -50,6 +50,9 @@ class TestNewsConsumeService(TestCase):
         Test succesful new update creates an apm success transaction and updates the body new
         """
         async def mock_save_new_success():
+            """
+            Test mocked asynchronous method response
+            """
             pass
         self.news_service_mock.save_new.return_value = mock_save_new_success()
         self.news_consume_service.new_update(None, None, None, json.dumps(dict(self.TEST_NEW)))
