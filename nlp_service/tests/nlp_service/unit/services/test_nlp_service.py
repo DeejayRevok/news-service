@@ -1,5 +1,8 @@
+"""
+NLP service tests module
+"""
 from unittest import TestCase
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, MagicMock
 
 from aiounittest import async_test
 from news_service_lib.models import New
@@ -8,7 +11,9 @@ from nlp_service.services.nlp_service import NlpService
 
 
 class TestNlpService(TestCase):
-
+    """
+    NLP service test cases implementation
+    """
     TEST_NEW = New(title='test_title', content='test_content', date=2124124.0, categories=['test_category'])
     TEST_TEXT = 'test_text'
     TEST_ENTITY = ('test_entity_text', 'test_entity_type')
@@ -17,6 +22,10 @@ class TestNlpService(TestCase):
     @patch('nlp_service.services.nlp_service.Pipeline')
     @async_test
     async def test_process_text(self, mocked_nlp_pipeline):
+        """
+        Test process text returns the NLP processed doc with the sentences and the named entities extracted from
+        the text
+        """
         mock_first_sentence = MagicMock()
         mock_first_sentence.text = self.TEST_SENTENCES[0]
         mock_second_sentence = MagicMock()
@@ -38,7 +47,10 @@ class TestNlpService(TestCase):
     @patch('nlp_service.services.nlp_service.hydrate_new_with_entities')
     @patch('nlp_service.services.nlp_service.Pipeline')
     @async_test
-    async def test_hydrate_new(self, _, mocked_hydrate_new_entities, mock_publish_task):
+    async def test_hydrate_new(self, _, mocked_hydrate_new_entities, __):
+        """
+        Test hydrate new builds a chain linking all the specified tasks one behind another and calls the chain
+        """
         hydrate_task_mock = MagicMock()
         NlpService.CELERY_NLP_PIPELINE = [mocked_hydrate_new_entities, hydrate_task_mock]
         mock_chain = MagicMock()
