@@ -1,12 +1,10 @@
 """
 Module used to communicate with the NLP service
 """
-from typing import Iterator
-
 from aiohttp import ClientSession
 from aiohttp.web_exceptions import HTTPUnauthorized, HTTPInternalServerError
 from news_service_lib import get_system_auth_token
-from .models import New, NamedEntity
+from .models import New, NamedEntity, NLPDoc
 
 
 class NlpServiceService:
@@ -15,7 +13,7 @@ class NlpServiceService:
     """
     URL_BASE = '{protocol}://{host}:{port}/{path}'
     PATHS = {'hydrate_new': 'v1/api/nlp/hydrate',
-             'get_entities': 'v1/api/nlp/entities'}
+             'process_text': 'v1/api/nlp'}
 
     def __init__(self, protocol: str, host: str, port: str):
         """
@@ -56,23 +54,25 @@ class NlpServiceService:
                 else:
                     raise ex
 
-    async def get_entities(self, text: str) -> Iterator[NamedEntity]:
+    async def process_text(self, text: str) -> NLPDoc:
         """
-        Request the NLP service to extract named entities from text
+        Request the NLP service to apply NLP processing in the given text
 
         Args:
-            text: text to extract named entities
+            text: text to process
+
+        Returns: NLP Doc with the extracted NLP data from the text
         """
         system_auth_token = get_system_auth_token()
-        get_entities_url = self.URL_BASE.format(protocol=self._protocol, host=self._host, port=self._port,
-                                                path=self.PATHS['get_entities'])
+        process_text_url = self.URL_BASE.format(protocol=self._protocol, host=self._host, port=self._port,
+                                                path=self.PATHS['process_text'])
         async with ClientSession(headers={'X-API-Key': 'Bearer ' + system_auth_token}) as client:
-
             try:
-                async with client.post(get_entities_url, data=dict(text=text)) as response:
+                async with client.post(process_text_url, data=dict(text=text)) as response:
                     if response.status == 200:
                         response_content = await response.json()
-                        return map(lambda entity: NamedEntity(**entity), response_content)
+                        return NLPDoc(sentences=response_content['sentences'],
+                                      named_entities=response_content['named_entities'])
                     if response.status == 401:
                         response_json = await response.json()
                         raise HTTPUnauthorized(reason=response_json['detail'])

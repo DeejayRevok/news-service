@@ -73,6 +73,12 @@ class SqlStorage:
         query = self._session.query(model)
         return query.filter_by(**filters).first()
 
+    def rollback(self):
+        """
+        Perform a rollback operation for the current storage session
+        """
+        self._session.rollback()
+
     def health_check(self) -> bool:
         """
         Check if the storage is available
