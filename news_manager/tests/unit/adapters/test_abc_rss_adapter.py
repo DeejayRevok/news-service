@@ -26,7 +26,9 @@ class MockedResponse:
 
 
 class TestABCRssAdapter(unittest.TestCase):
-
+    """
+    ABC Rss adapter test cases implementation
+    """
     XML_RESPONSE_PATH = join(dirname(dirname(__file__)), 'resources', 'abc_news_response.xml')
 
     def setUp(self):

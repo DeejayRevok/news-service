@@ -4,11 +4,11 @@ NLP request schemas module
 from marshmallow import Schema, fields
 
 
-class PostGetEntitiesSchema(Schema):
+class PostProcessTextSchema(Schema):
     """
-    Class that describes the schema of the get entities request
+    Class that describes the schema of the process text request
     """
-    text = fields.Str(description="Text to extract named entities")
+    text = fields.Str(description="Text to process")
 
 
 class PutHydrateNewSchema(Schema):
@@ -19,4 +19,5 @@ class PutHydrateNewSchema(Schema):
     content = fields.Str(description='New text content')
     categories = fields.List(fields.Str, description='New categories')
     date = fields.Float(description='New date timestamp')
+    summary = fields.Str(description='New summary', allow_none=True)
     entities = fields.List(fields.Dict, description='New named entities', allow_none=True)

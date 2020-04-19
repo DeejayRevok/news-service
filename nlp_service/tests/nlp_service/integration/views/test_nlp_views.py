@@ -1,13 +1,14 @@
 """
 NLP views test case
 """
+import json
 from unittest import main
 from unittest.mock import patch
 
 from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
 from aiohttp.web_app import Application
 from aiohttp_apispec import validation_middleware, setup_aiohttp_apispec
-from news_service_lib.models import NamedEntity, New
+from news_service_lib.models import New, NLPDoc
 
 from nlp_service.webapp.middlewares import error_middleware
 from nlp_service.webapp.views.nlp_view import setup_routes, ROOT_PATH
@@ -29,8 +30,8 @@ async def mock_auth_middleware(_, handler):
 
 class TestNlpViews(AioHTTPTestCase):
 
-    TEST_ENTITIES = [NamedEntity(text='test_entity_text', type='test_entity_type')]
-    TEST_NEW = New(title='test_title', content='test_content', date=232421.0, categories=['test_category'])
+    TEST_NLP_DOC = NLPDoc(sentences=['test_sentence'], named_entities=[('test_entity_text', 'test_entity_type')])
+    TEST_NEW = New(title='test_title', content='test_content', date=232421.0, categories=['test_category'], summary='')
 
     @patch('nlp_service.services.nlp_service.NlpService')
     @patch('elasticapm.middleware.ElasticAPM')
@@ -38,14 +39,17 @@ class TestNlpViews(AioHTTPTestCase):
         """
         Override the get_app method to return your application.
         """
-        async def get_entities_return():
-            return iter(self.TEST_ENTITIES)
+        async def get_processed_text_return():
+            return self.TEST_NLP_DOC
 
         async def hydrate_return():
+            """
+            Test mocked asynchronous method response
+            """
             pass
 
         self.mock_nlp_service = nlp_service_mocked
-        self.mock_nlp_service.get_named_entities.return_value = get_entities_return()
+        self.mock_nlp_service.get_processed_text.return_value = get_processed_text_return()
         self.mock_nlp_service.hydrate_new.return_value = hydrate_return()
         app = Application()
         app['apm'] = mock_apm_client
@@ -69,15 +73,15 @@ class TestNlpViews(AioHTTPTestCase):
         return app
 
     @unittest_run_loop
-    async def test_get_entities(self):
+    async def test_process_text(self):
         """
-        Test the get entities REST endpoint
+        Test the process text REST endpoint
         """
         test_text = 'test_text'
-        resp = await self.client.post(f'/{API_VERSION}{ROOT_PATH}/entities', data=dict(text=test_text))
+        resp = await self.client.post(f'/{API_VERSION}{ROOT_PATH}', data=dict(text=test_text))
         self.assertEqual(resp.status, 200)
         response_content = await resp.json()
-        self.assertEqual(response_content, [dict(entity) for entity in self.TEST_ENTITIES])
+        self.assertEqual(response_content, json.loads(json.dumps(dict(self.TEST_NLP_DOC))))
 
     @unittest_run_loop
     async def test_hydrate_new(self):

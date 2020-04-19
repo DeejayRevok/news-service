@@ -12,7 +12,9 @@ from news_manager.webapp.main import init_news_manager
 
 
 class TestMain(unittest.TestCase):
-
+    """
+    Main webapp script test cases implementation
+    """
     TEST_CONFIG = dict(protocol='test', host='test', port=0)
 
     # noinspection PyTypeHints
