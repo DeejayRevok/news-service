@@ -13,6 +13,9 @@ from news_manager.services.news_consume_service import NewsConsumeService
 
 
 class TestNewsConsumeService(TestCase):
+    """
+    News consume services test cases implementation
+    """
     TEST_RABBIT_CONFIG = dict(test='test')
     TEST_NEW = New(title='test_title', content='test_content', date=12313.0, categories=['test_category'],
                    entities=[NamedEntity(text='test_named_entity_text', type='test_named_entity_type')])

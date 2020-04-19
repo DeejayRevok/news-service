@@ -11,7 +11,9 @@ MOCKED_NEW = New(title='Test title', content='Test content', categories=['Test c
 
 
 class TestNewsService(unittest.TestCase):
-
+    """
+    News service test cases implementation
+    """
     @patch('news_manager.infrastructure.storage.storage.Storage')
     def test_save_new(self, client):
         """
