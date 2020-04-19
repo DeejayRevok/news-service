@@ -3,13 +3,15 @@ Celery tasks implementation module
 """
 import asyncio
 import json
+from typing import Tuple
 
 from news_service_lib import NlpServiceService
-from news_service_lib.models import New
+from news_service_lib.models import New, NamedEntity
 from pika import BlockingConnection, ConnectionParameters, PlainCredentials
 
 from nlp_service.log_config import get_logger
 from nlp_service.nlp_celery_worker.celery_app import CELERY_APP
+from nlp_service.nlp_celery_worker.nlp_helpers.summarizer import generate_summary_from_sentences
 
 LOGGER = get_logger()
 NLP_REMOTE_SERVICE = None
@@ -38,26 +40,70 @@ def initialize_worker(nlp_service_config: dict, queue_config: dict):
         LOGGER.info('Queue config already initialized')
 
 
+@CELERY_APP.app.task(name='process_content')
+def process_content(new: dict):
+    """
+    Apply NLP processing to the input new content
+
+    Args:
+        new: new to process content
+
+    Returns: new to hydrate in next tasks, processed new content
+
+    """
+    global NLP_REMOTE_SERVICE
+    LOGGER.info('NLP Processing new %s', new['title'])
+    if NLP_REMOTE_SERVICE is not None:
+        LOGGER.info('NLP service ready. Requesting NLP processing...')
+        processed_content = asyncio.run(NLP_REMOTE_SERVICE.process_text(new['content']))
+        return new, dict(processed_content)
+    else:
+        LOGGER.warning('Nlp service remote interface, not initialized, skipping named entities hydrating...')
+        return None, None
+
+
 @CELERY_APP.app.task(name='hydrate_new_entities')
-def hydrate_new_with_entities(new: dict):
+def hydrate_new_with_entities(new_nlp_doc: Tuple[dict, dict]):
     """
     Hydrate the input new with named entities
 
     Args:
-        new: new to hydrate
+        new_nlp_doc: new to hydrate, NLP data about the new content
 
-    Returns: new hydrated with named entities
+    Returns: new hydrated with named entities, processed new content
 
     """
-    global NLP_REMOTE_SERVICE
+    new, nlp_doc = new_nlp_doc
     LOGGER.info('Hydrating new %s with entities', new['title'])
-    if NLP_REMOTE_SERVICE is not None:
-        LOGGER.info('NLP service ready. Requesting new named entities...')
+    if nlp_doc is not None:
         new = New(**new)
-        new.entities = list(asyncio.run(NLP_REMOTE_SERVICE.get_entities(new.content)))
+        new.entities = list(
+            set(map(lambda entity: NamedEntity(text=entity[0].lower(), type=entity[1]), nlp_doc['named_entities'])))
+        return dict(new), nlp_doc
+    else:
+        LOGGER.warning('Processed new content is missing, skipping entities hydrate')
+        return None
+
+
+@CELERY_APP.app.task(name='hydrate_new_summary')
+def hydrate_new_summary(new_nlp_doc: Tuple[dict, dict]):
+    """
+    Hydrate the input new with the content summary
+
+    Args:
+        new_nlp_doc: new to hydrate, NLP data about the new content
+
+    Returns: new hydrated with the summary
+
+    """
+    new, nlp_doc = new_nlp_doc
+    LOGGER.info('Hydrating new %s with the content summary', new['title'])
+    if nlp_doc is not None:
+        new = New(**new)
+        new.summary = generate_summary_from_sentences(nlp_doc['sentences'])
         return dict(new)
     else:
-        LOGGER.warning('Nlp service remote interface, not initialized, skipping named entities hydrating...')
+        LOGGER.warning('Processed new content is missing, skipping summary hydrate')
         return None
 
 
