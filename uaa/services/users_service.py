@@ -1,6 +1,8 @@
 """
 Users service module
 """
+from sqlalchemy.exc import IntegrityError
+
 from uaa.infrastructure.storage.sql_storage import SqlStorage
 from uaa.lib.pass_tools import hash_password
 from uaa.models.user import User
@@ -31,7 +33,11 @@ class UserService:
 
         """
         password_hash = hash_password(password)
-        return self._client.save(User(username=username, password=password_hash))
+        try:
+            return self._client.save(User(username=username, password=password_hash))
+        except IntegrityError:
+            self._client.rollback()
+            raise ValueError(f'User {username} already exists')
 
     async def get_user_by_id(self, identifier: int) -> User:
         """

@@ -10,6 +10,9 @@ from news_manager.infrastructure.messaging.exchange_consumer import ExchangeCons
 
 
 class TestExchangeConsumer(TestCase):
+    """
+    Exchange consumer test cases implementation
+    """
     TEST_HOST = 'test_host'
     TEST_PORT = '0'
     TEST_USER = 'test_user'

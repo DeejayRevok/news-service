@@ -13,6 +13,9 @@ from news_manager.services.news_consume_service import NewsConsumeService
 
 
 class TestNewsConsumeService(TestCase):
+    """
+    News consume services test cases implementation
+    """
     TEST_RABBIT_CONFIG = dict(test='test')
     TEST_NEW = New(title='test_title', content='test_content', date=12313.0, categories=['test_category'],
                    entities=[NamedEntity(text='test_named_entity_text', type='test_named_entity_type')])
@@ -50,6 +53,9 @@ class TestNewsConsumeService(TestCase):
         Test succesful new update creates an apm success transaction and updates the body new
         """
         async def mock_save_new_success():
+            """
+            Test mocked asynchronous method response
+            """
             pass
         self.news_service_mock.save_new.return_value = mock_save_new_success()
         self.news_consume_service.new_update(None, None, None, json.dumps(dict(self.TEST_NEW)))
