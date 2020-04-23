@@ -74,7 +74,8 @@ class TestCeleryTasks(TestCase):
         Test hydrate with summary adds the generated content summary to the new
         """
         mocked_generate_summary.return_value = self.TEST_SUMMARY
-        new = hydrate_new_summary((dict(self.TEST_NEW), dict(self.TEST_PROCESSED_TEXT)))
+        new, nlp_doc = hydrate_new_summary((dict(self.TEST_NEW), dict(self.TEST_PROCESSED_TEXT)))
+        self.assertEqual(nlp_doc, dict(self.TEST_PROCESSED_TEXT))
         self.assertEqual(new['summary'], self.TEST_SUMMARY)
 
     @patch('nlp_service.nlp_celery_worker.celery_nlp_tasks.compute_overall_sentiment_sentences')
