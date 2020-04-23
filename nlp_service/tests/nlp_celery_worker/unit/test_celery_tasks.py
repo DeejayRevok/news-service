@@ -9,7 +9,7 @@ from news_service_lib import NlpServiceService
 from news_service_lib.models import New, NamedEntity, NLPDoc
 
 from nlp_service.nlp_celery_worker.celery_nlp_tasks import initialize_worker, hydrate_new_with_entities, \
-    publish_hydrated_new, process_content, hydrate_new_summary
+    publish_hydrated_new, process_content, hydrate_new_summary, hydrate_new_sentiment
 
 
 class TestCeleryTasks(TestCase):
@@ -19,6 +19,7 @@ class TestCeleryTasks(TestCase):
     TEST_NAMED_ENTITIES = [('Test_ENTITY_text', 'test_entity_type'), ('Test_ENTITY_text', 'test_entity_type')]
     TEST_PROCESSED_TEXT = NLPDoc(sentences=['test_sentence_1', 'test_sentence_2'], named_entities=TEST_NAMED_ENTITIES)
     TEST_SUMMARY = 'Test summary'
+    TEST_SENTIMENT = 0.4
 
     TEST_NLP_SERVICE_CONFIG = dict(protocol='test_protocol', host='test_host', port='0')
     TEST_QUEUE_CONFIG = dict(host='test_host', port='0', user='test_user', password='test_password')
@@ -70,11 +71,21 @@ class TestCeleryTasks(TestCase):
     @patch('nlp_service.nlp_celery_worker.celery_nlp_tasks.CELERY_APP')
     def test_hydrate_new_summary(self, _, mocked_generate_summary):
         """
-        Test hydrate with entities adds the named entities extracting removing duplicates and in lowercase
+        Test hydrate with summary adds the generated content summary to the new
         """
         mocked_generate_summary.return_value = self.TEST_SUMMARY
         new = hydrate_new_summary((dict(self.TEST_NEW), dict(self.TEST_PROCESSED_TEXT)))
         self.assertEqual(new['summary'], self.TEST_SUMMARY)
+
+    @patch('nlp_service.nlp_celery_worker.celery_nlp_tasks.compute_overall_sentiment_sentences')
+    @patch('nlp_service.nlp_celery_worker.celery_nlp_tasks.CELERY_APP')
+    def test_hydrate_new_sentiment(self, _, mocked_sentiment_analyzer):
+        """
+        Test hydrate with sentiment adds the sentiment score of the content
+        """
+        mocked_sentiment_analyzer.return_value = self.TEST_SENTIMENT
+        new = hydrate_new_sentiment((dict(self.TEST_NEW), dict(self.TEST_PROCESSED_TEXT)))
+        self.assertEqual(new['sentiment'], self.TEST_SENTIMENT)
 
     @patch('nlp_service.nlp_celery_worker.celery_nlp_tasks.PlainCredentials')
     @patch('nlp_service.nlp_celery_worker.celery_nlp_tasks.ConnectionParameters')

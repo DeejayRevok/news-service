@@ -20,6 +20,7 @@ class New:
     hydrated: bool = False
     entities: List[NamedEntity] = field(default_factory=list)
     summary: str = None
+    sentiment: float = None
 
     def __iter__(self) -> Iterator[tuple]:
         """
@@ -34,6 +35,7 @@ class New:
         yield 'date', self.date
         yield 'hydrated', self.hydrated
         yield 'summary', self.summary
+        yield 'sentiment', self.sentiment
         yield 'entities', [dict(entity) for entity in self.entities]
 
     def dto(self, render_date_format: str) -> dict:
@@ -52,4 +54,5 @@ class New:
                     date=datetime.fromtimestamp(self.date).strftime(render_date_format),
                     hydrated=self.hydrated,
                     summary=self.summary,
+                    sentiment=self.sentiment,
                     entities=[dict(entity) for entity in self.entities])

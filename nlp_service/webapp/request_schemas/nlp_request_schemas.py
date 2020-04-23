@@ -20,4 +20,5 @@ class PutHydrateNewSchema(Schema):
     categories = fields.List(fields.Str, description='New categories')
     date = fields.Float(description='New date timestamp')
     summary = fields.Str(description='New summary', allow_none=True)
+    sentiment = fields.Float(description='New content sentiment score', allow_none= True)
     entities = fields.List(fields.Dict, description='New named entities', allow_none=True)
