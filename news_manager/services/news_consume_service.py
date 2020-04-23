@@ -59,6 +59,7 @@ class NewsConsumeService:
                               date=body['date'],
                               hydrated=body['hydrated'],
                               summary=body['summary'],
+                              sentiment=body['sentiment'],
                               entities=[NamedEntity(**entity) for entity in body['entities']])
             asyncio.run(self._news_service.save_new(updated_new))
             self._app['apm'].client.end_transaction('New update', 'OK')

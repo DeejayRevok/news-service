@@ -5,14 +5,14 @@ from news_service_lib.models import NLPDoc
 from stanza import Pipeline, Document
 
 from nlp_service.nlp_celery_worker.celery_nlp_tasks import hydrate_new_with_entities, publish_hydrated_new, \
-    process_content, hydrate_new_summary
+    process_content, hydrate_new_summary, hydrate_new_sentiment
 
 
 class NlpService:
     """
     NLP service implementation
     """
-    CELERY_NLP_PIPELINE = [process_content, hydrate_new_with_entities, hydrate_new_summary]
+    CELERY_NLP_PIPELINE = [process_content, hydrate_new_with_entities, hydrate_new_summary, hydrate_new_sentiment]
 
     def __init__(self):
         """

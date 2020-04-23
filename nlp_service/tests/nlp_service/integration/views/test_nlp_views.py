@@ -21,6 +21,7 @@ async def mock_auth_middleware(_, handler):
     """
     Mocked authentication middleware
     """
+
     async def middleware(request):
         request.user = MOCKED_USER
         return await handler(request)
@@ -29,9 +30,9 @@ async def mock_auth_middleware(_, handler):
 
 
 class TestNlpViews(AioHTTPTestCase):
-
     TEST_NLP_DOC = NLPDoc(sentences=['test_sentence'], named_entities=[('test_entity_text', 'test_entity_type')])
-    TEST_NEW = New(title='test_title', content='test_content', date=232421.0, categories=['test_category'], summary='')
+    TEST_NEW = New(title='test_title', content='test_content', date=232421.0, categories=['test_category'], summary='',
+                   sentiment=0.0)
 
     @patch('nlp_service.services.nlp_service.NlpService')
     @patch('elasticapm.middleware.ElasticAPM')
@@ -39,6 +40,7 @@ class TestNlpViews(AioHTTPTestCase):
         """
         Override the get_app method to return your application.
         """
+
         async def get_processed_text_return():
             return self.TEST_NLP_DOC
 

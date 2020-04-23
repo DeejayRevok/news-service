@@ -11,6 +11,7 @@ from pika import BlockingConnection, ConnectionParameters, PlainCredentials
 
 from nlp_service.log_config import get_logger
 from nlp_service.nlp_celery_worker.celery_app import CELERY_APP
+from nlp_service.nlp_celery_worker.nlp_helpers.sentiment_analyzer import compute_overall_sentiment_sentences
 from nlp_service.nlp_celery_worker.nlp_helpers.summarizer import generate_summary_from_sentences
 
 LOGGER = get_logger()
@@ -101,9 +102,31 @@ def hydrate_new_summary(new_nlp_doc: Tuple[dict, dict]):
     if nlp_doc is not None:
         new = New(**new)
         new.summary = generate_summary_from_sentences(nlp_doc['sentences'])
-        return dict(new)
+        return dict(new), nlp_doc
     else:
         LOGGER.warning('Processed new content is missing, skipping summary hydrate')
+        return None
+
+
+@CELERY_APP.app.task(name='hydrate_new_sentiment')
+def hydrate_new_sentiment(new_nlp_doc: Tuple[dict, dict]):
+    """
+    Hydrate the input new with the overall content sentiment
+
+    Args:
+        new_nlp_doc: new to hydrate, NLP data about the new content
+
+    Returns: new hydrated with the sentiment
+
+    """
+    new, nlp_doc = new_nlp_doc
+    LOGGER.info('Hydrating new %s with the overall sentiment', new['title'])
+    if nlp_doc is not None:
+        new = New(**new)
+        new.sentiment = compute_overall_sentiment_sentences(nlp_doc['sentences'])
+        return dict(new)
+    else:
+        LOGGER.warning('Processed new content is missing, skipping sentiment hydrate')
         return None
 
 
