@@ -7,6 +7,7 @@ from celery import Celery
 from news_service_lib import profile_args_parser, Configuration, ConfigProfile, add_logstash_handler
 
 from nlp_service.log_config import LOG_CONFIG
+from nlp_service.nlp_celery_worker.nlp_helpers.sentiment_analyzer import initialize_sentiment_analyzer
 from nlp_service.nlp_celery_worker.nlp_helpers.summarizer import initialize_summarizer
 from nlp_service.webapp.definitions import CONFIG_PATH
 
@@ -55,6 +56,7 @@ if __name__ == '__main__':
     ARGS = profile_args_parser('NLP Celery worker')
 
     initialize_summarizer()
+    initialize_sentiment_analyzer()
 
     CONFIGURATION = Configuration(ConfigProfile[ARGS['profile']], CONFIG_PATH)
     add_logstash_handler(LOG_CONFIG, CONFIGURATION.get('LOGSTASH', 'host'), int(CONFIGURATION.get('LOGSTASH', 'port')))
