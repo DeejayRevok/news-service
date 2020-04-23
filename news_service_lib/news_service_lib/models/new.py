@@ -20,7 +20,7 @@ class New:
     hydrated: bool = False
     entities: List[NamedEntity] = field(default_factory=list)
     summary: str = None
-    sentiment: float = None
+    sentiment: float = 0.0
 
     def __iter__(self) -> Iterator[tuple]:
         """
