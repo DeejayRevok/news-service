@@ -1,3 +1,6 @@
+"""
+Summary generation operations module
+"""
 import math
 import string
 from statistics import mean
@@ -82,7 +85,8 @@ def _preprocess_sentences(sentences: List[str], stop_words: List[str]) -> Iterat
 
     """
     for sentence in sentences:
-        sentence_words = [w.translate(str.maketrans('', '', string.punctuation)).lower() for w in sentence.split(' ')]
+        sentence_words = [word.translate(str.maketrans('', '', string.punctuation)).lower() for word in
+                          sentence.split(' ')]
         yield sentence_words, _get_sentence_entropy(sentence_words, stop_words)
 
 
@@ -114,8 +118,8 @@ def _build_similarity_matrix(sentences: Iterator[List[str]], stop_words: List[st
     sentences = list(sentences)
     similarity_matrix = np.zeros((len(sentences), len(sentences)))
 
-    for idx1 in range(len(sentences)):
-        for idx2 in range(len(sentences)):
+    for idx1, _ in enumerate(sentences):
+        for idx2, _ in enumerate(sentences):
             if idx1 == idx2:
                 continue
             similarity_matrix[idx1][idx2] = _sentence_similarity(sentences[idx1], sentences[idx2], stop_words)
@@ -141,15 +145,15 @@ def _sentence_similarity(sent1: List[str], sent2: List[str], stop_words: list) -
     vector1 = [0] * len(all_words)
     vector2 = [0] * len(all_words)
 
-    for w in sent1:
-        if w in stop_words:
+    for word in sent1:
+        if word in stop_words:
             continue
-        vector1[all_words.index(w)] += 1
+        vector1[all_words.index(word)] += 1
 
-    for w in sent2:
-        if w in stop_words:
+    for word in sent2:
+        if word in stop_words:
             continue
-        vector2[all_words.index(w)] += 1
+        vector2[all_words.index(word)] += 1
 
     result = cosine_distance(vector1, vector2)
     return 1 - result if not math.isnan(result) else 0.0
@@ -172,11 +176,11 @@ def _clean_qualifiers(qualifiers: List[int], non_qualifiers: List[int], sentence
                                  filter(lambda indexes: len(indexes) > 0,
                                         np.where(qualifiers_similarity_matrix > 0.75))))
     if len(non_qualifiers) > 0 and len(similar_qualifiers) > 0:
-        for id1, id2 in set(map(lambda indexes: tuple(sorted(indexes)), list(similar_qualifiers))):
+        for idx1, idx2 in set(map(lambda indexes: tuple(sorted(indexes)), list(similar_qualifiers))):
             if len(non_qualifiers) > 0:
-                if preprocessed_sentences[qualifiers[id1]][1] >= preprocessed_sentences[qualifiers[id2]][1]:
-                    del qualifiers[id2]
+                if preprocessed_sentences[qualifiers[idx1]][1] >= preprocessed_sentences[qualifiers[idx2]][1]:
+                    del qualifiers[idx2]
                 else:
-                    del qualifiers[id1]
+                    del qualifiers[idx1]
                 qualifiers.append(non_qualifiers.pop(0))
         _clean_qualifiers(qualifiers, non_qualifiers, sentence_similarity_matrix, preprocessed_sentences)

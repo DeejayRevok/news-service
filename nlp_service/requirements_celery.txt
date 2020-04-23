@@ -10,3 +10,4 @@ celery==4.4.2
 pika==1.1.0
 nltk==3.5
 networkx==2.4
+googletrans==2.4.0
