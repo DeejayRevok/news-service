@@ -15,8 +15,8 @@ from news_manager.webapp.middlewares import error_middleware
 from news_manager.webapp.views.news_view import setup_routes, ROOT_PATH
 from news_manager.webapp.definitions import API_VERSION
 
-MOCKED_RESPONSE = [New(title='Test1', content='Test1', categories=['Test1'], date=101001.10),
-                   New(title='Test2', content='Test2', categories=['Test2'], date=101001.10)]
+MOCKED_RESPONSE = [New(title='Test1', content='Test1', source='Test1', date=101001.10),
+                   New(title='Test2', content='Test2', source='Test2', date=101001.10)]
 
 EXCEPTION_MESSAGE = 'test'
 

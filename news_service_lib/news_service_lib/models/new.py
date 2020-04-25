@@ -15,7 +15,7 @@ class New:
     """
     title: str
     content: str
-    categories: list
+    source: str
     date: float
     hydrated: bool = False
     entities: List[NamedEntity] = field(default_factory=list)
@@ -31,7 +31,7 @@ class New:
         """
         yield 'title', self.title
         yield 'content', self.content
-        yield 'categories', self.categories
+        yield 'source', self.source
         yield 'date', self.date
         yield 'hydrated', self.hydrated
         yield 'summary', self.summary
@@ -50,7 +50,7 @@ class New:
         """
         return dict(title=self.title,
                     content=self.content,
-                    categories=self.categories,
+                    source=self.source,
                     date=datetime.fromtimestamp(self.date).strftime(render_date_format),
                     hydrated=self.hydrated,
                     summary=self.summary,

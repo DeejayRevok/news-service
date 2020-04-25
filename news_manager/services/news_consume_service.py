@@ -55,7 +55,7 @@ class NewsConsumeService:
             body = json.loads(body)
             updated_new = New(title=body['title'],
                               content=body['content'],
-                              categories=body['categories'],
+                              source=body['source'],
                               date=body['date'],
                               hydrated=body['hydrated'],
                               summary=body['summary'],

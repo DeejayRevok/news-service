@@ -14,7 +14,7 @@ class TestNlpService(TestCase):
     """
     NLP service test cases implementation
     """
-    TEST_NEW = New(title='test_title', content='test_content', date=2124124.0, categories=['test_category'])
+    TEST_NEW = New(title='test_title', content='test_content', date=2124124.0, source='test_source')
     TEST_TEXT = 'test_text'
     TEST_ENTITY = ('test_entity_text', 'test_entity_type')
     TEST_SENTENCES = ['test_sentence_1', 'test_sentence_2']
