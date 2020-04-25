@@ -1,44 +1,42 @@
 """
-ABC rss news adapter module
+El confidencial rss adapter module
 """
 from time import mktime, strptime
 from typing import Iterator
-from xml.etree.ElementTree import fromstring, tostring, Element
+from xml.etree.ElementTree import Element, fromstring, tostring
 
 import requests
 from bs4 import BeautifulSoup
 from lxml import html
-from xmltodict import parse
 from news_service_lib.models import New
+from xmltodict import parse
 
 from news_manager.adapters.source_adapter import SourceAdapter
 from news_manager.log_config import get_logger
 
-
 LOGGER = get_logger()
 
 
-class ABCRssNewsAdapter(SourceAdapter):
+class ConfidencialRssNewsAdapter(SourceAdapter):
     """
-    ABC rss news adapter
+    El confidencial rss news adapter
     """
     DATE_INPUT_FORMAT = '%a, %d %b %Y %H:%M:%S %z'
-    ROOT_NEW_TAG = 'item'
+    ROOT_NEW_TAG = '{http://www.w3.org/2005/Atom}entry'
 
     def _fetch(self) -> Iterator[Element]:
         """
-        Fetch news from the ABC rss
+        Fetch news from the 'El confidencial' rss
 
-        Returns: ABC rss fetched items parsed
+        Returns: 'El confidencial' rss fetched items parsed
 
         """
-        LOGGER.info('Fetching news from %s', self.source_params['abc_rss'])
-        response = requests.get(self.source_params['abc_rss'])
+        LOGGER.info('Fetching news from %s', self.source_params['el_confidencial_rss'])
+        response = requests.get(self.source_params['el_confidencial_rss'])
         rss = fromstring(response.content)
-        for channel in rss:
-            for item in channel:
-                if item.tag == self.ROOT_NEW_TAG:
-                    yield item
+        for item in rss:
+            if item.tag == self.ROOT_NEW_TAG:
+                yield item
 
     def _adapt_single(self, item: Element) -> New:
         """
@@ -50,14 +48,14 @@ class ABCRssNewsAdapter(SourceAdapter):
         Returns: new representation of the item
 
         """
-        new_dict = parse(tostring(item).decode(), attr_prefix='')[self.ROOT_NEW_TAG]
-        LOGGER.info('Found new with title %s', new_dict['title'])
+        new_dict = parse(tostring(item).decode(), attr_prefix='')['ns0:entry']
+        LOGGER.info('Found new with title %s', new_dict['ns0:title'])
 
-        content = self._parse_content(new_dict['description'])
+        content = self._parse_content(new_dict['ns0:content']['#text'])
 
-        date = mktime(strptime(new_dict['pubDate'], self.DATE_INPUT_FORMAT))
+        date = mktime(strptime(new_dict['ns0:published'], '%Y-%m-%dT%H:%M:%S%z'))
 
-        return New(title=new_dict['title'], content=content, source='ABC', date=date)
+        return New(title=new_dict['ns0:title'], content=content, source='El Confidencial', date=date)
 
     def _parse_content(self, html_string: str) -> str:
         """

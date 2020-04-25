@@ -7,7 +7,7 @@ from news_service_lib.models.new import New
 from news_manager.lib.fixed_dict import FixedDict
 from news_manager.services.news_service import NewsService
 
-MOCKED_NEW = New(title='Test title', content='Test content', categories=['Test category'], date=10101010.00)
+MOCKED_NEW = New(title='Test title', content='Test content', source='Test source', date=10101010.00)
 
 
 class TestNewsService(unittest.TestCase):
