@@ -31,7 +31,7 @@ async def mock_auth_middleware(_, handler):
 
 class TestNlpViews(AioHTTPTestCase):
     TEST_NLP_DOC = NLPDoc(sentences=['test_sentence'], named_entities=[('test_entity_text', 'test_entity_type')])
-    TEST_NEW = New(title='test_title', content='test_content', date=232421.0, categories=['test_category'], summary='',
+    TEST_NEW = New(title='test_title', content='test_content', date=232421.0, source='test_source', summary='',
                    sentiment=0.0)
 
     @patch('nlp_service.services.nlp_service.NlpService')

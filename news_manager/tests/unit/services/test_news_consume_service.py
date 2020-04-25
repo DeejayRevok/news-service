@@ -17,7 +17,7 @@ class TestNewsConsumeService(TestCase):
     News consume services test cases implementation
     """
     TEST_RABBIT_CONFIG = dict(test='test')
-    TEST_NEW = New(title='test_title', content='test_content', date=12313.0, categories=['test_category'],
+    TEST_NEW = New(title='test_title', content='test_content', date=12313.0, source='test_source',
                    entities=[NamedEntity(text='test_named_entity_text', type='test_named_entity_type')])
 
     @patch('news_manager.services.news_consume_service.Process')

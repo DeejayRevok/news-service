@@ -17,7 +17,7 @@ class PutHydrateNewSchema(Schema):
     """
     title = fields.Str(description='New title')
     content = fields.Str(description='New text content')
-    categories = fields.List(fields.Str, description='New categories')
+    source = fields.Str(description='New source')
     date = fields.Float(description='New date timestamp')
     summary = fields.Str(description='New summary', allow_none=True)
     sentiment = fields.Float(description='New content sentiment score', allow_none=True)
