@@ -1,7 +1,6 @@
 """
 User views test case
 """
-from unittest import main
 from unittest.mock import patch
 
 from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
