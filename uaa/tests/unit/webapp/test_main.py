@@ -18,7 +18,9 @@ class DummySession:
 
 
 class TestMain(unittest.TestCase):
-
+    """
+    Webapp main test cases implementation
+    """
     TEST_STORAGE_CONFIG = dict(host='test', port=0, user='test', password='test', schema='test')
 
     # noinspection PyTypeHints
@@ -51,7 +53,3 @@ class TestMain(unittest.TestCase):
         self.assertTrue(isinstance(app['auth_service'], AuthService))
         self.assertEqual(app['user_service']._client.engine, mock_engine)
         self.assertEqual(app['auth_service']._user_service, app['user_service'])
-
-
-if __name__ == '__main__':
-    unittest.main()
