@@ -1,7 +1,6 @@
 """
 User views test case
 """
-from unittest import main
 from unittest.mock import patch
 
 from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
@@ -29,7 +28,9 @@ async def mock_auth_middleware(_, handler):
 
 
 class TestUserViews(AioHTTPTestCase):
-
+    """
+    User views test cases implementation
+    """
     @patch('uaa.services.users_service.UserService')
     @patch('elasticapm.middleware.ElasticAPM')
     async def get_application(self, mock_apm_client, mock_user_service):
@@ -83,7 +84,3 @@ class TestUserViews(AioHTTPTestCase):
         self.assertEqual(resp.status, 200)
         response_content = await resp.json()
         self.assertEqual(response_content['username'], MOCKED_USER.username)
-
-
-if __name__ == '__main__':
-    main()
