@@ -13,7 +13,9 @@ TEST_PASSWORD = 'test_password'
 
 
 class TestUserService(TestCase):
-
+    """
+    Authentication service test cases implementation
+    """
     @patch('uaa.services.authentication_service.UserService')
     def setUp(self, service_mock):
         """
@@ -86,7 +88,3 @@ class TestUserService(TestCase):
         loop = asyncio.new_event_loop()
         with self.assertRaises(ValueError):
             loop.run_until_complete(self.auth_service.validate_token('test_token'))
-
-
-if __name__ == '__main__':
-    main()

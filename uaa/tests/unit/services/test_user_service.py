@@ -13,7 +13,9 @@ TEST_PASSWORD = 'test_password'
 
 
 class TestUserService(TestCase):
-
+    """
+    User service test cases
+    """
     @patch('uaa.services.users_service.SqlStorage')
     def setUp(self, client_mock):
         """
@@ -52,7 +54,3 @@ class TestUserService(TestCase):
         self.client_mock.get_one.return_value = User(username=TEST_USERNAME, password=TEST_PASSWORD)
         result = loop.run_until_complete(self.user_service.get_user_by_name(TEST_USERNAME))
         self.assertEqual(result.username, TEST_USERNAME)
-
-
-if __name__ == '__main__':
-    main()

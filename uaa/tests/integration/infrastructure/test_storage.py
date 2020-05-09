@@ -25,7 +25,9 @@ class TestModel(BASE):
 
 
 class TestStorage(TestCase):
-
+    """
+    Storage interface test cases
+    """
     TEST_1 = 'test_1'
     TEST_2 = 'test_2'
 
@@ -75,7 +77,3 @@ class TestStorage(TestCase):
         Check if the health check returns true
         """
         self.assertTrue(self.client.health_check())
-
-
-if __name__ == '__main__':
-    unittest.main()
