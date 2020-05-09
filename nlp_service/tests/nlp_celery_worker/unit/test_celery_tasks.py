@@ -8,6 +8,7 @@ from unittest.mock import patch, MagicMock
 from news_service_lib import NlpServiceService
 from news_service_lib.models import New, NamedEntity, NLPDoc
 
+from nlp_service.nlp_celery_worker import celery_nlp_tasks
 from nlp_service.nlp_celery_worker.celery_nlp_tasks import initialize_worker, hydrate_new_with_entities, \
     publish_hydrated_new, process_content, hydrate_new_summary, hydrate_new_sentiment
 
@@ -78,13 +79,14 @@ class TestCeleryTasks(TestCase):
         self.assertEqual(nlp_doc, dict(self.TEST_PROCESSED_TEXT))
         self.assertEqual(new['summary'], self.TEST_SUMMARY)
 
-    @patch('nlp_service.nlp_celery_worker.celery_nlp_tasks.compute_overall_sentiment_sentences')
     @patch('nlp_service.nlp_celery_worker.celery_nlp_tasks.CELERY_APP')
-    def test_hydrate_new_sentiment(self, _, mocked_sentiment_analyzer):
+    def test_hydrate_new_sentiment(self, _):
         """
         Test hydrate with sentiment adds the sentiment score of the content
         """
-        mocked_sentiment_analyzer.return_value = self.TEST_SENTIMENT
+        sentiment_analyzer_mock = MagicMock()
+        sentiment_analyzer_mock.return_value = self.TEST_SENTIMENT
+        celery_nlp_tasks.SENTIMENT_ANALYZER = sentiment_analyzer_mock
         new = hydrate_new_sentiment((dict(self.TEST_NEW), dict(self.TEST_PROCESSED_TEXT)))
         self.assertEqual(new['sentiment'], self.TEST_SENTIMENT)
 

@@ -11,12 +11,13 @@ from pika import BlockingConnection, ConnectionParameters, PlainCredentials
 
 from nlp_service.log_config import get_logger
 from nlp_service.nlp_celery_worker.celery_app import CELERY_APP
-from nlp_service.nlp_celery_worker.nlp_helpers.sentiment_analyzer import compute_overall_sentiment_sentences
+from nlp_service.nlp_celery_worker.nlp_helpers.sentiment_analyzer import SentimentAnalyzer
 from nlp_service.nlp_celery_worker.nlp_helpers.summarizer import generate_summary_from_sentences
 
 LOGGER = get_logger()
 NLP_REMOTE_SERVICE = None
 QUEUE_PROVIDER_CONFIG = None
+SENTIMENT_ANALYZER = None
 
 
 @CELERY_APP.app.task(name='initialize_worker')
@@ -29,7 +30,7 @@ def initialize_worker(nlp_service_config: dict, queue_config: dict):
         queue_config: queue provider configuration
 
     """
-    global NLP_REMOTE_SERVICE, QUEUE_PROVIDER_CONFIG
+    global NLP_REMOTE_SERVICE, QUEUE_PROVIDER_CONFIG, SENTIMENT_ANALYZER
     LOGGER.info('Initializing worker')
     if NLP_REMOTE_SERVICE is None:
         NLP_REMOTE_SERVICE = NlpServiceService(**nlp_service_config)
@@ -39,6 +40,10 @@ def initialize_worker(nlp_service_config: dict, queue_config: dict):
         QUEUE_PROVIDER_CONFIG = queue_config
     else:
         LOGGER.info('Queue config already initialized')
+    if SENTIMENT_ANALYZER is None:
+        SENTIMENT_ANALYZER = SentimentAnalyzer()
+    else:
+        LOGGER.info('Sentiment analyzer already initialized')
 
 
 @CELERY_APP.app.task(name='process_content')
@@ -119,14 +124,19 @@ def hydrate_new_sentiment(new_nlp_doc: Tuple[dict, dict]):
     Returns: new hydrated with the sentiment
 
     """
+    global SENTIMENT_ANALYZER
     new, nlp_doc = new_nlp_doc
     LOGGER.info('Hydrating new %s with the overall sentiment', new['title'])
-    if nlp_doc is not None:
-        new = New(**new)
-        new.sentiment = compute_overall_sentiment_sentences(nlp_doc['sentences'])
-        return dict(new)
+    if SENTIMENT_ANALYZER is not None:
+        if nlp_doc is not None:
+            new = New(**new)
+            new.sentiment = SENTIMENT_ANALYZER(nlp_doc['sentences'])
+            return dict(new)
+        else:
+            LOGGER.warning('Processed new content is missing, skipping sentiment hydrate')
+            return None
     else:
-        LOGGER.warning('Processed new content is missing, skipping sentiment hydrate')
+        LOGGER.warning('Sentiment analyzer not initialized, skipping sentiment hydrate')
         return None
 
 

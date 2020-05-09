@@ -1,63 +1,114 @@
 """
 Sentiment analysis module
 """
-from typing import List, Iterator, Tuple
+from os.path import join, dirname
+from typing import List, Iterator
 
-from googletrans import Translator
-from nltk import download
-from nltk.sentiment import SentimentIntensityAnalyzer
+import spacy
+from nltk import SnowballStemmer
+from spacy.cli import download
+from spacy.tokens import Token
 
 from nlp_service.log_config import get_logger
 
 LOGGER = get_logger()
 
 
+class SentimentAnalyzer:
+    """
+    Sentiment analyzer implementation
+    """
+    def __init__(self):
+        """
+        Initialize the sentiment analyzer loading the required lexicons and loading the required nlp components
+        """
+        self._stemmer = SnowballStemmer('spanish')
+        self._nlp_pipeline = spacy.load('es_core_news_sm')
+        with open(join(dirname(__file__), 'resources/sentiment_lexicon/booster_increase.txt'), 'r') as file:
+            self._boosters_increase = list(map(lambda word: word.strip(), file.readlines()))
+
+        with open(join(dirname(__file__), 'resources/sentiment_lexicon/booster_decrease.txt'), 'r') as file:
+            self._boosters_decrease = list(map(lambda word: word.strip(), file.readlines()))
+
+        with open(join(dirname(__file__), 'resources/sentiment_lexicon/negative_words_es.txt'), 'r') as file:
+            self._negatives = list(map(lambda word: self._stemmer.stem(word.strip()), file.readlines()))
+
+        with open(join(dirname(__file__), 'resources/sentiment_lexicon/positive_words_es.txt'), 'r') as file:
+            self._positives = list(map(lambda word: self._stemmer.stem(word.strip()), file.readlines()))
+
+    def __call__(self, sentences_list: List[str]) -> float:
+        """
+        Analyze the sentiment of the given sentences list
+
+        Args:
+            sentences_list: list of sentences to analyze sentiment
+
+        Returns: overall sentiment of the input sentences
+
+        """
+        LOGGER.info('Starting sentiment analysis for %d sentences', len(sentences_list))
+        sentiment = 0
+        for sentence in sentences_list:
+            sentiment += self._get_sentence_sentiment(sentence)
+        return sentiment
+
+    def _get_sentence_sentiment(self, sentence: str) -> float:
+        """
+        Get the sentiment score for the input sentence
+
+        Args:
+            sentence: sentence to compute sentiment
+
+        Returns: sentiment of the sentence
+
+        """
+        sentence_sentiment = 0
+        for token in self._nlp_pipeline(sentence):
+            sentence_sentiment += self._get_token_sentiment(token)
+
+        return sentence_sentiment
+
+    def _get_token_sentiment(self, token: Token) -> float:
+        """
+        Get the sentiment score for the input token
+
+        Args:
+            token: token to get sentiment
+
+        Returns: sentiment of the token
+
+        """
+        stem = self._stemmer.stem(token.text)
+        if stem in self._negatives:
+            return self._apply_token_boosters(-1, token.children)
+        elif stem in self._positives:
+            return self._apply_token_boosters(1, token.children)
+        else:
+            return 0
+
+    def _apply_token_boosters(self, sentiment: float, token_childrens: Iterator[Token]) -> float:
+        """
+        Apply the sentiment boosters to the given token sentiment
+
+        Args:
+            sentiment: base token sentiment
+            token_childrens: token childrens to look for boosters
+
+        Returns: sentiment boosted
+
+        """
+        for children in token_childrens:
+            if children.pos_ == 'ADV':
+                if children.text in self._boosters_increase:
+                    sentiment = 1.2 * sentiment
+                elif children.text in self._boosters_decrease:
+                    sentiment = 0.8 * sentiment
+        return sentiment
+
+
 def initialize_sentiment_analyzer():
     """
-    Initialize the sentiment analyzer downloading the required resources (VADER lexicon)
+    Initialize the sentiment analyzer downloading the required resources (Spacy spanish model)
     """
-    LOGGER.info('Downloading VADER lexicon')
-    download('vader_lexicon')
-
-
-def compute_overall_sentiment_sentences(sentences: List[str]) -> float:
-    """
-    Compute the overall sentiment score for the input sentences
-
-    Args:
-        sentences: sentences to compute overall sentiment
-
-    Returns: sum of the sentences sentiments
-
-    """
-    LOGGER.info('Starting sentiment analysis for %d sentences', len(sentences))
-    return sum(_analyze_sentiments_sentences(_translate_sentences(sentences)))
-
-
-def _translate_sentences(sentences: List[str]) -> Iterator[str]:
-    """
-    Translate the input sentences in spanish to english
-
-    Args:
-        sentences: spanish sentences
-
-    Returns: english translated sentences
-
-    """
-    translator = Translator()
-    return map(lambda sent: sent.text, translator.translate(sentences, src='es', dest='en'))
-
-
-def _analyze_sentiments_sentences(sentences: Iterator[str]) -> List[Tuple[str, float]]:
-    """
-    Analyze the sentiment score of the input sentences
-
-    Args:
-        sentences: sentences to analyze sentiment
-
-    Returns: iterator to the sentiment score of each sentence
-
-    """
-    sentiment_analyzer = SentimentIntensityAnalyzer()
-    for sentence in sentences:
-        yield sentiment_analyzer.polarity_scores(sentence)['compound']
+    LOGGER.info('Downloading spacy spanish model')
+    download('es_core_news_sm')

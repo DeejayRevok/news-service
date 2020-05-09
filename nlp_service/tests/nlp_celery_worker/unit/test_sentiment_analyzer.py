@@ -5,7 +5,7 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from nlp_service.nlp_celery_worker.nlp_helpers.sentiment_analyzer import initialize_sentiment_analyzer, \
-    compute_overall_sentiment_sentences
+    SentimentAnalyzer
 
 
 class TestSentimentAnalyzer(TestCase):
@@ -19,14 +19,15 @@ class TestSentimentAnalyzer(TestCase):
         Test initialize sentiment analyzer downloads the required resources
         """
         initialize_sentiment_analyzer()
-        download_mock.assert_called_with('vader_lexicon')
+        download_mock.assert_called_with('es_core_news_sm')
 
     def test_negative_sentiment(self):
         """
         Test the sentiment analyzer with overall negative sentences returns negative score
         """
         initialize_sentiment_analyzer()
-        sentiment_score = compute_overall_sentiment_sentences(self.TEST_NEGATIVE_SENTENCES)
+        sentiment_analyzer = SentimentAnalyzer()
+        sentiment_score = sentiment_analyzer(self.TEST_NEGATIVE_SENTENCES)
         self.assertLess(sentiment_score, 0)
 
     def test_positive_sentiment(self):
@@ -34,7 +35,8 @@ class TestSentimentAnalyzer(TestCase):
         Test the sentiment analyzer with overall positive sentences returns positive score
         """
         initialize_sentiment_analyzer()
-        sentiment_score = compute_overall_sentiment_sentences(self.TEST_POSITIVE_SENTENCES)
+        sentiment_analyzer = SentimentAnalyzer()
+        sentiment_score = sentiment_analyzer(self.TEST_POSITIVE_SENTENCES)
         self.assertGreater(sentiment_score, 0)
 
 
