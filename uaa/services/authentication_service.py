@@ -36,18 +36,18 @@ class AuthService:
 
         """
         user = await self._user_service.get_user_by_name(username)
-        if user is not None:
-            pass_hash = hash_password(password)
-            if user.password == pass_hash:
-                payload = {
-                    'user_id': user.id,
-                }
-                jwt_token = generate_token(payload)
-                return {'token': jwt_token.decode('utf-8')}
-            else:
-                raise ValueError('Wrong credentials')
-        else:
+        if user is None:
             raise ValueError('Wrong credentials')
+
+        pass_hash = hash_password(password)
+        if user.password != pass_hash:
+            raise ValueError('Wrong credentials')
+
+        payload = {
+            'user_id': user.id,
+        }
+        jwt_token = generate_token(payload)
+        return {'token': jwt_token.decode('utf-8')}
 
     async def validate_token(self, token: str):
         """
@@ -69,7 +69,7 @@ class AuthService:
             return User(id=-1000, username='SYSTEM')
         else:
             user = await self._user_service.get_user_by_id(user_identifier)
-            if user is not None:
-                return user
-            else:
+            if user is None:
                 raise ValueError('Invalid user')
+
+            return user
