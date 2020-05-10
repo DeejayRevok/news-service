@@ -1,11 +1,11 @@
 """
 Sentiment analysis module
 """
+from math import sqrt
 from os.path import join, dirname
 from typing import List, Iterator
 
 import spacy
-from nltk import SnowballStemmer
 from spacy.cli import download
 from spacy.tokens import Token
 
@@ -22,7 +22,6 @@ class SentimentAnalyzer:
         """
         Initialize the sentiment analyzer loading the required lexicons and loading the required nlp components
         """
-        self._stemmer = SnowballStemmer('spanish')
         self._nlp_pipeline = spacy.load('es_core_news_sm')
         with open(join(dirname(__file__), 'resources/sentiment_lexicon/booster_increase.txt'), 'r') as file:
             self._boosters_increase = list(map(lambda word: word.strip(), file.readlines()))
@@ -30,11 +29,11 @@ class SentimentAnalyzer:
         with open(join(dirname(__file__), 'resources/sentiment_lexicon/booster_decrease.txt'), 'r') as file:
             self._boosters_decrease = list(map(lambda word: word.strip(), file.readlines()))
 
-        with open(join(dirname(__file__), 'resources/sentiment_lexicon/negative_words_es.txt'), 'r') as file:
-            self._negatives = list(map(lambda word: self._stemmer.stem(word.strip()), file.readlines()))
+        with open(join(dirname(__file__), 'resources/sentiment_lexicon/negative_lexicon.txt'), 'r') as file:
+            self._negatives = list(map(lambda word: word.strip(), file.readlines()))
 
-        with open(join(dirname(__file__), 'resources/sentiment_lexicon/positive_words_es.txt'), 'r') as file:
-            self._positives = list(map(lambda word: self._stemmer.stem(word.strip()), file.readlines()))
+        with open(join(dirname(__file__), 'resources/sentiment_lexicon/positive_lexicon.txt'), 'r') as file:
+            self._positives = list(map(lambda word: word.strip(), file.readlines()))
 
     def __call__(self, sentences_list: List[str]) -> float:
         """
@@ -66,7 +65,7 @@ class SentimentAnalyzer:
         for token in self._nlp_pipeline(sentence):
             sentence_sentiment += self._get_token_sentiment(token)
 
-        return sentence_sentiment
+        return sentence_sentiment/sqrt(sentence_sentiment*sentence_sentiment + 15)
 
     def _get_token_sentiment(self, token: Token) -> float:
         """
@@ -78,10 +77,9 @@ class SentimentAnalyzer:
         Returns: sentiment of the token
 
         """
-        stem = self._stemmer.stem(token.text)
-        if stem in self._negatives:
+        if token.lemma_.lower() in self._negatives:
             return self._apply_token_boosters(-1, token.children)
-        elif stem in self._positives:
+        elif token.lemma_.lower() in self._positives:
             return self._apply_token_boosters(1, token.children)
         else:
             return 0
@@ -99,9 +97,9 @@ class SentimentAnalyzer:
         """
         for children in token_childrens:
             if children.pos_ == 'ADV':
-                if children.text in self._boosters_increase:
+                if children.lemma_.lower() in self._boosters_increase:
                     sentiment = 1.2 * sentiment
-                elif children.text in self._boosters_decrease:
+                elif children.lemma_.lower() in self._boosters_decrease:
                     sentiment = 0.8 * sentiment
         return sentiment
 
