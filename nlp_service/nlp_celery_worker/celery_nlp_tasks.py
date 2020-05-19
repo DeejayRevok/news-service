@@ -162,8 +162,8 @@ def publish_hydrated_new(new: dict):
                                      credentials=PlainCredentials(QUEUE_PROVIDER_CONFIG['user'],
                                                                   QUEUE_PROVIDER_CONFIG['password'])))
             channel = connection.channel()
-            channel.exchange_declare(exchange='news', exchange_type='fanout', durable=True)
-            channel.basic_publish(exchange='news', routing_key='', body=json.dumps(dict(new)))
+            channel.exchange_declare(exchange='new-updates', exchange_type='fanout', durable=True)
+            channel.basic_publish(exchange='new-updates', routing_key='', body=json.dumps(dict(new)))
 
             LOGGER.info('New published')
             channel.close()

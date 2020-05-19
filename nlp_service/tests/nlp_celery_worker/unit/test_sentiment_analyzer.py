@@ -12,6 +12,8 @@ class TestSentimentAnalyzer(TestCase):
 
     TEST_NEGATIVE_SENTENCES = ['Esta frase es algo buena', 'Esta frase es mala', 'Esta frase es muy negativa']
     TEST_POSITIVE_SENTENCES = ['Esta frase es algo mala', 'Esta frase es buena', 'Esta frase es muy buena']
+    TEST_POSITIVE_NEGATED_SENTENCE = ['Esta frase no es buena']
+    TEST_NEGATIVE_NEGATED_SENTENCE = ['Esta frase no es mala']
 
     @patch('nlp_service.nlp_celery_worker.nlp_helpers.sentiment_analyzer.download')
     def test_initialize_sentiment_analyzer(self, download_mock):
@@ -37,6 +39,24 @@ class TestSentimentAnalyzer(TestCase):
         initialize_sentiment_analyzer()
         sentiment_analyzer = SentimentAnalyzer()
         sentiment_score = sentiment_analyzer(self.TEST_POSITIVE_SENTENCES)
+        self.assertGreater(sentiment_score, 0)
+
+    def test_positive_negated_sentiment(self):
+        """
+        Test the sentiment analyzer with positive negated sentence returns negative score
+        """
+        initialize_sentiment_analyzer()
+        sentiment_analyzer = SentimentAnalyzer()
+        sentiment_score = sentiment_analyzer(self.TEST_POSITIVE_NEGATED_SENTENCE)
+        self.assertLess(sentiment_score, 0)
+
+    def test_negative_negated_sentiment(self):
+        """
+        Test the sentiment analyzer with negative negated sentence returns positive score
+        """
+        initialize_sentiment_analyzer()
+        sentiment_analyzer = SentimentAnalyzer()
+        sentiment_score = sentiment_analyzer(self.TEST_NEGATIVE_NEGATED_SENTENCE)
         self.assertGreater(sentiment_score, 0)
 
 
