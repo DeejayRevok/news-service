@@ -1,14 +1,27 @@
 version: '3'
 
 services:
-  mongodb:
+  mongodb-first:
     build:
-      context: mongo
-    image: mongo-news-service:latest
+      context: mongo-first
+    image: mongo-first-news-service:latest
     volumes:
-      - 'mongodb_news_data:/data/db'
+      - 'mongodb_news_first_data:/data/db'
     ports:
       - "27017:27017"
+    depends_on:
+      - elasticsearch
+      - kibana
+
+  mongodb-second:
+    build:
+      context: mongo-second
+    image: mongo-second-news-service:latest
+    command: "--port 27018 --replSet nsrs"
+    volumes:
+      - 'mongodb_news_second_data:/data/db'
+    ports:
+      - "27018:27018"
     depends_on:
       - elasticsearch
       - kibana
@@ -54,7 +67,8 @@ services:
       JWT_SECRET: t0k3ns3cr3t
     restart: on-failure
     depends_on:
-      - mongodb
+      - mongodb-first
+      - mongodb-second
       - logstash
       - apm-server
       - elasticsearch
@@ -176,6 +190,7 @@ services:
       - 25672:25672
 
 volumes:
-  mongodb_news_data:
+  mongodb_news_first_data:
+  mongodb_news_second_data:
   mysql_uaa_data:
   elastic_news_service_data:
