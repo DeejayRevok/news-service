@@ -5,6 +5,7 @@ services:
     build:
       context: mongo-first
     image: mongo-first-news-service:latest
+    command: "--replSet nsrs"
     volumes:
       - 'mongodb_news_first_data:/data/db'
     ports:

@@ -1,3 +1,6 @@
+"""
+Exchange provider module
+"""
 from pika import BlockingConnection, ConnectionParameters, PlainCredentials
 from pika.exceptions import AMQPConnectionError
 
@@ -7,7 +10,9 @@ LOGGER = get_logger()
 
 
 class ExchangeProvider:
-
+    """
+    Exchange provider implementation
+    """
     def __init__(self, host: str, port: str, user: str, password: str, exchange: str):
         """
        Initialize the exchange provider with the specified configuration parameters
@@ -19,7 +24,7 @@ class ExchangeProvider:
            password: exchange provider access password
            exchange: name of the exchange to manage
        """
-        LOGGER.info('Initializing exchange publisher for %s', exchange)
+        LOGGER.info('Initializing exchange provider for %s', exchange)
         self._host = host
         self._port = int(port)
         self._user = user
