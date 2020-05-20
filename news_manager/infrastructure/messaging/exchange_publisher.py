@@ -3,6 +3,8 @@ Exchange publisher module
 """
 import json
 
+from pika.exceptions import StreamLostError
+
 from news_manager.infrastructure.messaging.exchange_provider import ExchangeProvider
 from news_manager.log_config import get_logger
 
@@ -27,13 +29,24 @@ class ExchangePublisher(ExchangeProvider):
         super().__init__(host, port, user, password, exchange)
         LOGGER.info('Initializing exchange publisher for %s', exchange)
 
-    def __call__(self, message_json: dict):
+    def __call__(self, message_json: dict, reconnection: bool = False):
         """
         Publish the input message in the previously declared exchange
 
         Args:
             message_json: dictionary json like message to publish
+            reconnection: True if the publish is been made after a reconnection, False otherwise
 
         """
         LOGGER.info('Publishing a new message')
-        self._channel.basic_publish(exchange=self._exchange, routing_key='', body=json.dumps(message_json))
+        try:
+            self._channel.basic_publish(exchange=self._exchange, routing_key='', body=json.dumps(message_json))
+        except StreamLostError as stle:
+            LOGGER.warning(f'Connection lost with queue provider. Retrying...')
+            if not reconnection:
+                self.connect()
+                self.initialize()
+                self(message_json, reconnection=True)
+            else:
+                LOGGER.error(f'Fatal connection error after retrying: {stle}')
+                raise ConnectionError('Error connecting to queue provider after retrying')
