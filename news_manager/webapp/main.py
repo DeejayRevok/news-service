@@ -52,7 +52,7 @@ def init_news_manager(app: Application) -> Application:
     initialize_apm(app)
 
     app['news_consume_service'] = NewsConsumeService(app)
-    app['news_publish_service'] = NewsPublishService(news_store_client, app['config'].get_section('RABBIT'))
+    app['news_publish_service'] = NewsPublishService(app)
 
     HealthCheck(app, health_check)
 

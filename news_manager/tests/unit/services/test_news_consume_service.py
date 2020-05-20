@@ -43,7 +43,7 @@ class TestNewsConsumeService(TestCase):
         """
         Test initializing consumer service initializes the exchange consumer in a separate process and runs the process
         """
-        self.consumer_mock.assert_called_with(**self.TEST_RABBIT_CONFIG, exchange='news', queue_name='news_updates',
+        self.consumer_mock.assert_called_with(**self.TEST_RABBIT_CONFIG, exchange='new-updates', queue_name='news_updates',
                                               message_callback=self.news_consume_service.new_update)
         self.process_mock.assert_called_with(target=self.consumer_mock().__call__)
         self.assertTrue(self.process_mock().start.called)

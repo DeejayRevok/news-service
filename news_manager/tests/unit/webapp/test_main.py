@@ -18,13 +18,14 @@ class TestMain(unittest.TestCase):
     TEST_CONFIG = dict(protocol='test', host='test', port=0)
 
     # noinspection PyTypeHints
+    @patch('news_manager.webapp.main.NewsPublishService')
     @patch('news_manager.webapp.main.NewsConsumeService')
     @patch.object(Configuration, 'get')
     @patch('news_manager.webapp.main.health_check')
     @patch('news_manager.webapp.main.initialize_crons')
     @patch('news_manager.webapp.main.news_view')
     @patch('news_manager.webapp.main.storage_factory')
-    def test_init_app(self, storage_factory_mock, view_mock, init_crons_mock, _, config_mock, __):
+    def test_init_app(self, storage_factory_mock, view_mock, init_crons_mock, _, config_mock, __, ___):
         """
         Test if the initialization of the app initializes all the required modules
         """
