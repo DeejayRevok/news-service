@@ -62,6 +62,21 @@ class MongoStorage(Storage):
             database: mongodb database name
         """
         members = members.split(',')
+        self._init_replicaset(members, rsname)
+        self._mongo_client = pymongo.MongoClient(members[0], replicaset=rsname, connect=True)
+        self._database = self._mongo_client[database]
+        self.collection = None
+
+    @staticmethod
+    def _init_replicaset(members: List[str], rsname: str):
+        """
+        Initialize the mongodb replicaset
+
+        Args:
+            members: replicaset members addresses
+            rsname: replicaset name
+
+        """
         try:
             first_host = members[0].split(':')[0]
             first_port = int(members[0].split(':')[1])
@@ -71,9 +86,6 @@ class MongoStorage(Storage):
             mongo_admin_client.close()
         except Exception as ex:
             LOGGER.info('Replicaset already initialized %s', str(ex))
-        self._mongo_client = pymongo.MongoClient(members[0], replicaset=rsname, connect=True)
-        self._database = self._mongo_client[database]
-        self.collection = None
 
     def health_check(self) -> bool:
         """

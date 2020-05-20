@@ -1,10 +1,12 @@
 """
 News publish service module
 """
+import sys
 from multiprocessing import Process
 
+from aiohttp.web_app import Application
+
 from news_manager.infrastructure.messaging.exchange_publisher import ExchangePublisher
-from news_manager.infrastructure.storage.storage import Storage
 from news_manager.log_config import get_logger
 
 LOGGER = get_logger()
@@ -14,16 +16,21 @@ class NewsPublishService:
     """
     News publish service implementation
     """
-    def __init__(self, storage_client: Storage, exchange_config: dict):
+    def __init__(self, app: Application):
         """
         Start a new process which listens the new inserts and publish them in the exchange configured
 
         Args:
-            storage_client: storage client to get the database consumer
-            exchange_config: configuration of the exchange provider
+            app: application associated
         """
-        self._exchange_publisher = ExchangePublisher(**exchange_config, exchange='news')
-        self._storage_client = storage_client
+        self._app = app
+        self._news_service = app['news_service']
+        self._exchange_publisher = ExchangePublisher(**app['config'].get_section('RABBIT'), exchange='news')
+
+        if not self._exchange_publisher.test_connection():
+            LOGGER.error('Error connecting to the queue provider. Exiting...')
+            sys.exit(1)
+
         self._publish_process = Process(target=self.__call__)
         self._publish_process.start()
 
@@ -32,9 +39,10 @@ class NewsPublishService:
         Initialize the exchange publisher and start listening the database inserts
 
         """
+        self._exchange_publisher.connect()
         self._exchange_publisher.initialize()
         try:
-            for new_inserted in self._storage_client.consume_inserts():
+            for new_inserted in self._news_service.consume_new_inserts():
                 LOGGER.info('Listened inserted new %s', new_inserted['title'])
                 self._exchange_publisher(new_inserted)
         except Exception as exc:
