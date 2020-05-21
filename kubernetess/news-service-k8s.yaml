@@ -496,7 +496,10 @@ spec:
         io.kompose.service: mongodb-first
     spec:
       containers:
-      - image: djrevok/mongo-first-news-service:latest
+      - args:
+        - --replSet
+        - nsrs
+        image: djrevok/mongo-first-news-service:latest
         imagePullPolicy: ""
         name: mongodb-first
         ports:
@@ -504,13 +507,13 @@ spec:
         resources: {}
         volumeMounts:
         - mountPath: /data/db
-          name: mongodb-first-news-data
+          name: mongodb-news-first-data
       restartPolicy: Always
       serviceAccountName: ""
       volumes:
-      - name: mongodb-first-news-data
+      - name: mongodb-news-first-data
         persistentVolumeClaim:
-          claimName: mongodb-first-news-data
+          claimName: mongodb-news-first-data
 status: {}
 ---
 apiVersion: apps/v1
@@ -540,7 +543,12 @@ spec:
         io.kompose.service: mongodb-second
     spec:
       containers:
-      - image: djrevok/mongo-second-news-service:latest
+      - args:
+        - --port
+        - "27018"
+        - --replSet
+        - nsrs
+        image: djrevok/mongo-second-news-service:latest
         imagePullPolicy: ""
         name: mongodb-second
         ports:
@@ -548,13 +556,13 @@ spec:
         resources: {}
         volumeMounts:
         - mountPath: /data/db
-          name: mongodb-second-news-data
+          name: mongodb-news-second-data
       restartPolicy: Always
       serviceAccountName: ""
       volumes:
-      - name: mongodb-second-news-data
+      - name: mongodb-news-second-data
         persistentVolumeClaim:
-          claimName: mongodb-second-news-data
+          claimName: mongodb-news-second-data
 status: {}
 ---
 apiVersion: apps/v1
@@ -938,8 +946,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: mongodb-first-news-data
-  name: mongodb-first-news-data
+    io.kompose.service: mongodb-news-first-data
+  name: mongodb-news-first-data
 spec:
   accessModes:
   - ReadWriteOnce
@@ -953,8 +961,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: mongodb-second-news-data
-  name: mongodb-second-news-data
+    io.kompose.service: mongodb-news-second-data
+  name: mongodb-news-second-data
 spec:
   accessModes:
   - ReadWriteOnce

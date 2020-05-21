@@ -25,7 +25,10 @@ spec:
         io.kompose.service: mongodb-first
     spec:
       containers:
-      - image: djrevok/mongo-first-news-service:latest
+      - args:
+        - --replSet
+        - nsrs
+        image: djrevok/mongo-first-news-service:latest
         imagePullPolicy: ""
         name: mongodb-first
         ports:
@@ -33,11 +36,11 @@ spec:
         resources: {}
         volumeMounts:
         - mountPath: /data/db
-          name: mongodb-first-news-data
+          name: mongodb-news-first-data
       restartPolicy: Always
       serviceAccountName: ""
       volumes:
-      - name: mongodb-first-news-data
+      - name: mongodb-news-first-data
         persistentVolumeClaim:
-          claimName: mongodb-first-news-data
+          claimName: mongodb-news-first-data
 status: {}
