@@ -4,8 +4,6 @@ Exchange consumer unit tests module
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from pika.exceptions import AMQPConnectionError
-
 from news_manager.infrastructure.messaging.exchange_consumer import ExchangeConsumer
 
 
@@ -28,34 +26,9 @@ class TestExchangeConsumer(TestCase):
         self.consumer = ExchangeConsumer(self.TEST_HOST, self.TEST_PORT, self.TEST_USER, self.TEST_PASSWORD,
                                          self.TEST_EXCHANGE, self.TEST_QUEUE_NAME, self.callback)
 
-    @patch('news_manager.infrastructure.messaging.exchange_consumer.ConnectionParameters')
-    @patch('news_manager.infrastructure.messaging.exchange_consumer.PlainCredentials')
-    @patch('news_manager.infrastructure.messaging.exchange_consumer.BlockingConnection')
-    def test_test_connection_success(self, mock_connection, mock_credentials, mock_parameters):
-        """
-        Test the test connection successful creates the connection with the instance parameters and credentials
-        """
-        result = self.consumer.test_connection()
-        self.assertTrue(result)
-        mock_credentials.assert_called_with(self.TEST_USER, self.TEST_PASSWORD)
-        mock_parameters.assert_called_with(host=self.TEST_HOST, port=int(self.TEST_PORT),
-                                           credentials=mock_credentials())
-        mock_connection.assert_called_with(mock_parameters())
-
-    @patch('news_manager.infrastructure.messaging.exchange_consumer.ConnectionParameters')
-    @patch('news_manager.infrastructure.messaging.exchange_consumer.PlainCredentials')
-    @patch('news_manager.infrastructure.messaging.exchange_consumer.BlockingConnection')
-    def test_test_connection_fail(self, mock_connection, _, __):
-        """
-        Test the test connection fail returns false when ampq connection error is raised
-        """
-        mock_connection.side_effect = AMQPConnectionError()
-        result = self.consumer.test_connection()
-        self.assertFalse(result)
-
-    @patch('news_manager.infrastructure.messaging.exchange_consumer.ConnectionParameters')
-    @patch('news_manager.infrastructure.messaging.exchange_consumer.PlainCredentials')
-    @patch('news_manager.infrastructure.messaging.exchange_consumer.BlockingConnection')
+    @patch('news_manager.infrastructure.messaging.exchange_provider.ConnectionParameters')
+    @patch('news_manager.infrastructure.messaging.exchange_provider.PlainCredentials')
+    @patch('news_manager.infrastructure.messaging.exchange_provider.BlockingConnection')
     def test_consume(self, ___, _, __):
         """
         Test the consume method creates a channel, declares the exchange and the queue, binds the queue to the exchange

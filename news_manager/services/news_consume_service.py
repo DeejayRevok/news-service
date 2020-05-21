@@ -30,7 +30,7 @@ class NewsConsumeService:
         LOGGER.info('Starting news consumer service')
         self._app = app
         self._news_service = app['news_service']
-        self._exchange_consumer = ExchangeConsumer(**app['config'].get_section('RABBIT'), exchange='news',
+        self._exchange_consumer = ExchangeConsumer(**app['config'].get_section('RABBIT'), exchange='new-updates',
                                                    queue_name='news_updates',
                                                    message_callback=self.new_update)
 

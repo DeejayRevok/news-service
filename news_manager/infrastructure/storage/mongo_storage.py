@@ -26,6 +26,7 @@ def check_collection(function: Callable) -> Any:
     Returns: fn execution result
 
     """
+
     @functools.wraps(function)
     def managed(*args, **kwargs) -> Any:
         """
@@ -42,6 +43,7 @@ def check_collection(function: Callable) -> Any:
             return function(*args, **kwargs)
         else:
             raise AttributeError('Collection not set')
+
     return managed
 
 
@@ -50,18 +52,40 @@ class MongoStorage(Storage):
     MongoDB storage implementation
     """
 
-    def __init__(self, host: str, port: int, database: str):
+    def __init__(self, members: str, rsname: str, database: str):
         """
         Initialize a mongo storage client
 
         Args:
-            host: mongodb host address
-            port: mongodb port
+            members: mongodb replicaset members address
+            rsname: mongodb replicaset name
             database: mongodb database name
         """
-        self._mongo_client = pymongo.MongoClient(host, int(port), connect=True)
+        members = members.split(',')
+        self._init_replicaset(members, rsname)
+        self._mongo_client = pymongo.MongoClient(members[0], replicaset=rsname, connect=True)
         self._database = self._mongo_client[database]
         self.collection = None
+
+    @staticmethod
+    def _init_replicaset(members: List[str], rsname: str):
+        """
+        Initialize the mongodb replicaset
+
+        Args:
+            members: replicaset members addresses
+            rsname: replicaset name
+
+        """
+        try:
+            first_host = members[0].split(':')[0]
+            first_port = int(members[0].split(':')[1])
+            mongo_admin_client = pymongo.MongoClient(first_host, first_port, connect=True)
+            rs_config = {'_id': rsname, 'members': [{'_id': 0, 'host': members[0]}, {'_id': 1, 'host': members[1]}]}
+            mongo_admin_client.admin.command("replSetInitiate", rs_config)
+            mongo_admin_client.close()
+        except Exception as ex:
+            LOGGER.info('Replicaset already initialized %s', str(ex))
 
     def health_check(self) -> bool:
         """
@@ -107,7 +131,8 @@ class MongoStorage(Storage):
         self.collection.insert_one(item)
 
     @check_collection
-    def get(self, filter_types: List[StorageFilterType] = None, filters_params: List[FixedDict] = None) -> Iterator[dict]:
+    def get(self, filter_types: List[StorageFilterType] = None, filters_params: List[FixedDict] = None) \
+            -> Iterator[dict]:
         """
         Get items which match the specified filters
 
@@ -154,6 +179,23 @@ class MongoStorage(Storage):
 
         """
         self.collection.remove(identifier)
+
+    @check_collection
+    def consume_inserts(self) -> Iterator[dict]:
+        """
+        Consume the insert operations
+
+        """
+        insert_consumer = self.collection.watch([{'$match': {'operationType': 'insert'}}])
+        try:
+            for insert_change in insert_consumer:
+                yield self.render_item(insert_change['fullDocument'])
+        except Exception as ex:
+            insert_consumer.close()
+            raise ex
+        except KeyboardInterrupt as kex:
+            insert_consumer.close()
+            raise kex
 
     @staticmethod
     def render_item(item: dict) -> dict:

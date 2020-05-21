@@ -2,7 +2,7 @@
 Abstract storage module
 """
 from abc import ABCMeta, abstractmethod
-from typing import Iterator, List
+from typing import Iterator, List, Callable
 
 from news_manager.infrastructure.storage.filters.storage_filter_type import StorageFilterType
 from news_manager.lib.fixed_dict import FixedDict
@@ -66,5 +66,12 @@ class Storage(metaclass=ABCMeta):
 
         Args:
             identifier: identifier of the item to delete
+
+        """
+
+    @abstractmethod
+    def consume_inserts(self) -> Iterator[dict]:
+        """
+        Consume the inserts in the database
 
         """

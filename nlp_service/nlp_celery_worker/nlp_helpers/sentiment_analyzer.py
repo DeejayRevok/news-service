@@ -101,6 +101,8 @@ class SentimentAnalyzer:
                     sentiment = 1.2 * sentiment
                 elif children.lemma_.lower() in self._boosters_decrease:
                     sentiment = 0.8 * sentiment
+                elif children.lower_ == 'no':
+                    sentiment = -sentiment
         return sentiment
 
 

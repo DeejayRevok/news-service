@@ -85,6 +85,15 @@ class NewsService:
 
         return NewsService._render_news_list(self._client.get(filter_types, filters_params))
 
+    def consume_new_inserts(self) -> Iterator[dict]:
+        """
+        Consume the new insertions
+
+        Returns: an iterator to the inserted news
+
+        """
+        yield from self._client.consume_inserts()
+
     @staticmethod
     def _render_news_list(news_list: Iterator[dict]) -> Iterator[New]:
         """
