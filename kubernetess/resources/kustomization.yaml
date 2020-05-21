@@ -1,7 +1,10 @@
 resources:
-  - mongodb-service.yaml
-  - mongodb-deployment.yaml
-  - mongodb-news-data-persistentvolumeclaim.yaml
+  - mongodb-first-service.yaml
+  - mongodb-first-deployment.yaml
+  - mongodb-first-news-data-persistentvolumeclaim.yaml
+  - mongodb-second-service.yaml
+  - mongodb-second-deployment.yaml
+  - mongodb-second-news-data-persistentvolumeclaim.yaml
   - mysql-service.yaml
   - mysql-deployment.yaml
   - mysql-uaa-data-persistentvolumeclaim.yaml
