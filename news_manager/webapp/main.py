@@ -10,6 +10,7 @@ from news_manager.cron.cron_factory import initialize_crons
 from news_manager.infrastructure.storage.storage_factory import storage_factory
 from news_manager.log_config import get_logger, LOG_CONFIG
 from news_manager.services.news_consume_service import NewsConsumeService
+from news_manager.services.news_publish_service import NewsPublishService
 from news_manager.services.news_service import NewsService
 from news_manager.webapp.definitions import CONFIG_PATH, health_check, API_VERSION
 from news_manager.webapp.middlewares import error_middleware
@@ -24,6 +25,7 @@ async def shutdown(app: Application):
         app: application to shutdown
     """
     await app['news_consume_service'].shutdown()
+    await app['news_publish_service'].shutdown()
 
 
 def init_news_manager(app: Application) -> Application:
@@ -50,6 +52,7 @@ def init_news_manager(app: Application) -> Application:
     initialize_apm(app)
 
     app['news_consume_service'] = NewsConsumeService(app)
+    app['news_publish_service'] = NewsPublishService(app)
 
     HealthCheck(app, health_check)
 

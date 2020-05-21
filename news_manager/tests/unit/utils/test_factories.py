@@ -34,7 +34,7 @@ class TestFactories(unittest.TestCase):
         """
         Test storage factory with Mongo type creates Mongo client
         """
-        storage = storage_factory('MONGO', {'host': 'test', 'port': 1234, 'database': 'test'})
+        storage = storage_factory('MONGO', {'members': '0.0.0.0:1234', 'rsname': 'test', 'database': 'test'})
         self.assertTrue(isinstance(storage, MongoStorage))
 
     @patch('news_manager.cron.cron_factory.DEFINITIONS')

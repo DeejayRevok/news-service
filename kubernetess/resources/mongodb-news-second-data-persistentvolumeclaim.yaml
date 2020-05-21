@@ -3,8 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: mongodb-news-data
-  name: mongodb-news-data
+    io.kompose.service: mongodb-news-second-data
+  name: mongodb-news-second-data
 spec:
   accessModes:
   - ReadWriteOnce
