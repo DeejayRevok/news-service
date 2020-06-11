@@ -7,6 +7,7 @@ from graphene import ObjectType, List as GraphList, Field, Argument, String
 from graphql import ResolveInfo
 
 from news_manager.webapp.graph.model.new import New
+from news_manager.webapp.graph.utils.auth import login_required
 from news_manager.webapp.graph.utils.custom_date_time import DATE_FORMAT
 
 
@@ -19,6 +20,7 @@ class NewsQuery(ObjectType):
                 title=Argument(String),
                 description='New with the given title')
 
+    @login_required
     async def resolve_news(self, info: ResolveInfo) -> List[dict]:
         """
         News list graphql query
@@ -32,6 +34,7 @@ class NewsQuery(ObjectType):
         app = info.context['request'].app
         return [new.dto(DATE_FORMAT) for new in await app['news_service'].get_news()]
 
+    @login_required
     async def resolve_new(self, info: ResolveInfo, title: int) -> dict:
         """
         Single new graphql query
