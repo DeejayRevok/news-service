@@ -6,10 +6,13 @@ import asyncio
 from aiohttp.web_app import Application
 from aiohttp_graphql import GraphQLView
 from graphene import Schema
+from graphql.error import GraphQLLocatedError
 from graphql.execution.executors.asyncio import AsyncioExecutor
 
+from news_manager.log_config import get_logger
 from news_manager.webapp.graph.queries import Query
 
+LOGGER = get_logger()
 schema = Schema(query=Query)
 
 GRAPHIQL_JWT_TEMPLATE = """<!--
@@ -169,6 +172,22 @@ add "&raw" to the end of the URL within a browser.
 </html>"""
 
 
+def error_formatter(error: Exception) -> dict:
+    """
+    Error formatter for GraphQL queries
+
+    Args:
+        error: query error
+
+    Returns: dictionary formatted error
+
+    """
+    if isinstance(error, GraphQLLocatedError):
+        error = error.original_error
+    LOGGER.error('Error in GraphQL query', exc_info=(type(error), error, error.__traceback__))
+    return dict(error=error.__class__.__name__, detail=str(error))
+
+
 def setup_routes(app: Application):
     """
     Add the graphql routes to the specified application
@@ -183,4 +202,5 @@ def setup_routes(app: Application):
                        graphiql_template=GRAPHIQL_JWT_TEMPLATE,
                        route_path='/graphql',
                        executor=AsyncioExecutor(loop=asyncio.get_event_loop()),
-                       enable_async=True)
+                       enable_async=True,
+                       error_formatter=error_formatter)
