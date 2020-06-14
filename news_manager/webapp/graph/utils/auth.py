@@ -22,6 +22,7 @@ def login_required(func: Callable):
         for arg in args:
             if isinstance(arg, ResolveInfo):
                 graphql_info = arg
+                break
         if not graphql_info:
             raise ValueError('GraphQL resolve info not found')
         request = graphql_info.context['request']
