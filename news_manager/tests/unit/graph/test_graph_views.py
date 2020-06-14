@@ -6,6 +6,7 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from aiohttp.web_app import Application
+from aiounittest import async_test
 from graphql.error import GraphQLLocatedError
 
 from news_manager.webapp.graph.graphql_views import setup_routes, schema, GRAPHIQL_JWT_TEMPLATE, error_formatter
@@ -17,7 +18,8 @@ class TestGraphViews(TestCase):
     """
     @patch('news_manager.webapp.graph.graphql_views.AsyncioExecutor')
     @patch('news_manager.webapp.graph.graphql_views.GraphQLView')
-    def test_setup_routes(self, graph_view_mock, executor_mock):
+    @async_test
+    async def test_setup_routes(self, graph_view_mock, executor_mock):
         """
         Test the setup routes setups the GraphQL view with the provided app, the predefined schema
         and the predefined template
