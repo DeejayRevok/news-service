@@ -41,7 +41,7 @@ async def mock_auth_middleware(_, handler):
 
 class TestNewsView(AioHTTPTestCase):
 
-    @patch.object(NewsService, 'get_news')
+    @patch.object(NewsService, 'get_news_filtered')
     @patch('elasticapm.middleware.ElasticAPM')
     async def get_application(self, mocked_news_service, mock_apm_client):
         """
@@ -51,7 +51,7 @@ class TestNewsView(AioHTTPTestCase):
         async def mock_news_response():
             return iter(MOCKED_RESPONSE)
 
-        mocked_news_service.get_news.return_value = mock_news_response()
+        mocked_news_service.get_news_filtered.return_value = mock_news_response()
         self.mocked_news_service = mocked_news_service
         app = Application()
         app['news_service'] = mocked_news_service
@@ -71,7 +71,7 @@ class TestNewsView(AioHTTPTestCase):
         response_content = await resp.json()
         self.assertEqual(response_content[0]['title'], list(MOCKED_RESPONSE)[0].title)
         self.assertEqual(response_content[1]['title'], list(MOCKED_RESPONSE)[1].title)
-        self.mocked_news_service.get_news.assert_called_with(start=None, end=None)
+        self.mocked_news_service.get_news_filtered.assert_called_with(from_date=None, to_date=None)
 
     @unittest_run_loop
     async def test_get_news_filtered(self):
@@ -83,7 +83,7 @@ class TestNewsView(AioHTTPTestCase):
         end_parsed = mktime(strptime(query_params['end_date'], '%Y-%m-%dT%H:%M:%S'))
         resp = await self.client.get(f'/{API_VERSION}{ROOT_PATH}', params=query_params)
         self.assertEqual(resp.status, 200)
-        self.mocked_news_service.get_news.assert_called_with(start=start_parsed, end=end_parsed)
+        self.mocked_news_service.get_news_filtered.assert_called_with(from_date=start_parsed, to_date=end_parsed)
 
     @unittest_run_loop
     async def test_get_news_wrong_request(self):
@@ -100,7 +100,7 @@ class TestNewsView(AioHTTPTestCase):
         """
         Test the get news REST endpoint failed
         """
-        self.mocked_news_service.get_news = raise_exception
+        self.mocked_news_service.get_news_filtered = raise_exception
         self.app['news_service'] = self.mocked_news_service
         resp = await self.client.get(f'/{API_VERSION}{ROOT_PATH}')
         response_content = await resp.json()
