@@ -44,6 +44,8 @@ add "&raw" to the end of the URL within a browser.
     }
   </style>
   <meta name="referrer" content="no-referrer">
+  <title>GraphiQL UI</title>
+  <link rel="icon" href="//cdn.jsdelivr.net/npm/graphql-playground-react@1.7.8/build/favicon.png" />
   <link href="//cdn.jsdelivr.net/npm/graphiql@{{graphiql_version}}/graphiql.css" rel="stylesheet" />
   <script src="//cdn.jsdelivr.net/gh/github/fetch@3.0.0/fetch.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/react@16.12.0/umd/react.production.min.js"></script>
