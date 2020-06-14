@@ -3,6 +3,7 @@ Application main module
 """
 from aiohttp.web_app import Application
 from aiohttp_apispec import validation_middleware
+from aiohttp_graphql import GraphQLView
 from news_service_lib import HealthCheck, server_runner, get_uaa_service, uaa_auth_middleware, initialize_apm, \
     NlpServiceService
 
@@ -13,6 +14,7 @@ from news_manager.services.news_consume_service import NewsConsumeService
 from news_manager.services.news_publish_service import NewsPublishService
 from news_manager.services.news_service import NewsService
 from news_manager.webapp.definitions import CONFIG_PATH, health_check, API_VERSION
+from news_manager.webapp.graph import graphql_views
 from news_manager.webapp.middlewares import error_middleware
 from news_manager.webapp.views import news_view
 
@@ -57,6 +59,7 @@ def init_news_manager(app: Application) -> Application:
     HealthCheck(app, health_check)
 
     news_view.setup_routes(app)
+    graphql_views.setup_routes(app)
 
     app.middlewares.append(error_middleware)
     app.middlewares.append(uaa_auth_middleware)

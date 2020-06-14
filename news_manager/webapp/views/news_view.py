@@ -79,7 +79,7 @@ class NewsViews:
                 raise HTTPBadRequest(text=str(ex))
 
             news = list(map(lambda new: new.dto(self.DATE_FORMAT),
-                            await self.news_service.get_news(start=start_date, end=end_date)))
+                            await self.news_service.get_news_filtered(from_date=start_date, to_date=end_date)))
 
             return json_response(news, status=200)
 

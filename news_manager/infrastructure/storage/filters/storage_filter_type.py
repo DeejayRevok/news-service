@@ -13,8 +13,8 @@ class StorageFilterType(Enum):
         UNIQUE: filter items which match with one value
         RANGE: filter items which match the specified range
     """
-    UNIQUE = ('parse_unique', FixedDict(dict(key=None, value=None)))
-    RANGE = ('parse_range', FixedDict(dict(key=None, upper=None, lower=None)))
+    UNIQUE = ('parse_unique', ['key', 'value'])
+    RANGE = ('parse_range', ['key', 'upper', 'lower'])
 
     @property
     def params(self) -> FixedDict:
@@ -24,7 +24,7 @@ class StorageFilterType(Enum):
         Returns: storage filter required parameters
 
         """
-        return self.value[1]
+        return FixedDict(dict.fromkeys(self.value[1], None))
 
     def get_filter_implementation(self, cls) -> Callable:
         """
