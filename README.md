@@ -1,80 +1,12 @@
 # News Service
-News service
-
-![News Service](https://github.com/DeejayRevok/news-service/workflows/News%20Service/badge.svg)
-[![codecov](https://codecov.io/gh/DeejayRevok/news-service/branch/develop/graph/badge.svg?token=1EEM8TD8JC)](https://codecov.io/gh/DeejayRevok/news-service)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DeejayRevok_news-service&metric=alert_status)](https://sonarcloud.io/dashboard?id=DeejayRevok_news-service)
+News service parent repository
 
 ## Installation and running
   
-### Local with external services in docker
-Requirements:
-  - Virtualenv
-  - Python 3.7
-  - Docker
-
-#### Run external services:
-Inside the docker folder of the application folder run:
+#### Run local dev services:
+Inside the docker folder run:
 ```
 docker-compose -f docker-compose-local.yml up -d
-```
-
-#### Set up the environment:
-```
-virtualenv -p python3.7 venv
-source venv/bin/activate
-```
-
-#### Install the application library:
-Inside the application folder run:
-```
-export PYTHONPATH={FULL_PATH_TO_APPLICATION_FOLDER}
-cd news_service_lib
-pip install -r requirements.txt
-python setup.py bdist_wheel
-pip install dist/news_service_lib-0.0.1-py3-none-any.whl
-```
-
-#### UAA
-Inside the application folder run:
-```
-export JWT_SECRET={JWT_TOKEN_SECRET}
-export PYTHONPATH={FULL_PATH_TO_APPLICATION_FOLDER}
-pip install -r uaa/requirements.txt
-python uaa/webapp/main.py -p local
-```
-
-#### NLP celery worker
-Inside the application folder run:
-```
-export JWT_SECRET={JWT_TOKEN_SECRET}
-export PYTHONPATH={FULL_PATH_TO_APPLICATION_FOLDER}
-pip install -r nlp_service/requirements_celery.txt
-python nlp_service/nlp_celery_worker/celery_app.py -p local
-```
-#### NLP flower service
-Inside the application folder run:
-```
-export PYTHONPATH={FULL_PATH_TO_APPLICATION_FOLDER}
-pip install -r nlp_service/requirements_flower.txt
-python nlp_service/nlp_celery_worker/flower_app.py -p local
-```
-
-#### NLP service
-Inside the application folder run:
-```
-export PYTHONPATH={FULL_PATH_TO_APPLICATION_FOLDER}
-pip install -r nlp_service/requirements.txt
-python nlp_service/webapp/main.py -p local
-```
-
-#### News manager
-Inside the application folder run:
-```
-export JWT_SECRET={JWT_TOKEN_SECRET}
-export PYTHONPATH={FULL_PATH_TO_APPLICATION_FOLDER}
-pip install -r news_manager/requirements.txt
-python news_manager/webapp/main.py -p local
 ```
 
 ### Docker
