@@ -84,7 +84,9 @@ services:
       - kibana
 
   rabbitmq:
-    image: rabbitmq:management
+    build:
+      context: rabbitmq
+    image: rabbitmq-news-service:latest
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
