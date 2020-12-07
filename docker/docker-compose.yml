@@ -116,8 +116,23 @@ services:
       - elasticsearch
       - kibana
       - rabbitmq
-    links:
-      - "nlp-service:nlp-service"
+
+  search-engine:
+    build:
+      context: ../search-engine
+    image: search-engine:latest
+    ports:
+      - "8083:8083"
+    environment:
+      JWT_SECRET: t0k3ns3cr3t
+    depends_on:
+      - logstash
+      - apm-server
+      - elasticsearch
+      - kibana
+      - uaa
+      - news-manager
+      - mysql-search-engine
 
   nlp-service-flower:
     build:
