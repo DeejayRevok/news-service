@@ -33,6 +33,7 @@ kubectl apply -f news-service-k8s.yaml
 - News manager: In your webbrowser navigate to http://localhost:8080/v1/api/docs/ui
 - UAA: In your webbrowser navigate to http://localhost:8081/v1/api/docs/ui
 - NLP service: In your webbrowser navigate to http://localhost:8082/v1/api/docs/ui
+- Search engine: In your webbrowser navigate to http://localhost:8083/graphiql
 - Flower: In your webbrowser navigate to http://localhost:5555
 - Kibana: In your webbrowser navigate to http://localhost:5671
 - Rabbit management: In your webbrowser navigate to http://localhost:15672 (guest:guest)
@@ -43,6 +44,7 @@ Before navigating to the services you should discover your cluster ip.
 - News manager: In your webbrowser navigate to http://{CLUSTER_IP}/manager/v1/api/docs/ui
 - UAA: In your webbrowser navigate to http://{CLUSTER_IP}/uaa/v1/api/docs/ui
 - NLP service: In your webbrowser navigate to http://{CLUSTER_IP}/nlp/v1/api/docs/ui
+- Search engine: In your webbrowser navigate to http://{CLUSTER_IP}/search-engine/graphiql
 - Flower: In your webbrowser navigate to http://{CLUSTER_IP}/flower
 - Kibana: In your webbrowser navigate to http://{CLUSTER_IP}/kibana
 - Rabbit management: In your webbrowser navigate to http://{CLUSTER_IP}/rabbit (guest:guest)
