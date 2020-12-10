@@ -125,6 +125,7 @@ services:
       - "8083:8083"
     environment:
       JWT_SECRET: t0k3ns3cr3t
+    restart: on-failure
     depends_on:
       - logstash
       - apm-server
