@@ -219,4 +219,5 @@ volumes:
   mongodb_news_first_data:
   mongodb_news_second_data:
   mysql_uaa_data:
+  mysql_search_engine_data:
   elastic_news_service_data:
