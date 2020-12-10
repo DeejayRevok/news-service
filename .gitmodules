@@ -16,8 +16,8 @@
     branch = develop
 [submodule "search-engine"]
 	path = search-engine
-	url = https://github.com/DeejayRevok/search-engine.git
-    branch = develop
+	url = https://github.com/DeejayRevok/search-engine
+	branch = develop
 [submodule "news-service-ui"]
 	path = news-service-ui
 	url = https://github.com/DeejayRevok/news-service-ui.git
