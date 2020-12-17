@@ -44,7 +44,7 @@ Before navigating to the services you should discover your cluster ip.
 - News manager: In your webbrowser navigate to http://{CLUSTER_IP}/manager/v1/api/docs/ui
 - UAA: In your webbrowser navigate to http://{CLUSTER_IP}/uaa/v1/api/docs/ui
 - NLP service: In your webbrowser navigate to http://{CLUSTER_IP}/nlp/v1/api/docs/ui
-- Search engine: In your webbrowser navigate to http://{CLUSTER_IP}/search-engine/graphiql
+- Search engine: In your webbrowser navigate to http://{CLUSTER_IP}/search/graphiql
 - Flower: In your webbrowser navigate to http://{CLUSTER_IP}/flower
 - Kibana: In your webbrowser navigate to http://{CLUSTER_IP}/kibana
 - Rabbit management: In your webbrowser navigate to http://{CLUSTER_IP}/rabbit (guest:guest)
