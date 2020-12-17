@@ -12,6 +12,10 @@ spec:
           backend:
             serviceName: news-manager
             servicePort: 8080
+        - path: /search/?(.*)
+          backend:
+            serviceName: search-engine
+            servicePort: 8083
         - path: /uaa/?(.*)
           backend:
             serviceName: uaa
