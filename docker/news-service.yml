@@ -120,13 +120,14 @@ services:
       - news-manager
       - mysql-search-engine
 
-  nlp-service-flower:
-    image: djrevok/nlp-service-flower:latest
+  news-service-flower:
+    image: djrevok/news-service-flower:latest
     ports:
       - "5555:5555"
     depends_on:
       - elasticsearch
       - kibana
+      - rabbitmq
 
   elasticsearch:
     image: elasticsearch:7.6.0
@@ -177,7 +178,7 @@ services:
       - news-manager
       - uaa
       - nlp-service
-      - nlp-service-flower
+      - news-service-flower
 
   rabbitmq:
     image: rabbitmq:management

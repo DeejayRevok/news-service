@@ -22,7 +22,7 @@ heartbeat.monitors:
 - type: http
   name: 'Flower celery monitor service'
   schedule: '@every 5s'
-  hosts: ["http://nlp-service-flower:5555/api/workers"]
+  hosts: ["http://news-service-flower:5555/api/workers"]
   check.response.status: 200
 
 output.elasticsearch:
