@@ -88,6 +88,32 @@ services:
       - uaa
       - rabbitmq
 
+  news-discovery-beat:
+    build:
+      context: ../news-manager
+      dockerfile: Dockerfile_discovery_beat
+    image: news-discovery-beat:latest
+    environment:
+      CELERY_FORCE_ROOT: "True"
+    restart: on-failure
+    depends_on:
+      - logstash
+      - rabbitmq
+      - news-discovery-app
+
+  news-discovery-app:
+    build:
+      context: ../news-manager
+      dockerfile: Dockerfile_discovery_app
+    image: news-discovery-app:latest
+    environment:
+      CELERY_FORCE_ROOT: "True"
+    restart: on-failure
+    depends_on:
+      - logstash
+      - rabbitmq
+      - news-manager
+
   nlp-service:
     build:
       context: ../nlp-service
@@ -135,16 +161,16 @@ services:
       - news-manager
       - mysql-search-engine
 
-  nlp-service-flower:
+  news-service-flower:
     build:
-      context: ../nlp-service
-      dockerfile: Dockerfile_flower
-    image: nlp-service-flower:latest
+      context: ./flower
+    image: news-service-flower:latest
     ports:
       - "5555:5555"
     depends_on:
       - elasticsearch
       - kibana
+      - rabbitmq
 
   elasticsearch:
     image: elasticsearch:7.6.0
@@ -199,7 +225,7 @@ services:
       - news-manager
       - uaa
       - nlp-service
-      - nlp-service-flower
+      - news-service-flower
 
   rabbitmq:
     image: rabbitmq:management
