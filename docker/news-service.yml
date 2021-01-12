@@ -80,6 +80,26 @@ services:
       - uaa
       - rabbitmq
 
+  news-discovery-beat:
+    image: djrevok/news-discovery-beat:latest
+    environment:
+      CELERY_FORCE_ROOT: "True"
+    restart: on-failure
+    depends_on:
+      - logstash
+      - rabbitmq
+      - news-discovery-app
+
+  news-discovery-app:
+    image: djrevok/news-discovery-app:latest
+    environment:
+      CELERY_FORCE_ROOT: "True"
+    restart: on-failure
+    depends_on:
+      - logstash
+      - rabbitmq
+      - news-manager
+
   nlp-service:
     image: djrevok/nlp-service:latest
     ports:

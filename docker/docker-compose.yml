@@ -88,6 +88,32 @@ services:
       - uaa
       - rabbitmq
 
+  news-discovery-beat:
+    build:
+      context: ../news-manager
+      dockerfile: Dockerfile_discovery_beat
+    image: news-discovery-beat:latest
+    environment:
+      CELERY_FORCE_ROOT: "True"
+    restart: on-failure
+    depends_on:
+      - logstash
+      - rabbitmq
+      - news-discovery-app
+
+  news-discovery-app:
+    build:
+      context: ../news-manager
+      dockerfile: Dockerfile_discovery_app
+    image: news-discovery-app:latest
+    environment:
+      CELERY_FORCE_ROOT: "True"
+    restart: on-failure
+    depends_on:
+      - logstash
+      - rabbitmq
+      - news-manager
+
   nlp-service:
     build:
       context: ../nlp-service

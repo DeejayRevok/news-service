@@ -30,5 +30,5 @@ spec:
             servicePort: 5601
         - path: /flower/?(.*)
           backend:
-            serviceName: nlp-service-flower
+            serviceName: news-service-flower
             servicePort: 5555
