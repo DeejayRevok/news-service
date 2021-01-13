@@ -94,6 +94,7 @@ services:
     image: djrevok/news-discovery-app:latest
     environment:
       CELERY_FORCE_ROOT: "True"
+      PROFILE: DOCKER
     restart: on-failure
     depends_on:
       - logstash
@@ -118,6 +119,7 @@ services:
     environment:
       JWT_SECRET: t0k3ns3cr3t
       CELERY_FORCE_ROOT: "True"
+      PROFILE: DOCKER
     depends_on:
       - logstash
       - elasticsearch

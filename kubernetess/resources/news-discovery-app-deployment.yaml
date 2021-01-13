@@ -27,6 +27,8 @@ spec:
       - env:
         - name: CELERY_FORCE_ROOT
           value: "True"
+        - name: PROFILE
+          value: DOCKER
         image: djrevok/news-discovery-app:latest
         imagePullPolicy: ""
         name: news-discovery-app
