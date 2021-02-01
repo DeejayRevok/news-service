@@ -819,6 +819,8 @@ spec:
       - env:
         - name: CELERY_FORCE_ROOT
           value: "True"
+        - name: PROFILE
+          value: DOCKER
         image: djrevok/news-discovery-app:latest
         imagePullPolicy: ""
         name: news-discovery-app
@@ -981,6 +983,8 @@ spec:
           value: "True"
         - name: JWT_SECRET
           value: t0k3ns3cr3t
+        - name: PROFILE
+          value: DOCKER
         image: djrevok/nlp-celery-worker:latest
         imagePullPolicy: ""
         name: nlp-celery-worker
