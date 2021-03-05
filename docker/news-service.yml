@@ -79,6 +79,7 @@ services:
       - kibana
       - uaa
       - rabbitmq
+      - redis
 
   news-discovery-beat:
     image: djrevok/news-discovery-beat:latest
@@ -217,9 +218,19 @@ services:
       - 15674:15674
       - 25672:25672
 
+  redis:
+    image: bitnami/redis:latest
+    environment:
+      - REDIS_PASSWORD=n3wsr3d1sp4ss
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/bitnami/redis/data
+
 volumes:
   mongodb_news_first_data:
   mongodb_news_second_data:
   mysql_uaa_data:
   mysql_search_engine_data:
   elastic_news_service_data:
+  redis_data:

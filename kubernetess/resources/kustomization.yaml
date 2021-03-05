@@ -8,6 +8,9 @@ resources:
   - mysql-uaa-service.yaml
   - mysql-uaa-deployment.yaml
   - mysql-uaa-data-persistentvolumeclaim.yaml
+  - redis-service.yaml
+  - redis-deployment.yaml
+  - redis-data-persistentvolumeclaim.yaml
   - mysql-search-engine-service.yaml
   - mysql-search-engine-deployment.yaml
   - mysql-search-engine-data-persistentvolumeclaim.yaml
