@@ -852,18 +852,18 @@ spec:
         io.kompose.service: redis
     spec:
       containers:
-        env:
-        - name: REDIS_PASSWORD
-          value: n3wsr3d1sp4ss
-        image: bitnami/redis:latest
-        imagePullPolicy: ""
-        name: redis
-        ports:
-        - containerPort: 6379
-        resources: {}
-        volumeMounts:
-        - mountPath: /bitnami/redis/data
-          name: redis-data
+        - env:
+          - name: REDIS_PASSWORD
+            value: n3wsr3d1sp4ss
+          image: bitnami/redis:latest
+          imagePullPolicy: ""
+          name: redis
+          ports:
+          - containerPort: 6379
+          resources: {}
+          volumeMounts:
+          - mountPath: /bitnami/redis/data
+            name: redis-data
       restartPolicy: Always
       serviceAccountName: ""
       volumes:
