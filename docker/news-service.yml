@@ -62,6 +62,7 @@ services:
       - apm-server
       - elasticsearch
       - kibana
+      - redis
 
   news-manager:
     image: djrevok/news-manager:latest
@@ -142,6 +143,7 @@ services:
       - uaa
       - news-manager
       - mysql-search-engine
+      - redis
 
   news-service-flower:
     image: djrevok/news-service-flower:latest
