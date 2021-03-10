@@ -68,6 +68,7 @@ services:
       - apm-server
       - elasticsearch
       - kibana
+      - redis
 
   news-manager:
     build:
@@ -163,6 +164,7 @@ services:
       - uaa
       - news-manager
       - mysql-search-engine
+      - redis
 
   news-service-flower:
     build:
