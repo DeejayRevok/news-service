@@ -33,8 +33,6 @@ resources:
   - apm-server-deployment.yaml
   - heartbeat-deployment.yaml
   - nlp-celery-worker-deployment.yaml
-  - nlp-service-deployment.yaml
-  - nlp-service-service.yaml
   - news-service-flower-deployment.yaml
   - news-service-flower-service.yaml
   - rabbitmq-deployment.yaml

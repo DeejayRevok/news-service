@@ -103,19 +103,6 @@ services:
       - rabbitmq
       - news-manager
 
-  nlp-service:
-    image: djrevok/nlp-service:latest
-    ports:
-      - "8082:8082"
-    environment:
-      JWT_SECRET: t0k3ns3cr3t
-    depends_on:
-      - logstash
-      - apm-server
-      - elasticsearch
-      - kibana
-      - uaa
-
   nlp-celery-worker:
     image: djrevok/nlp-celery-worker:latest
     environment:
@@ -127,6 +114,7 @@ services:
       - elasticsearch
       - kibana
       - rabbitmq
+      - redis
 
   search-engine:
     image: djrevok/search-engine:latest
@@ -202,7 +190,6 @@ services:
       - kibana
       - news-manager
       - uaa
-      - nlp-service
       - news-service-flower
 
   rabbitmq:

@@ -10,11 +10,6 @@ heartbeat.monitors:
   hosts: ["http://uaa:8081/healthcheck"]
   check.response.status: 200
 - type: http
-  name: 'NLP service'
-  schedule: '@every 5s'
-  hosts: ["http://nlp-service:8082/healthcheck"]
-  check.response.status: 200
-- type: http
   name: 'Search engine'
   schedule: '@every 5s'
   hosts: ["http://search-engine:8083/healthcheck"]
