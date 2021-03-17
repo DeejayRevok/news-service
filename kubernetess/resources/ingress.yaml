@@ -20,10 +20,6 @@ spec:
           backend:
             serviceName: uaa
             servicePort: 8081
-        - path: /nlp/?(.*)
-          backend:
-            serviceName: nlp-service
-            servicePort: 8082
         - path: /kibana/?(.*)
           backend:
             serviceName: kibana

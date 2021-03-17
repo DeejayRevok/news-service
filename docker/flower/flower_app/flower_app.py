@@ -2,16 +2,33 @@
 Flower celery worker monitor module
 """
 import os
-from os.path import join, dirname
+from argparse import ArgumentParser
+from typing import Dict, Any
 
 from flower.command import FlowerCommand
-from news_service_lib import profile_args_parser, Configuration, ConfigProfile
 
-CONFIG_PATH = join(dirname(__file__), 'configs')
+from config import config, load_config
+
+
+def args_parser(server_name: str) -> Dict[str, Any]:
+    """
+    Parse the required arguments to run the specified server
+
+    Args:
+        server_name: name of the server to parse args
+
+    Returns: args parsed
+
+    """
+    arg_solver = ArgumentParser(description=f'{server_name} server')
+    arg_solver.add_argument('-c', '--config', required=True, help='Configuration file path')
+
+    return vars(arg_solver.parse_args())
+
 
 if __name__ == '__main__':
-    args = profile_args_parser('NLP Celery worker')
-    configuration = Configuration(ConfigProfile[args['profile']], CONFIG_PATH)
+    args = args_parser('Flower')
+    load_config(args['config'])
     if 'RABBIT_URL_PREFIX' in os.environ:
         broker_api = 'http://{user}:{password}@{host}:15672/' + os.environ.get('RABBIT_URL_PREFIX') + '/api/'
     else:
@@ -21,11 +38,11 @@ if __name__ == '__main__':
     if 'URL_PREFIX' in os.environ:
         flower_command.execute_from_commandline(
             ['Nlp celery monitor', '--address=0.0.0.0',
-             '--broker-api=' + broker_api.format(**configuration.get_section('RABBIT')),
-             '--broker=' + broker_url.format(**configuration.get_section('RABBIT')),
+             '--broker-api=' + broker_api.format(**config.rabbit),
+             '--broker=' + broker_url.format(**config.rabbit),
              '--url_prefix=' + os.environ.get('URL_PREFIX')])
     else:
         flower_command.execute_from_commandline(
             ['Nlp celery monitor', '--address=0.0.0.0',
-             '--broker-api=' + broker_api.format(**configuration.get_section('RABBIT')),
-             '--broker=' + broker_url.format(**configuration.get_section('RABBIT'))])
+             '--broker-api=' + broker_api.format(**config.rabbit),
+             '--broker=' + broker_url.format(**config.rabbit)])

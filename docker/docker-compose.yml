@@ -117,21 +117,6 @@ services:
       - rabbitmq
       - news-manager
 
-  nlp-service:
-    build:
-      context: ../nlp-service
-    image: nlp-service:latest
-    ports:
-      - "8082:8082"
-    environment:
-      JWT_SECRET: t0k3ns3cr3t
-    depends_on:
-      - logstash
-      - apm-server
-      - elasticsearch
-      - kibana
-      - uaa
-
   nlp-celery-worker:
     build:
       context: ../nlp-service
@@ -146,6 +131,7 @@ services:
       - elasticsearch
       - kibana
       - rabbitmq
+      - redis
 
   search-engine:
     build:
@@ -229,7 +215,6 @@ services:
       - kibana
       - news-manager
       - uaa
-      - nlp-service
       - news-service-flower
 
   rabbitmq:

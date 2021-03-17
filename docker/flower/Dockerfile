@@ -14,4 +14,4 @@ RUN pip install -r requirements.txt
 COPY ./tools_config/metricbeat.yml /etc/metricbeat/metricbeat.yml
 
 EXPOSE 5555
-CMD service metricbeat start && export PYTHONPATH=${PYTHONPATH}:/app && python ./flower_app/flower_app.py -p DOCKER
+CMD service metricbeat start && export PYTHONPATH=${PYTHONPATH}:/app && python ./flower_app/flower_app.py -c ./flower_app/configs/config_docker.yml
