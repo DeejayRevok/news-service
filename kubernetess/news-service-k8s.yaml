@@ -1200,7 +1200,8 @@ metadata:
   name: news-service-fanout
 spec:
   rules:
-  - http:
+  - host: localhost
+    http:
       paths:
       - backend:
           serviceName: news-manager
@@ -1231,7 +1232,8 @@ metadata:
   name: news-service-rabbit
 spec:
   rules:
-  - http:
+  - host: localhost
+    http:
       paths:
       - backend:
           serviceName: rabbitmq
