@@ -22,3 +22,7 @@
 	path = news-service-ui
 	url = https://github.com/DeejayRevok/news-service-ui.git
     branch = develop
+[submodule "news-discovery-app"]
+	path = news-discovery-app
+	url = https://github.com/DeejayRevok/news-discovery-app.git
+	branch = develop
