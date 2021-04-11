@@ -15,8 +15,7 @@ services:
       test: echo 'db.runCommand("ping").ok' | mongo mongodb-first:27017 --quiet
       interval: 10s
       timeout: 10s
-      retries: 5
-      start_period: 40s
+      retries: 10
 
   mongodb-second:
     image: djrevok/mongo-second-news-service:latest
@@ -32,8 +31,7 @@ services:
       test: echo 'db.runCommand("ping").ok' | mongo mongodb-second:27018 --quiet
       interval: 10s
       timeout: 10s
-      retries: 5
-      start_period: 40s
+      retries: 10
 
   mysql-uaa:
     image: mysql:latest
