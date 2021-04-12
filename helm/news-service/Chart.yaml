@@ -1,0 +1,21 @@
+name: news-service
+description: A generated Helm Chart for news-service from Skippbox Kompose
+version: 0.0.1
+apiVersion: v1
+keywords:
+  - news-service-monitor
+sources:
+home:
+dependencies:
+  - name: news-service-monitor
+    version: 0.0.1
+  - name: news-discovery
+    version: 0.0.1
+  - name: news-manager
+    version: 0.0.1
+  - name: nlp-service
+    version: 0.0.1
+  - name: search-engine
+    version: 0.0.1
+  - name: uaa
+    version: 0.0.1
