@@ -1,6 +1,6 @@
 name: news-service
-description: A generated Helm Chart for news-service from Skippbox Kompose
-version: 0.0.1
+description: News service helm chart
+version: 0.1.0
 apiVersion: v1
 keywords:
   - news-service-monitor
@@ -8,14 +8,20 @@ sources:
 home:
 dependencies:
   - name: news-service-monitor
-    version: 0.0.1
+    version: 0.1.0
+    repository: "https://deejayrevok.github.io/helm-repo"
   - name: news-discovery
-    version: 0.0.1
+    version: 0.1.0
+    repository: "https://deejayrevok.github.io/helm-repo"
   - name: news-manager
-    version: 0.0.1
+    version: 0.1.0
+    repository: "https://deejayrevok.github.io/helm-repo"
   - name: nlp-service
-    version: 0.0.1
+    version: 0.1.0
+    repository: "https://deejayrevok.github.io/helm-repo"
   - name: search-engine
-    version: 0.0.1
+    version: 0.1.0
+    repository: "https://deejayrevok.github.io/helm-repo"
   - name: uaa
-    version: 0.0.1
+    version: 0.1.0
+    repository: "https://deejayrevok.github.io/helm-repo"

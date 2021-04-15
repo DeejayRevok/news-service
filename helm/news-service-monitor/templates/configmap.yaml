@@ -3,17 +3,13 @@ kind: ConfigMap
 metadata:
   name: news-service-monitor-configmap
 data:
-  RABBITMQ_DEFAULT_PASS: {{ .Values.RABBITMQ_DEFAULT_PASS }}
-  RABBITMQ_DEFAULT_USER: {{ .Values.RABBITMQ_DEFAULT_USER }}
-  RABBITMQ_DEFAULT_VHOST: {{ .Values.RABBITMQ_DEFAULT_VHOST }}
+  apm-server.host: '{{ .Values.apm_server_host }}'
+  apm-server.secret_token: '{{ .Values.apm_server_secret_token }}'
+  logging.to_files: '{{ .Values.logging_to_files }}'
+  output.elasticsearch.hosts: '{{ .Values.output_elasticsearch_hosts }}'
+  setup.kibana.host: '{{ .Values.setup_kibana_host }}'
+  setup.template.enabled: '{{ .Values.setup_template_enabled }}'
 
-  apm-server.host: {{ .Values.apm-server-host }}
-  apm-server.secret_token: {{ .Values.apm-server-secret_token }}
-  logging.to_files: {{ .Values.logging-to_files }}
-  output.elasticsearch.hosts: {{ .Values.output-elasticsearch-hosts }}
-  setup.kibana.host: {{ .Values.setup-kibana-host }}
-  setup.template.enabled: {{ .Values.setup-template-enabled }}
-
-  ES_JAVA_OPTS: {{ .Values.ELASTIC_ES_JAVA_OPTS }}
-  JAVA_TOOL_OPTIONS: {{ .Values.ELASTIC_JAVA_TOOL_OPTIONS }}
-  discovery.type: {{ .Values.ELASTIC_DISCOVERY_TYPE }}
+  ES_JAVA_OPTS: '{{ .Values.ELASTIC_ES_JAVA_OPTS }}'
+  JAVA_TOOL_OPTIONS: '{{ .Values.ELASTIC_JAVA_TOOL_OPTIONS }}'
+  discovery.type: '{{ .Values.ELASTIC_DISCOVERY_TYPE }}'

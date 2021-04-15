@@ -8,15 +8,17 @@ spec:
   rules:
     - http:
         paths:
-          - path: /kibana/?(.*)
-              backend:
-                service:
-                  name: kibana
-                  port:
-                    number: 5601
-          - path: /flower/?(.*)
-              backend:
-                service:
-                  name: news-service-flower
-                  port:
-                    number: 5555
+        - path: /kibana/?(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: kibana
+              port:
+                number: 5601
+        - path: /flower/?(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: news-service-flower
+              port:
+                number: 5555

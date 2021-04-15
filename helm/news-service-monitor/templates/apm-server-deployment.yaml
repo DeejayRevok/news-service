@@ -1,10 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
-      convert -c -f docker\news-service.yml
-    kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
     io.kompose.service: apm-server
@@ -17,10 +13,6 @@ spec:
   strategy: {}
   template:
     metadata:
-      annotations:
-        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe
-          convert -c -f docker\news-service.yml
-        kompose.version: 1.21.0 (992df58d8)
       creationTimestamp: null
       labels:
         io.kompose.service: apm-server
@@ -31,13 +23,6 @@ spec:
               name: news-service-monitor-configmap
         image: store/elastic/apm-server:7.6.0
         imagePullPolicy: ""
-        livenessProbe:
-          exec:
-            command:
-            - curl -f http://localhost:8200
-          failureThreshold: 5
-          periodSeconds: 30
-          timeoutSeconds: 10
         name: apm-server
         ports:
         - containerPort: 8200
