@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: redis-configmap
 data:
-  REDIS_PASSWORD: '{{ .Values.REDIS_PASSWORD }}'
+  REDIS_PASSWORD: '{{ .Values.global.REDIS_PASSWORD }}'

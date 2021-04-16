@@ -20,7 +20,7 @@ spec:
       containers:
       - envFrom:
           - configMapRef:
-              name: news-service-monitor-configmap
+              name: news-service-monitor-configmap-apm
         image: store/elastic/apm-server:7.6.0
         imagePullPolicy: ""
         name: apm-server

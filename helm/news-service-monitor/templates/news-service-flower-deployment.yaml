@@ -18,7 +18,10 @@ spec:
         io.kompose.service: news-service-flower
     spec:
       containers:
-      - image: djrevok/news-service-flower:latest
+      - envFrom:
+          - configMapRef:
+              name: news-service-monitor-configmap-flower
+        image: djrevok/news-service-flower:latest
         imagePullPolicy: ""
         name: news-service-flower
         ports:

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: news-service-monitor-configmap-apm
+data:
+  apm-server.host: '{{ .Values.global.apm_server_host }}'
+  apm-server.secret_token: '{{ .Values.global.apm_server_secret_token }}'
+  logging.to_files: '{{ .Values.global.logging_to_files }}'
+  output.elasticsearch.hosts: '{{ .Values.global.output_elasticsearch_hosts }}'
+  setup.kibana.host: '{{ .Values.global.setup_kibana_host }}'
+  setup.template.enabled: '{{ .Values.global.setup_template_enabled }}'

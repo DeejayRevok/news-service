@@ -1,15 +1,16 @@
-apm_server_host: 0.0.0.0:8200
-apm_server_secret_token: xxVpmQB2HMzCL9PgBHVrnxjNXXw5J7bd79DFm6sjBJR5HPXDhcF8MSb3vv4bpg44
-logging_to_files: "false"
-output_elasticsearch_hosts: http://elasticsearch:9200
-setup_kibana_host: kibana:5601
-setup_template_enabled: "true"
+global:
+  apm_server_host: 0.0.0.0:8200
+  apm_server_secret_token: xxVpmQB2HMzCL9PgBHVrnxjNXXw5J7bd79DFm6sjBJR5HPXDhcF8MSb3vv4bpg44
+  logging_to_files: "false"
+  output_elasticsearch_hosts: http://elasticsearch:9200
+  setup_kibana_host: kibana:5601
+  setup_template_enabled: "true"
 
-ELASTIC_ES_JAVA_OPTS: -Xms512m -Xmx512m
-ELASTIC_JAVA_TOOL_OPTIONS: -Xms512m -Xmx512m
-ELASTIC_DISCOVERY_TYPE: single-node
+  ELASTIC_ES_JAVA_OPTS: -Xms512m -Xmx512m
+  ELASTIC_JAVA_TOOL_OPTIONS: -Xms512m -Xmx512m
+  ELASTIC_DISCOVERY_TYPE: single-node
 
-rabbit:
-  RABBITMQ_DEFAULT_PASS: guest
-  RABBITMQ_DEFAULT_USER: guest
-  RABBITMQ_DEFAULT_VHOST: /
+  KIBANA_SERVER_BASEPATH: /kibana
+
+  FLOWER_RABBIT_URL_PREFIX: rabbit
+  FLOWER_URL_PREFIX: flower

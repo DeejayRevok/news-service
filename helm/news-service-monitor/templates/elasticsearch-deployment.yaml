@@ -21,7 +21,7 @@ spec:
       containers:
       - envFrom:
           - configMapRef:
-              name: news-service-monitor-configmap
+              name: news-service-monitor-configmap-elastic
         image: elasticsearch:7.6.0
         imagePullPolicy: ""
         name: elasticsearch
