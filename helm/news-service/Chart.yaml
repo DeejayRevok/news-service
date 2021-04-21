@@ -7,6 +7,12 @@ keywords:
 sources:
 home:
 dependencies:
+  - name: rabbit
+    version: 0.1.0
+    repository: "https://deejayrevok.github.io/helm-repo"
+  - name: redis
+    version: 0.1.0
+    repository: "https://deejayrevok.github.io/helm-repo"
   - name: news-service-monitor
     version: 0.1.0
     repository: "https://deejayrevok.github.io/helm-repo"

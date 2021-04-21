@@ -1,6 +1,10 @@
+{{ if .Values.enabled }}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: redis-configmap
 data:
   REDIS_PASSWORD: '{{ .Values.global.REDIS_PASSWORD }}'
+
+{{ end }}

@@ -1,0 +1,38 @@
+news-service-monitor:
+  rabbit:
+    enabled: false
+
+news-discovery:
+  rabbit:
+    enabled: false
+
+news-manager:
+  redis:
+    enabled: false
+
+  rabbit:
+    enabled: false
+
+nlp-service:
+  redis:
+    enabled: false
+
+  rabbit:
+    enabled: false
+
+search-engine:
+  redis:
+    enabled: false
+
+  rabbit:
+    enabled: false
+
+uaa:
+  redis:
+    enabled: false
+
+redis:
+  enabled: true
+
+rabbit:
+  enabled: true
