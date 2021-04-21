@@ -11,11 +11,6 @@ services:
     depends_on:
       - elasticsearch
       - kibana
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo mongodb-first:27017 --quiet
-      interval: 10s
-      timeout: 10s
-      retries: 10
 
   mongodb-second:
     image: djrevok/mongo-second-news-service:latest
@@ -27,11 +22,6 @@ services:
     depends_on:
       - elasticsearch
       - kibana
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo mongodb-second:27018 --quiet
-      interval: 10s
-      timeout: 10s
-      retries: 10
 
   mysql-uaa:
     image: mysql:latest
@@ -45,11 +35,6 @@ services:
       MYSQL_PASSWORD: n3wsp4ssw0rd
     ports:
       - "3306:3306"
-    healthcheck:
-      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
-      interval: 2s
-      timeout: 20s
-      retries: 10
 
   mysql-search-engine:
     image: mysql:latest
@@ -63,11 +48,6 @@ services:
       MYSQL_PASSWORD: n3wsp4ssw0rd
     ports:
       - "3307:3306"
-    healthcheck:
-      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
-      interval: 2s
-      timeout: 20s
-      retries: 10
 
   uaa:
     image: djrevok/uaa:latest
@@ -83,11 +63,6 @@ services:
       - elasticsearch
       - kibana
       - redis
-    healthcheck:
-      test: curl -f http://localhost:8081/healthcheck
-      interval: 2s
-      timeout: 20s
-      retries: 10
 
   news-manager:
     image: djrevok/news-manager:latest
@@ -106,11 +81,6 @@ services:
       - uaa
       - rabbitmq
       - redis
-    healthcheck:
-      test: curl -f http://localhost:8080/healthcheck
-      interval: 2s
-      timeout: 20s
-      retries: 10
 
   news-discovery-beat:
     image: djrevok/news-discovery-beat:latest
@@ -132,11 +102,6 @@ services:
       - logstash
       - rabbitmq
       - news-manager
-    healthcheck:
-      test: celery -b amqp://guest:guest@rabbitmq:5672 inspect ping -d celery@$$HOSTNAME
-      interval: 2s
-      timeout: 20s
-      retries: 10
 
   nlp-celery-worker:
     image: djrevok/nlp-celery-worker:latest
@@ -150,11 +115,6 @@ services:
       - kibana
       - rabbitmq
       - redis
-    healthcheck:
-      test: celery -b amqp://guest:guest@rabbitmq:5672 inspect ping -d celery@$$HOSTNAME
-      interval: 2s
-      timeout: 20s
-      retries: 10
 
   search-engine:
     image: djrevok/search-engine:latest
@@ -172,11 +132,6 @@ services:
       - news-manager
       - mysql-search-engine
       - redis
-    healthcheck:
-      test: curl -f http://localhost:8083/healthcheck
-      interval: 2s
-      timeout: 20s
-      retries: 10
 
   news-service-flower:
     image: djrevok/news-service-flower:latest
@@ -186,11 +141,6 @@ services:
       - elasticsearch
       - kibana
       - rabbitmq
-    healthcheck:
-      test: curl -f http://localhost:5555/api/workers
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
   elasticsearch:
     image: elasticsearch:7.6.0
@@ -202,11 +152,6 @@ services:
       JAVA_TOOL_OPTIONS: "-Xms512m -Xmx512m"
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
       discovery.type: "single-node"
-    healthcheck:
-      test: curl -s -f http://localhost:9200/_cluster/health
-      interval: 30s
-      timeout: 30s
-      retries: 3
 
   logstash:
     image: djrevok/logstash-news-service:latest
@@ -214,11 +159,6 @@ services:
       - elasticsearch
     ports:
       - "5000:5000"
-    healthcheck:
-      test: logstash -t
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
   kibana:
     image: kibana:7.6.0
@@ -227,11 +167,6 @@ services:
     depends_on:
       - elasticsearch
       - logstash
-    healthcheck:
-      test: curl -f http://localhost:5601/
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
   apm-server:
     image: store/elastic/apm-server:7.6.0
@@ -247,11 +182,6 @@ services:
     depends_on:
       - elasticsearch
       - kibana
-    healthcheck:
-      test: curl -f http://localhost:8200
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
   heartbeat:
     image: djrevok/heartbeat-news-service:latest
@@ -276,11 +206,6 @@ services:
       - 15672:15672
       - 15674:15674
       - 25672:25672
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 30s
-      timeout: 30s
-      retries: 3
 
   redis:
     image: bitnami/redis:latest
@@ -290,12 +215,6 @@ services:
       - 6379:6379
     volumes:
       - redis_data:/bitnami/redis/data
-    healthcheck:
-      test: redis-cli -a $$REDIS_PASSWORD ping
-      interval: 1s
-      timeout: 3s
-      retries: 30
-
 
 volumes:
   mongodb_news_first_data:
