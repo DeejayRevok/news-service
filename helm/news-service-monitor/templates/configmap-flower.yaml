@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: news-service-monitor-configmap-flower
+data:
+  RABBIT_URL_PREFIX: '{{ .Values.global.FLOWER_RABBIT_URL_PREFIX }}'
+  URL_PREFIX: '{{ .Values.global.FLOWER_URL_PREFIX }}'

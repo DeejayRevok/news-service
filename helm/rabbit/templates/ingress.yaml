@@ -1,0 +1,21 @@
+{{ if .Values.enabled }}
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rabbit-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+    - http:
+        paths:
+        - path: /rabbit/?(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: rabbitmq
+              port:
+                number: 15672
+
+{{ end }}

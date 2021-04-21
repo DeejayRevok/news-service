@@ -1,0 +1,12 @@
+name: news-service-monitor
+description: News service monitor helm chart
+version: 0.1.0
+apiVersion: v1
+keywords:
+  - news-service-monitor
+sources:
+home:
+dependencies:
+  - name: rabbit
+    version: 0.1.0
+    repository: "https://deejayrevok.github.io/helm-repo"

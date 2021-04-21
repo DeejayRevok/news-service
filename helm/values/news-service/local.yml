@@ -1,0 +1,27 @@
+news-discovery:
+  CELERY_FORCE_ROOT: "True"
+
+news-manager:
+  JWT_SECRET: t0k3ns3cr3t
+  SERVER_BASEPATH: /manager
+
+nlp-service:
+  CELERY_FORCE_ROOT: "True"
+
+search-engine:
+  JWT_SECRET: t0k3ns3cr3t
+  SERVER_BASEPATH: /search
+
+  MYSQL_DATABASE: search-engine
+  MYSQL_PASSWORD: n3wsp4ssw0rd
+  MYSQL_ROOT_PASSWORD: n3wss3rv1c3
+  MYSQL_USER: app-us3r
+
+uaa:
+  JWT_SECRET: t0k3ns3cr3t
+  SERVER_BASEPATH: /uaa
+
+  MYSQL_DATABASE: uaa
+  MYSQL_PASSWORD: n3wsp4ssw0rd
+  MYSQL_ROOT_PASSWORD: n3wss3rv1c3
+  MYSQL_USER: app-us3r
