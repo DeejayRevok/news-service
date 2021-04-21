@@ -3,7 +3,7 @@ description: News service helm chart
 version: 0.1.0
 apiVersion: v1
 keywords:
-  - news-service-monitor
+  - news-service
 sources:
 home:
 dependencies:
