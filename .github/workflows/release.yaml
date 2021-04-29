@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
       - name: Validate version
         uses: rubenesp87/semver-validation-action@0.0.6
         with:
