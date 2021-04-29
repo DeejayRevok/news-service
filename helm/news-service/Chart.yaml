@@ -29,10 +29,5 @@ dependencies:
     version: ">=0.1.0"
     repository: "https://deejayrevok.github.io/helm-repo"
   - name: uaa
-<<<<<<< Updated upstream
-    version: 0.1.0
-    repository: "https://deejayrevok.github.io/helm-repo"
-=======
     version: ">=0.1.0"
     repository: "https://deejayrevok.github.io/helm-repo"
->>>>>>> Stashed changes
