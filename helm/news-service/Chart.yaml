@@ -1,6 +1,6 @@
 name: news-service
 description: News service helm chart
-version: 0.1.0
+version: 0.0.0
 apiVersion: v1
 keywords:
   - news-service
@@ -14,20 +14,25 @@ dependencies:
     version: 0.1.0
     repository: "https://deejayrevok.github.io/helm-repo"
   - name: news-service-monitor
-    version: 0.1.0
+    version: ">=0.1.0"
     repository: "https://deejayrevok.github.io/helm-repo"
   - name: news-discovery
-    version: 0.1.0
+    version: ">=0.1.0"
     repository: "https://deejayrevok.github.io/helm-repo"
   - name: news-manager
-    version: 0.1.0
+    version: ">=0.1.0"
     repository: "https://deejayrevok.github.io/helm-repo"
   - name: nlp-service
-    version: 0.1.0
+    version: ">=0.1.0"
     repository: "https://deejayrevok.github.io/helm-repo"
   - name: search-engine
-    version: 0.1.0
+    version: ">=0.1.0"
     repository: "https://deejayrevok.github.io/helm-repo"
   - name: uaa
+<<<<<<< Updated upstream
     version: 0.1.0
     repository: "https://deejayrevok.github.io/helm-repo"
+=======
+    version: ">=0.1.0"
+    repository: "https://deejayrevok.github.io/helm-repo"
+>>>>>>> Stashed changes
