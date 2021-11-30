@@ -23,7 +23,7 @@ spec:
       - envFrom:
           - configMapRef:
               name: rabbit-configmap
-        image: rabbitmq:management
+        image: rabbitmq:3.8.19-management
         imagePullPolicy: ""
         name: rabbitmq
         ports:
