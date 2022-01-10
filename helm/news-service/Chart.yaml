@@ -26,8 +26,8 @@ dependencies:
     version: 1.0.5
     repository: "https://deejayrevok.github.io/helm-repo"
   - name: search-engine
-    version: 1.0.4
+    version: 1.0.5
     repository: "https://deejayrevok.github.io/helm-repo"
   - name: uaa
-    version: 0.2.4
+    version: 0.3.0
     repository: "https://deejayrevok.github.io/helm-repo"
