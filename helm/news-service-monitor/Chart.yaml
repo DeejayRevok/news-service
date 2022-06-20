@@ -1,6 +1,6 @@
 name: news-service-monitor
 description: News service monitor helm chart
-version: 0.1.0
+version: 0.1.2
 apiVersion: v1
 keywords:
   - news-service-monitor
