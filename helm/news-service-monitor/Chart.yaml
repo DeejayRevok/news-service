@@ -8,5 +8,5 @@ sources:
 home:
 dependencies:
   - name: rabbit
-    version: 0.1.1
+    version: 0.1.2
     repository: "https://deejayrevok.github.io/helm-repo"
