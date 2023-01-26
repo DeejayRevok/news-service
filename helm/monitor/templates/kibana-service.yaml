@@ -1,16 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: null
   labels:
-    io.kompose.service: kibana
-  name: kibana
+    app.kubernetes.io/name: monitor-kibana
+  name: monitor-kibana
 spec:
   ports:
   - name: "5601"
     port: 5601
     targetPort: 5601
   selector:
-    io.kompose.service: kibana
+    app.kubernetes.io/name: monitor-kibana
 status:
   loadBalancer: {}

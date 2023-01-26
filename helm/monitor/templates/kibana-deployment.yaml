@@ -1,28 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
-    io.kompose.service: logstash
-  name: logstash
+    app.kubernetes.io/name: monitor-kibana
+  name: monitor-kibana
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: logstash
+      app.kubernetes.io/name: monitor-kibana
   strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        io.kompose.service: logstash
+        app.kubernetes.io/name: monitor-kibana
     spec:
       containers:
-      - image: djrevok/logstash-news-service:latest
+      - envFrom:
+          - configMapRef:
+              name: monitor-configmap-kibana
+        image: kibana:7.6.0
         imagePullPolicy: ""
-        name: logstash
+        name: monitor-kibana
         ports:
-        - containerPort: 5000
+        - containerPort: 5601
         resources: {}
       restartPolicy: Always
       serviceAccountName: ""

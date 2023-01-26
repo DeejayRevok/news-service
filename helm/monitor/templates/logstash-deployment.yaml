@@ -1,31 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
-    io.kompose.service: apm-server
-  name: apm-server
+    app.kubernetes.io/name: monitor-logstash
+  name: monitor-logstash
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: apm-server
+      app.kubernetes.io/name: monitor-logstash
   strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        io.kompose.service: apm-server
+        app.kubernetes.io/name: monitor-logstash
     spec:
       containers:
       - envFrom:
           - configMapRef:
-              name: news-service-monitor-configmap-apm
-        image: store/elastic/apm-server:7.6.0
+              name: monitor-configmap-logstash
+        image: logstash:7.6.0
         imagePullPolicy: ""
-        name: apm-server
+        name: monitor-logstash
         ports:
-        - containerPort: 8200
+        - containerPort: 5044
         resources: {}
       restartPolicy: Always
       serviceAccountName: ""

@@ -1,0 +1,35 @@
+APM_SERVER_HOST: 0.0.0.0:8200
+APM_SERVER_SECRET_TOKEN: xxVpmQB2HMzCL9PgBHVrnxjNXXw5J7bd79DFm6sjBJR5HPXDhcF8MSb3vv4bpg44
+APM_SERVER_LOGGING_TO_FILES: false
+APM_SERVER_SETUP_KIBANA_HOST: monitor-kibana:5601
+APM_SERVER_SETUP_TEMPLATE_ENABLED: true
+APM_SERVER_ELASTICSEARCH_HOSTS: http://monitor-elasticsearch:9200
+
+ELASTICSEARCH_ES_JAVA_OPTS: -Xms512m -Xmx512m
+ELASTICSEARCH_JAVA_TOOL_OPTIONS: -Xms512m -Xmx512m
+ELASTICSEARCH_DISCOVERY_TYPE: single-node
+
+KIBANA_SERVER_BASEPATH: /monitor/kibana
+KIBANA_ELASTICSEARCH_HOSTS: http://monitor-elasticsearch:9200
+
+LOGSTASH_PIPELINE_WORKERS: 2
+LOGSTASH_XPACK_MONITORING_ELASTICSEARCH_HOSTS: http://monitor-elasticsearch:9200
+LOGSTASH_CONFIG_STRING: |
+  input {
+    beats {
+      port => 5044
+    }
+  }
+
+  filter {
+    json {
+      source => "message"
+    }
+  }
+
+  output {
+    elasticsearch {
+      hosts => ["http://monitor-elasticsearch:9200"]
+      index => "%{[@metadata][beat]}-%{[@metadata][version]}"
+    }
+  }

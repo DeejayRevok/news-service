@@ -1,10 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  creationTimestamp: null
-  labels:
-    io.kompose.service: elastic-news-service-data
-  name: elastic-news-service-data
+  name: monitor-elasticsearch-data
 spec:
   accessModes:
   - ReadWriteOnce
