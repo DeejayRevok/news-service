@@ -2,14 +2,6 @@
 	path = news-manager
 	url = https://github.com/DeejayRevok/news-manager.git
     branch = develop
-[submodule "news-service-lib"]
-	path = news-service-lib
-	url = https://github.com/DeejayRevok/news-service-lib.git
-    branch = develop
-[submodule "uaa"]
-	path = uaa
-	url = https://github.com/DeejayRevok/uaa.git
-    branch = develop
 [submodule "nlp-service"]
 	path = nlp-service
 	url = https://github.com/DeejayRevok/nlp-service.git
