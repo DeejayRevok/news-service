@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: monitor-kibana
+  name: monitor-kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: monitor-kibana
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: monitor-kibana
+    spec:
+      containers:
+      - envFrom:
+          - configMapRef:
+              name: monitor-configmap-kibana
+        image: kibana:7.6.0
+        imagePullPolicy: ""
+        name: monitor-kibana
+        ports:
+        - containerPort: 5601
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

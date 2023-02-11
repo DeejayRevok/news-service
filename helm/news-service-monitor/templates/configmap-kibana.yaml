@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: news-service-monitor-configmap-kibana
-data:
-  SERVER_BASEPATH: '{{ .Values.global.KIBANA_SERVER_BASEPATH }}'

@@ -3,6 +3,7 @@
 **charts**
 *.tgz
 *.lock
+*secrets.yaml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

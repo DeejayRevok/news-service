@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: monitor-elasticsearch
+  name: monitor-elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: monitor-elasticsearch
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: monitor-elasticsearch
+    spec:
+      containers:
+      - envFrom:
+          - configMapRef:
+              name: monitor-configmap-elasticsearch
+        image: elasticsearch:7.6.0
+        imagePullPolicy: ""
+        name: monitor-elasticsearch
+        ports:
+        - containerPort: 9200
+        resources: {}
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: monitor-elasticsearch-data
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: monitor-elasticsearch-data
+        persistentVolumeClaim:
+          claimName: monitor-elasticsearch-data
+status: {}

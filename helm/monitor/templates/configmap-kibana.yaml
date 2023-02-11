@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: monitor-configmap-kibana
+data:
+  SERVER_BASEPATH: '{{ .Values.KIBANA_SERVER_BASEPATH }}'
+  ELASTICSEARCH_HOSTS: '{{ .Values.KIBANA_ELASTICSEARCH_HOSTS }}'

@@ -1,0 +1,4 @@
+redis:
+  fullnameOverride: redis
+  auth:
+    password: test_password

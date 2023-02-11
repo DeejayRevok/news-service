@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: monitor-logstash
+  name: monitor-logstash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: monitor-logstash
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: monitor-logstash
+    spec:
+      containers:
+      - envFrom:
+          - configMapRef:
+              name: monitor-configmap-logstash
+        image: logstash:7.6.0
+        imagePullPolicy: ""
+        name: monitor-logstash
+        ports:
+        - containerPort: 5044
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

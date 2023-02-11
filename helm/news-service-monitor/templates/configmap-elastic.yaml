@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: news-service-monitor-configmap-elastic
-data:
-  ES_JAVA_OPTS: '{{ .Values.global.ELASTIC_ES_JAVA_OPTS }}'
-  JAVA_TOOL_OPTIONS: '{{ .Values.global.ELASTIC_JAVA_TOOL_OPTIONS }}'
-  discovery.type: '{{ .Values.global.ELASTIC_DISCOVERY_TYPE }}'
