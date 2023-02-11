@@ -2,49 +2,33 @@
 News service repository
 
 ## Installation and running
-  
-#### Run local dev services:
-Inside the docker folder run:
-```
-docker-compose -f docker-compose-local.yml up -d
-```
-
-### Docker
-Requirements:
-  - Docker
-  
-Inside the application docker folder run:
-```
-docker-compose up -d
-```
 
 ### Kubernetes
 Requirements:
   - Kubernetes
   - Kubernetes cluster system (e.g docker-desktop, minikube)
   - Ingress enabled
+  - Helm
 
-Inside the kubernetes folder of the application folder run:
+- Inside the root folder run:
 ```
-kubectl apply -f news-service-k8s.yaml
+make build_news_service_chart
 ```
-
-## Usage for local and docker installations
-- News manager: In your webbrowser navigate to http://localhost:8080/v1/api/docs/ui
-- UAA: In your webbrowser navigate to http://localhost:8081/v1/api/docs/ui
-- NLP service: In your webbrowser navigate to http://localhost:8082/v1/api/docs/ui
-- Search engine: In your webbrowser navigate to http://localhost:8083/graphiql
-- Flower: In your webbrowser navigate to http://localhost:5555
-- Kibana: In your webbrowser navigate to http://localhost:5671
-- Rabbit management: In your webbrowser navigate to http://localhost:15672 (guest:guest)
-
+- Install the required secrets into the kubernetess namespace:
+```
+kubectl apply -f {SECRETS_FILE_PATH} -n {NAMESPACE_NAME}
+```
+- Install the chart:
+```
+helm install {RELEASE_NAME} .\news-service-{CHART_VERSION}.tgz --values .\helm\values\news-service\local\iam.yaml 
+--values .\helm\values\news-service\local\monitor.yaml --values .\helm\values\news-service\local\news-discovery.yaml --values .\helm\valu
+es\news-service\local\news-manager.yaml --values .\helm\values\news-service\local\nlp-service.yaml --values .\helm\values\news-service\lo
+cal\rabbitmq.yaml --values .\helm\values\news-service\local\redis.yaml --values .\helm\values\news-service\local\search-engine.yaml -n {NAMESPACE_NAME}
+```
 
 ## Usage for kubernetes installation
 Before navigating to the services you should discover your cluster ip.
-- News manager: In your webbrowser navigate to http://{CLUSTER_IP}/manager/v1/api/docs/ui
-- UAA: In your webbrowser navigate to http://{CLUSTER_IP}/uaa/v1/api/docs/ui
-- NLP service: In your webbrowser navigate to http://{CLUSTER_IP}/nlp/v1/api/docs/ui
-- Search engine: In your webbrowser navigate to http://{CLUSTER_IP}/search/graphiql
-- Flower: In your webbrowser navigate to http://{CLUSTER_IP}/flower
-- Kibana: In your webbrowser navigate to http://{CLUSTER_IP}/kibana
-- Rabbit management: In your webbrowser navigate to http://{CLUSTER_IP}/rabbit (guest:guest)
+- News manager base path: https://{CLUSTER_IP}/news-manager
+- IAM base path: https://{CLUSTER_IP}/iam
+- Search engine base path: http://{CLUSTER_IP}/search
+- Kibana: In your webbrowser navigate to http://{CLUSTER_IP}/monitor/kibana
