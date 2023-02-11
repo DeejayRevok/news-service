@@ -1,0 +1,29 @@
+name: News service pre release workflow
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  news-service-pre-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get version
+        id: get_version
+        run: |
+          VERSION=`cat VERSION`
+          echo "Version: $VERSION"
+          echo "::set-output name=version::$VERSION"
+      - name: Check if tag exists
+        uses: mukunku/tag-exists-action@v1.0.0
+        id: checkTag
+        with:
+          tag: ${{ steps.get_version.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fail if tag exists
+        if: steps.checkTag.outputs.exists == 'true'
+        run: exit 1

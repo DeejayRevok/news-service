@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: monitor-configmap-apm
+data:
+  HOST: '{{ .Values.APM_SERVER_HOST }}'
+  SECRET_TOKEN: '{{ .Values.APM_SERVER_SECRET_TOKEN }}'
+  LOGGING_TO_FILES: '{{ .Values.APM_SERVER_LOGGING_TO_FILES }}'
+  KIBANA_HOST: '{{ .Values.APM_SERVER_SETUP_KIBANA_HOST }}'
+  TEMPLATE_ENABLED: '{{ .Values.APM_SERVER_SETUP_TEMPLATE_ENABLED }}'
+  ELASTICSEARCH_HOSTS: '{{ .Values.APM_SERVER_ELASTICSEARCH_HOSTS }}'

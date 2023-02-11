@@ -1,38 +1,31 @@
 name: News Service Release Process
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version of the release to create'
-        required: true
+  push:
+    branches:
+      - master
 
 jobs:
-  news-discovery-release:
+  news-service-release:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - name: Validate version
-        uses: rubenesp87/semver-validation-action@0.0.6
-        with:
-          version: ${{ github.event.inputs.version }}
-      - name: Check if version exists
-        uses: mukunku/tag-exists-action@v1.0.0
-        id: checkTag
-        with:
-          tag: ${{ github.event.inputs.version }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get version
+        id: get_version
+        run: |
+          VERSION=`cat VERSION`
+          echo "Version: $VERSION"
+          echo "::set-output name=version::$VERSION"
       - name: Setup helm
         uses: azure/setup-helm@v1
       - name: Build helm chart
-        run: make build_chart version=${{ github.event.inputs.version }}
+        run: make build_news_service_chart
       - name: Clone helm repo
         run: |
           git clone https://DeejayRevok:${{ secrets.HELM_REPO_ACCESS_TOKEN }}@github.com/DeejayRevok/helm-repo.git
       - name: Copy chart to repo
-        run: cp ./news-service-${{ github.event.inputs.version }}.tgz ./helm-repo
+        run: cp ./news-service-${{ steps.get_version.outputs.version }}.tgz ./helm-repo
       - name: Index new chart
         run: helm repo index --url https://deejayrevok.github.io/helm-repo ./helm-repo
       - name: Push new chart
@@ -45,6 +38,6 @@ jobs:
         working-directory: ./helm-repo
       - uses: avakar/tag-and-release@v1
         with:
-          tag_name: ${{ github.event.inputs.version }}
+          tag_name: ${{ steps.get_version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

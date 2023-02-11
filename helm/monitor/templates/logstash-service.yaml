@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: monitor-logstash
+  name: monitor-logstash
+spec:
+  ports:
+  - name: "5044"
+    port: 5044
+    targetPort: 5044
+  selector:
+    app.kubernetes.io/name: monitor-logstash
+status:
+  loadBalancer: {}
