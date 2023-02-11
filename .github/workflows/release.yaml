@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Get version
         id: get_version
         run: |
@@ -18,7 +18,9 @@ jobs:
           echo "Version: $VERSION"
           echo "::set-output name=version::$VERSION"
       - name: Setup helm
-        uses: azure/setup-helm@v1
+        uses: azure/setup-helm@v3
+        with:
+          version: 'v3.5.4'
       - name: Build helm chart
         run: make build_news_service_chart
       - name: Clone helm repo
