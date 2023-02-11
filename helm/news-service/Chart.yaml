@@ -17,17 +17,17 @@ dependencies:
     version: 1.0.2
     repository: "https://deejayrevok.github.io/helm-repo"
   - name: news-discovery
-    version: 0.0.0
-    repository: "file://../../../news-discovery-app/helm/news-discovery"
+    version: 2.0.0
+    repository: "https://deejayrevok.github.io/helm-repo"
   - name: news-manager
-    version: 0.0.0
-    repository: "file://../../../news-manager/helm/news-manager"
+    version: 2.0.0
+    repository: "https://deejayrevok.github.io/helm-repo"
   - name: nlp-service
-    version: 0.0.0
-    repository: "file://../../../nlp-service/helm/nlp-service"
+    version: 2.0.0
+    repository: "https://deejayrevok.github.io/helm-repo"
   - name: search-engine
-    version: 0.0.0
-    repository: "file://../../../search-engine/helm/search-engine"
+    version: 2.0.0
+    repository: "https://deejayrevok.github.io/helm-repo"
   - name: iam
-    version: 0.0.0
-    repository: "file://../../../go-iam/helm/iam"
+    version: 0.1.0
+    repository: "https://deejayrevok.github.io/helm-repo"

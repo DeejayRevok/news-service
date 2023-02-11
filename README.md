@@ -1,5 +1,5 @@
 # News Service
-News service parent repository
+News service repository
 
 ## Installation and running
   
